@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   await dotenv.load(fileName: '.env');
   final api = await SpotifyApiService.api;
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Jukebox'),
+      home: MyHomePage(title: 'Jukebox'),
     );
   }
 }
@@ -43,7 +43,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   String token = "";
-  Uint8List? artistImage;
 
   final Logger _logger = Logger(
     //filter: CustomLogFilter(), // custom logfilter can be used to have logs in release mode
@@ -56,8 +55,13 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   );
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _incrementCounter() async {
-    await connectToSpotifyRemote();
+    // await connectToSpotifyRemote();
     setState(() {
       _counter++;
     });
@@ -168,35 +172,39 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ArtistsGridScreen(),
-            FloatingActionButton.extended(
-              label: Text('play'),
-              // onPressed: play,
-              onPressed: refresh,
-              tooltip: 'connect',
-              icon: const Icon(Icons.playlist_play),
-            ),
-            // FloatingActionButton.extended(
-            //   label: Text('resume'),
-            //   onPressed: resume,
-            //   tooltip: 'connect',
-            //   icon: const Icon(Icons.restaurant_menu),
-            // ),
-            // FloatingActionButton.extended(
-            //   label: Text('get image'),
-            //   onPressed: pause,
-            //   icon: const Icon(Icons.image),
-            // ),
-            // FloatingActionButton.extended(
-            //   label: Text('logout'),
-            //   onPressed: logout,
-            //   icon: const Icon(Icons.logout),
-            // ),
-            // FloatingActionButton.extended(
-            //   label: Text('delete'),
-            //   onPressed: deleteToken,
-            //   icon: const Icon(Icons.delete),
-            // ),
+            Expanded(child: ArtistsGridScreen()),
+            Row(
+              children: [
+                FloatingActionButton.extended(
+                  label: Text('play'),
+                  // onPressed: play,
+                  onPressed: refresh,
+                  tooltip: 'connect',
+                  icon: const Icon(Icons.playlist_play),
+                ),
+                FloatingActionButton.extended(
+                  label: Text('resume'),
+                  onPressed: resume,
+                  tooltip: 'connect',
+                  icon: const Icon(Icons.restaurant_menu),
+                ),
+                FloatingActionButton.extended(
+                  label: Text('get image'),
+                  onPressed: pause,
+                  icon: const Icon(Icons.image),
+                ),
+                FloatingActionButton.extended(
+                  label: Text('logout'),
+                  onPressed: logout,
+                  icon: const Icon(Icons.logout),
+                ),
+                FloatingActionButton.extended(
+                  label: Text('delete'),
+                  onPressed: deleteToken,
+                  icon: const Icon(Icons.delete),
+                ),
+              ],
+            )
           ],
         ),
       ),

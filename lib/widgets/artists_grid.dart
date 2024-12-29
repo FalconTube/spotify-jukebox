@@ -39,48 +39,46 @@ class ArtistsGridScreenState extends State<ArtistsGridScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      body: FutureBuilder<List<Uint8List>>(
-          future: _imageFutures,
-          builder: (context, snapshot) {
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              return ListView.builder(
-                itemExtent: 300,
-                // itemCount: snapshot.data!.length,
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  final imageItem = snapshot.data![index];
-                  return Card(
-                    // Added a Card for better visual separation
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.memory(imageItem,
-                              scale: 0.01,
-                              // fit: BoxFit.cover,
-                              height: 20, // Fixed height for consistent display
-                              width: 20,
-                              gaplessPlayback: true,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Center(
-                                      child: Text('Error loading image'))),
-                          // Text("ArtistName", style: TextStyle(fontSize: 10)),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            }
+    return FutureBuilder<List<Uint8List>>(
+      future: _imageFutures,
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          return GridView.builder(
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
 
-            /// handles others as you did on question
-            else {
-              return CircularProgressIndicator();
-            }
-          }),
+            scrollDirection: Axis.vertical,
+            itemCount: snapshot.data!.length,
+            // itemCount: 2,
+            itemBuilder: (context, index) {
+              final imageItem = snapshot.data![index];
+              return Card(
+                // Added a Card for better visual separation
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.memory(imageItem,
+                      scale: 0.01,
+                      // fit: BoxFit.cover,
+                      height: 20, // Fixed height for consistent display
+                      width: 20,
+                      gaplessPlayback: true,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Center(child: Text('Error loading image'))),
+                ),
+              );
+            },
+          );
+        } else {
+          return Center(
+            child: SizedBox(
+              height: 50,
+              width: 50,
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 }
