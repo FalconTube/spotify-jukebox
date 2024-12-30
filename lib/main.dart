@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
+import 'package:jukebox_spotify_flutter/widgets/artist_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/artists_grid.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/widgets/artist_grid_temp.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
   await SpotifyApiService.api;
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -66,7 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(child: ArtistsGridScreen()),
+            // Expanded(child: ArtistsGridScreen()),
+            Expanded(child: ImageGrid()),
+            ArtistFilter(),
             Row(
               children: [
                 FloatingActionButton.extended(

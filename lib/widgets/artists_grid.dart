@@ -1,16 +1,17 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 
-class ArtistsGridScreen extends StatefulWidget {
+class ArtistsGridScreen extends ConsumerStatefulWidget {
   const ArtistsGridScreen({super.key});
 
   @override
-  State<ArtistsGridScreen> createState() => ArtistsGridScreenState();
+  ArtistsGridScreenState createState() => ArtistsGridScreenState();
 }
 
-class ArtistsGridScreenState extends State<ArtistsGridScreen> {
+class ArtistsGridScreenState extends ConsumerState<ArtistsGridScreen> {
   late Future<List<Uint8List>> _imageFutures;
 
   Future<List<Uint8List>> loadImages() async {
