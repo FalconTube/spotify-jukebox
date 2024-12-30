@@ -5,10 +5,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
+import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
 
+late ByteData placeholderRaw;
+late Uint8List pl;
 void main() async {
   await dotenv.load(fileName: '.env');
   await SpotifyApiService.api;
+
+  placeholderRaw = await rootBundle.load('favicon.png');
+  pl = Uint8List.view(placeholderRaw.buffer);
   runApp(ProviderScope(child: MyApp()));
 }
 
@@ -67,8 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(child: ArtistGrid()),
+            Expanded(child: ArtistGrid(placeholder: pl)),
             ArtistFilter(),
+            GenreFilter(),
             Row(
               children: [
                 FloatingActionButton.extended(
