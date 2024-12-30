@@ -4,9 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_filter.dart';
-import 'package:jukebox_spotify_flutter/widgets/artists_grid.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
-import 'package:jukebox_spotify_flutter/widgets/artist_grid_temp.dart';
+import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
@@ -69,8 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Expanded(child: ArtistsGridScreen()),
-            Expanded(child: ImageGrid()),
+            Expanded(child: ArtistGrid()),
             ArtistFilter(),
             Row(
               children: [
