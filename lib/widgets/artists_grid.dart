@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 
 class ArtistsGridScreen extends StatefulWidget {
@@ -31,14 +30,12 @@ class ArtistsGridScreenState extends State<ArtistsGridScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _imageFutures = loadImages();
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return FutureBuilder<List<Uint8List>>(
       future: _imageFutures,
       builder: (context, snapshot) {
