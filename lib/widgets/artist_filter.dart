@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_artist_filter.dart';
 
 class ArtistFilter extends ConsumerWidget {
@@ -21,6 +22,10 @@ class ArtistFilter extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () {
                 ref.read(chosenArtistFilterProvider.notifier).state = letter;
+                final genre = ref.read(chosenGenreFilterProvider);
+                ref
+                    .read(dataProvider.notifier)
+                    .resetAndFetch(artistLetter: letter, genre: genre);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
