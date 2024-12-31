@@ -50,18 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  Future<Uint8List> getImage() async {
-    // Future<void> getImage() async {
-    final api = await SpotifyApiService.api;
-    final url = await api.getArtistImageURL("2n2RSaZqBuUUukhbLlpnE6");
-    final img = await api.getImage(url);
-    return img;
-  }
-
-  Future<void> doImage() async {
-    await getImage();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,13 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ArtistFilter(),
             GenreFilter(),
             Row(
-              children: [
-                FloatingActionButton.extended(
-                  label: Text('get image'),
-                  onPressed: doImage,
-                  icon: const Icon(Icons.image),
-                ),
-              ],
+              children: [],
             )
           ],
         ),

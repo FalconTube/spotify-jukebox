@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:typed_data';
 
-import 'package:logger/logger.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
+import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 
 class SpotifyApiService {
   final String clientId = dotenv.env['CLIENT_ID'].toString();
@@ -56,11 +58,43 @@ class SpotifyApi {
   }
 
   Future<void> _init() async {
+    // Access token
     _prefs = await SharedPreferences.getInstance();
     _accessToken = _prefs.getString('spotify_access_token');
-    // setStatus(_accessToken);
+    // Dio cache
+    late CacheStore cacheStore;
+    cacheStore = HiveCacheStore(null);
+
+    // Global cache options
+    final cacheOptions = CacheOptions(
+      // A default store is required for interceptor.
+      store: cacheStore,
+
+      // All subsequent fields are optional.
+
+      // Default.
+      policy: CachePolicy.forceCache,
+      // Returns a cached response on error but for statuses 401 & 403.
+      // Also allows to return a cached response on network errors (e.g. offline usage).
+      // Defaults to [null].
+      hitCacheOnErrorExcept: [401, 403],
+      // Overrides any HTTP directive to delete entry past this duration.
+      // Useful only when origin server has no cache config or custom behaviour is desired.
+      // Defaults to [null].
+      maxStale: const Duration(days: 7),
+      // Default. Allows 3 cache sets and ease cleanup.
+      priority: CachePriority.normal,
+      // Default. Body and headers encryption with your own algorithm.
+      cipher: null,
+      // Default. Key builder to retrieve requests.
+      keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+      // Default. Allows to cache POST requests.
+      // Overriding [keyBuilder] is strongly recommended when [true].
+      allowPostMethod: false,
+    );
 
     _dio.options.baseUrl = apiBaseUrl;
+    // Add token handling
     _dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         if (_accessToken != null) {
@@ -82,6 +116,8 @@ class SpotifyApi {
         return handler.next(e);
       },
     ));
+    // Add cache
+    _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
   }
 
   Future<bool> _refreshTokenFunc() async {
@@ -133,18 +169,20 @@ class SpotifyApi {
     return _dio.post(path, data: data);
   }
 
-  Future<String> getArtistImageURL(String id) async {
-    String url = "https://api.spotify.com/v1/artists/$id";
-    final response = await get(url);
-    try {
-      final Map<String, dynamic> jsonData = response.data;
-      String albumUrl = jsonData["images"][0]["url"];
-      return albumUrl;
-    } on Exception catch (e) {
-      // setStatus(e.toString());
-      rethrow;
-    }
-  }
+  // Future<String> getArtistImageURL(String id) async {
+  //   Log.log("Getting artist");
+  //   String url = "https://api.spotify.com/v1/artists/$id";
+  //   final response = await get(url);
+  //   Log.log(response.statusCode.toString());
+  //   try {
+  //     final Map<String, dynamic> jsonData = response.data;
+  //     String albumUrl = jsonData["images"][0]["url"];
+  //     return albumUrl;
+  //   } on Exception catch (e) {
+  //     // setStatus(e.toString());
+  //     rethrow;
+  //   }
+  // }
 
   Future<Uint8List> getImage(String imageURL) async {
     final thisDio = Dio();
@@ -156,24 +194,8 @@ class SpotifyApi {
       imageData = Uint8List.fromList(response.data.toList());
       return imageData;
     } on Exception catch (e) {
-      setStatus(e.toString());
+      Log.log(e.toString());
       rethrow;
     }
-  }
-
-  final Logger _logger = Logger(
-    //filter: CustomLogFilter(), // custom logfilter can be used to have logs in release mode
-    printer: PrettyPrinter(
-      methodCount: 2, // number of method calls to be displayed
-      errorMethodCount: 8, // number of method calls if stacktrace is provided
-      lineLength: 120, // width of the output
-      colors: true, // Colorful log messages
-      printEmojis: true, // Print an emoji for each log message
-    ),
-  );
-  void setStatus(String code, {String? message}) {
-    var text = message ?? '';
-    _logger.i('$code$text');
-    // print('$code$text');
   }
 }
