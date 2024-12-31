@@ -56,9 +56,12 @@ class DataNotifier extends StateNotifier<DataState> {
     state = state.copyWith(isLoading: true, error: null);
     int currentAmountItems = state.data.length;
     final artists = await _getMostRelevantArtists(
-        artistLetter, 20, genre, currentAmountItems);
+        artistLetter, 40, genre, currentAmountItems);
     sortByFollowersDescending(artists);
+    // sortByPopularityDescending(artists);
     removeNotStartingWithLetter(artists, artistLetter);
+    removeWithoutGenre(artists);
+    removeHoerspiel(artists);
     // Remove possible duplicates
     if (currentAmountItems > 1) {
       final distinctArtists = removeAlreadyExisting(state.data, artists);
@@ -82,10 +85,26 @@ class DataNotifier extends StateNotifier<DataState> {
     artists.sort((a, b) => b.followers.compareTo(a.followers));
   }
 
+  // Sorts all arists by their amount of popularity in descending order
+  void sortByPopularityDescending(List<ArtistCard> artists) {
+    artists.sort((a, b) => b.popularity.compareTo(a.popularity));
+  }
+
   // Sorts all artists by their amount of followers in descending order
   void removeNotStartingWithLetter(List<ArtistCard> artists, String letter) {
     artists.removeWhere((artist) => artist.name.startsWith(letter) == false);
     // artists.sort((a, b) => b.followers.compareTo(a.followers));
+  }
+
+  // Some things do not have a genre.
+  // I guess they are not music then, so remove them.
+  void removeWithoutGenre(List<ArtistCard> artists) {
+    artists.removeWhere((artist) => artist.genres == "");
+  }
+
+  // We do not want "Hoerspiel"
+  void removeHoerspiel(List<ArtistCard> artists) {
+    artists.removeWhere((artist) => artist.genres.contains("hoerspiel"));
   }
 
   List<ArtistCard> removeAlreadyExisting(
@@ -93,7 +112,6 @@ class DataNotifier extends StateNotifier<DataState> {
     // Create list of names of artists
     List<String> curArtNames = [];
     for (final artist in curArt) {
-      // Log.log(artist.toString());
       curArtNames.add(artist.name);
     }
     // Now check if they are already present in existing
@@ -135,10 +153,29 @@ class DataNotifier extends StateNotifier<DataState> {
       final name = item["name"].toString();
       final pop = item["popularity"];
       final follows = item["followers"]["total"];
-      final img = item["images"][0]["url"].toString();
-      // Log.log("Name: $name, Pop: $pop, Fol: $follows Img: $img");
+      String img;
+      // Not all artists have an image
+      final images = item["images"];
+      if (images.toString() == "[]") {
+        img = "";
+      } else {
+        img = images[0]["url"].toString();
+      }
+      // Not all artists have a genre
+      // TODO: Dirty implementation, fix this.
+      String gen;
+      final genres = item["genres"];
+      if (genres.toString() == "[]") {
+        gen = "";
+      } else {
+        gen = genres.toString();
+      }
       foundArtists.add(ArtistCard(
-          imageUrl: img, name: name, popularity: pop, followers: follows));
+          imageUrl: img,
+          name: name,
+          popularity: pop,
+          followers: follows,
+          genres: gen));
     }
     return foundArtists;
   }

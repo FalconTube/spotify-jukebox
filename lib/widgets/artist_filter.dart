@@ -28,11 +28,11 @@ class ArtistFilter extends ConsumerWidget {
                     .resetAndFetch(artistLetter: letter, genre: genre);
               },
               style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.zero)),
-                backgroundColor:
-                    artistFilter == letter ? Colors.purpleAccent : null,
-              ),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.zero)),
+                  backgroundColor: artistFilter == letter
+                      ? Theme.of(context).colorScheme.inversePrimary
+                      : null),
               child: Text(letter),
             ),
           );

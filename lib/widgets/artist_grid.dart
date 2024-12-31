@@ -35,8 +35,8 @@ class _ArtistGridState extends ConsumerState<ArtistGrid> {
   void _scrollListener() {
     final artistLetter = ref.read(chosenArtistFilterProvider);
     final genre = ref.read(chosenGenreFilterProvider);
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels >=
+        (_scrollController.position.maxScrollExtent * 2 / 3)) {
       ref.read(dataProvider.notifier).fetchData(artistLetter, genre);
     }
   }
@@ -76,11 +76,14 @@ class _ArtistGridState extends ConsumerState<ArtistGrid> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: FadeInImage.memoryNetwork(
-                      image: imageData.imageUrl,
-                      fit: BoxFit.cover,
-                      placeholder: widget.placeholder,
-                    ),
+                    child: imageData.imageUrl != ""
+                        ? FadeInImage.memoryNetwork(
+                            fadeInDuration: const Duration(milliseconds: 300),
+                            image: imageData.imageUrl,
+                            fit: BoxFit.cover,
+                            placeholder: widget.placeholder,
+                          )
+                        : Image.asset("favicon.png", fit: BoxFit.cover),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),

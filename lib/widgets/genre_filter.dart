@@ -9,7 +9,12 @@ class GenreFilter extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final genreFilter = ref.watch(chosenGenreFilterProvider);
-    final genres = ["metal", "pop", "disco", "eurobeat"];
+    final genres = [
+      "metal",
+      "pop",
+      "disco",
+      "eurobeat",
+    ];
     return SizedBox(
       // Added SizedBox to constrain the height of the ListView
       height: 40, // Adjust height as needed
@@ -31,8 +36,9 @@ class GenreFilter extends ConsumerWidget {
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.zero)),
-                backgroundColor:
-                    genreFilter == genres[index] ? Colors.purpleAccent : null,
+                backgroundColor: genreFilter == genres[index]
+                    ? Theme.of(context).colorScheme.inversePrimary
+                    : null,
               ),
               child: Text(genres[index]),
             ),
