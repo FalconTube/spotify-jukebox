@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 
-import 'package:jukebox_spotify_flutter/states/chosen_artist_filter.dart';
-
 // Provider for managing the data and API calls
 final dataProvider = StateNotifierProvider<DataNotifier, DataState>((ref) {
   return DataNotifier();

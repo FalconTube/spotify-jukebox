@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
-import 'package:jukebox_spotify_flutter/states/chosen_artist_filter.dart';
+import 'package:jukebox_spotify_flutter/states/chosen_genre_filter.dart';
+import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 
 class GenreFilter extends ConsumerWidget {
   const GenreFilter({super.key});
@@ -28,10 +29,10 @@ class GenreFilter extends ConsumerWidget {
               onPressed: () {
                 ref.read(chosenGenreFilterProvider.notifier).state =
                     genres[index];
-                final artist = ref.read(chosenArtistFilterProvider);
+                final query = ref.read(searchQueryProvider);
                 ref
                     .read(dataProvider.notifier)
-                    .resetAndFetch(searchQuery: artist, genre: genres[index]);
+                    .resetAndFetch(searchQuery: query, genre: genres[index]);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(

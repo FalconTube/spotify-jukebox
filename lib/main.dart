@@ -4,8 +4,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
-import 'package:jukebox_spotify_flutter/states/chosen_artist_filter.dart';
-import 'package:jukebox_spotify_flutter/widgets/artist_filter.dart';
+import 'package:jukebox_spotify_flutter/states/chosen_genre_filter.dart';
+import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
@@ -49,20 +49,20 @@ class MyHomePage extends ConsumerStatefulWidget {
 }
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
-  // _controller = TextEditingController(text: ref.read(searchQueryProvider));
   final TextEditingController _controller = TextEditingController(text: "");
   final FocusNode _searchFocusNode = FocusNode();
   String compareValue = "";
   @override
   void initState() {
     super.initState();
-    // _controller = TextEditingController(text: ref.read(searchQueryProvider));
-
     // Listen to changes in the text field and update the provider.
     _controller.addListener(() {
       if (_controller.text == compareValue) return;
+      // Update comparison
       compareValue = _controller.text;
-      // ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
+      // Update provider
+      ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
+      // Do API call
       final genre = ref.read(chosenGenreFilterProvider);
       ref
           .read(dataProvider.notifier)
@@ -100,7 +100,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                   },
                   label: Text("Clear Search")),
             )),
-            ArtistFilter(),
             GenreFilter(),
             MyKeyboard(
                 textcontroller: _controller, focusNode: _searchFocusNode),

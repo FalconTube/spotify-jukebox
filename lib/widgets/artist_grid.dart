@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
-import 'package:jukebox_spotify_flutter/states/chosen_artist_filter.dart';
+import 'package:jukebox_spotify_flutter/states/chosen_genre_filter.dart';
+import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
-  Uint8List placeholder;
-  ArtistGrid({super.key, required this.placeholder});
+  final Uint8List placeholder;
+  const ArtistGrid({super.key, required this.placeholder});
 
   @override
   ConsumerState<ArtistGrid> createState() => _ArtistGridState();
@@ -33,11 +34,11 @@ class _ArtistGridState extends ConsumerState<ArtistGrid> {
   }
 
   void _scrollListener() {
-    final artistLetter = ref.read(chosenArtistFilterProvider);
+    final query = ref.read(searchQueryProvider);
     final genre = ref.read(chosenGenreFilterProvider);
     if (_scrollController.position.pixels >=
         (_scrollController.position.maxScrollExtent * 2 / 3)) {
-      ref.read(dataProvider.notifier).fetchData(artistLetter, genre);
+      ref.read(dataProvider.notifier).fetchData(query, genre);
     }
   }
 
