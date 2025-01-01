@@ -9,12 +9,15 @@ class MySearchbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SearchBar(
-      keyboardType: TextInputType.none,
-      focusNode: focusNode,
-      leading: Icon(Icons.search),
-      hintText: "Find anything",
-      controller: textcontroller,
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: SearchBar(
+        keyboardType: TextInputType.none,
+        focusNode: focusNode,
+        leading: Icon(Icons.search),
+        hintText: "Find anything",
+        controller: textcontroller,
+      ),
     );
   }
 }

@@ -152,6 +152,7 @@ class DataNotifier extends StateNotifier<DataState> {
       final name = item["name"].toString();
       final pop = item["popularity"];
       final follows = item["followers"]["total"];
+      final id = item["id"];
       String img;
       // Not all artists have an image
       final images = item["images"];
@@ -174,7 +175,8 @@ class DataNotifier extends StateNotifier<DataState> {
           name: name,
           popularity: pop,
           followers: follows,
-          genres: gen));
+          genres: gen,
+          id: id));
     }
     return foundArtists;
   }

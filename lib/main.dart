@@ -94,6 +94,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 child: Scaffold(
               body: ArtistGrid(placeholder: pl),
               floatingActionButton: FloatingActionButton.extended(
+                  heroTag: 'f1',
                   icon: Icon(Icons.delete),
                   onPressed: () {
                     _controller.text = "";
@@ -107,6 +108,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'f2',
         label: Text('connect'),
         onPressed: () {},
         tooltip: 'connect',
