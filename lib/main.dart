@@ -3,9 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
+import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
+import 'package:jukebox_spotify_flutter/states/chosen_artist_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
+import 'package:jukebox_spotify_flutter/widgets/search.dart';
+import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 
 late ByteData placeholderRaw;
 late Uint8List pl;
@@ -35,19 +39,42 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
+  // _controller = TextEditingController(text: ref.read(searchQueryProvider));
+  final TextEditingController _controller = TextEditingController(text: "");
+  final FocusNode _searchFocusNode = FocusNode();
+  String compareValue = "";
   @override
   void initState() {
     super.initState();
+    // _controller = TextEditingController(text: ref.read(searchQueryProvider));
+
+    // Listen to changes in the text field and update the provider.
+    _controller.addListener(() {
+      if (_controller.text == compareValue) return;
+      compareValue = _controller.text;
+      // ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
+      final genre = ref.read(chosenGenreFilterProvider);
+      ref
+          .read(dataProvider.notifier)
+          .resetAndFetch(searchQuery: _controller.text, genre: genre);
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _searchFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -61,12 +88,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(child: ArtistGrid(placeholder: pl)),
+            MySearchbar(
+                textcontroller: _controller, focusNode: _searchFocusNode),
+            Expanded(
+                child: Scaffold(
+              body: ArtistGrid(placeholder: pl),
+              floatingActionButton: FloatingActionButton.extended(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    _controller.text = "";
+                  },
+                  label: Text("Clear Search")),
+            )),
             ArtistFilter(),
             GenreFilter(),
-            Row(
-              children: [],
-            )
+            MyKeyboard(
+                textcontroller: _controller, focusNode: _searchFocusNode),
           ],
         ),
       ),

@@ -25,7 +25,7 @@ class ArtistFilter extends ConsumerWidget {
                 final genre = ref.read(chosenGenreFilterProvider);
                 ref
                     .read(dataProvider.notifier)
-                    .resetAndFetch(artistLetter: letter, genre: genre);
+                    .resetAndFetch(searchQuery: letter, genre: genre);
               },
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(

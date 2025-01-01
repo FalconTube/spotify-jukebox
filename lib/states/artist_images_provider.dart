@@ -3,7 +3,6 @@ import 'dart:collection';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 
 import 'package:jukebox_spotify_flutter/states/chosen_artist_filter.dart';
 
@@ -45,21 +44,22 @@ class DataNotifier extends StateNotifier<DataState> {
   DataNotifier() : super(DataState()) {
     fetchData("A", ""); // Initial data fetch
   }
-  void resetAndFetch({required String artistLetter, required String genre}) {
+  void resetAndFetch({required String searchQuery, required String genre}) {
     state = DataState(); // Reset state to initial values.
-    fetchData(artistLetter, genre); // Fetch with the new URL
+    fetchData(searchQuery, genre); // Fetch with the new URL
   }
 
-  Future<void> fetchData(String artistLetter, String genre) async {
+  Future<void> fetchData(String searchQuery, String genre) async {
     if (state.isLoading) return; // Prevent concurrent requests
+    if (searchQuery == "") return; // Nothing to do if empty
 
     state = state.copyWith(isLoading: true, error: null);
     int currentAmountItems = state.data.length;
     final artists = await _getMostRelevantArtists(
-        artistLetter, 40, genre, currentAmountItems);
+        searchQuery, 40, genre, currentAmountItems);
     sortByFollowersDescending(artists);
     // sortByPopularityDescending(artists);
-    removeNotStartingWithLetter(artists, artistLetter);
+    // removeNotStartingWithLetter(artists, artistLetter);
     removeWithoutGenre(artists);
     removeHoerspiel(artists);
     // Remove possible duplicates
@@ -92,7 +92,8 @@ class DataNotifier extends StateNotifier<DataState> {
 
   // Sorts all artists by their amount of followers in descending order
   void removeNotStartingWithLetter(List<ArtistCard> artists, String letter) {
-    artists.removeWhere((artist) => artist.name.startsWith(letter) == false);
+    artists.removeWhere((artist) =>
+        artist.name.toLowerCase().startsWith(letter.toLowerCase()) == false);
     // artists.sort((a, b) => b.followers.compareTo(a.followers));
   }
 
