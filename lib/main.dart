@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_genre_filter.dart';
+import 'package:jukebox_spotify_flutter/states/loading_state.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
@@ -29,10 +32,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeAnimationDuration: Durations.extralong4,
       title: 'Jukebox',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple, brightness: Brightness.dark),
+              seedColor: Colors.redAccent, brightness: Brightness.dark),
+          // seedColor: Colors.deepPurple, brightness: Brightness.dark),
           useMaterial3: true),
       home: MyHomePage(title: 'Jukebox'),
     );
@@ -52,21 +57,28 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   final TextEditingController _controller = TextEditingController(text: "");
   final FocusNode _searchFocusNode = FocusNode();
   String compareValue = "";
+  Timer? debounce;
   @override
   void initState() {
     super.initState();
     // Listen to changes in the text field and update the provider.
     _controller.addListener(() {
       if (_controller.text == compareValue) return;
-      // Update comparison
+      ref.read(isLoadingProvider.notifier).state = true;
+
       compareValue = _controller.text;
       // Update provider
-      ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
-      // Do API call
-      final genre = ref.read(chosenGenreFilterProvider);
-      ref
-          .read(dataProvider.notifier)
-          .resetAndFetch(searchQuery: _controller.text, genre: genre);
+      // Check if another call is in flight
+      if (debounce?.isActive ?? false) debounce?.cancel();
+      // API with debounce
+      debounce = Timer(const Duration(milliseconds: 1500), () {
+        ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
+        final genre = ref.read(chosenGenreFilterProvider);
+        ref
+            .read(dataProvider.notifier)
+            .resetAndFetch(searchQuery: _controller.text, genre: genre);
+        ref.read(isLoadingProvider.notifier).state = false;
+      });
     });
   }
 
@@ -89,7 +101,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             MySearchbar(
-                textcontroller: _controller, focusNode: _searchFocusNode),
+              textcontroller: _controller,
+              focusNode: _searchFocusNode,
+            ),
             Expanded(
                 child: Scaffold(
               body: ArtistGrid(placeholder: pl),
