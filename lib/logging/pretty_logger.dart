@@ -1,7 +1,8 @@
 import 'package:logger/logger.dart';
 
 class Log {
-  static void log(String code, {String? message}) {
+  static void log(dynamic code, {String? message}) {
+    String strCode = code.toString();
     final Logger logger = Logger(
       //filter: CustomLogFilter(), // custom logfilter can be used to have logs in release mode
       printer: PrettyPrinter(
@@ -14,6 +15,6 @@ class Log {
     );
 
     var text = message ?? '';
-    logger.i('$code$text');
+    logger.i('$strCode$text');
   }
 }
