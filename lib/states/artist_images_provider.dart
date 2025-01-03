@@ -61,24 +61,24 @@ class DataNotifier extends StateNotifier<DataState> {
 
     state = state.copyWith(isLoading: true, error: null);
     int currentAmountItems = state.data.length;
-    final artists = await _requestInfo(
+    final infos = await _requestInfo(
         searchQuery, 2, genre, currentAmountItems, requestType);
-    // sortByFollowersDescending(artists);
-    // sortByPopularityDescending(artists);
-    // removeNotStartingWithLetter(artists, "f");
-    removeWithoutGenre(artists);
-    removeHoerspiel(artists);
+    // sortByFollowersDescending(infos);
+    // sortByPopularityDescending(infos);
+    // removeNotStartingWithLetter(infos, "f");
+    removeWithoutGenre(infos);
+    removeHoerspiel(infos);
     // Remove possible duplicates
     if (currentAmountItems > 1) {
-      final distinctArtists = removeAlreadyExisting(state.data, artists);
+      final distinctInfos = removeAlreadyExisting(state.data, infos);
       state = state.copyWith(
-        data: [...state.data, ...distinctArtists], // Append new data
+        data: [...state.data, ...distinctInfos], // Append new data
         isLoading: false,
         page: state.page + 1, // Increment page number
       );
     } else {
       state = state.copyWith(
-        data: [...state.data, ...artists], // Append new data
+        data: [...state.data, ...infos], // Append new data
         isLoading: false,
         page: state.page + 1, // Increment page number
       );
@@ -104,13 +104,19 @@ class DataNotifier extends StateNotifier<DataState> {
 
   // Some things do not have a genre.
   // I guess they are not music then, so remove them.
-  void removeWithoutGenre(List<ArtistCard> artists) {
-    artists.removeWhere((artist) => artist.genres!.isEmpty);
+  void removeWithoutGenre(List<Info> infos) {
+    infos.removeWhere((info) {
+      if (info is ArtistCard) return info.genres!.isEmpty;
+      return false;
+    });
   }
 
   // We do not want "Hoerspiel"
-  void removeHoerspiel(List<ArtistCard> artists) {
-    artists.removeWhere((artist) => artist.genres!.contains("hoerspiel"));
+  void removeHoerspiel(List<Info> infos) {
+    infos.removeWhere((info) {
+      if (info is ArtistCard) return info.genres!.contains("hoerspiel");
+      return false;
+    });
   }
 
   List<Info> removeAlreadyExisting(List<Info> curArt, List<Info> newArt) {
@@ -131,20 +137,18 @@ class DataNotifier extends StateNotifier<DataState> {
     return distinctArtists;
   }
 
-  List<ArtistCard> removeDuplicates(List<ArtistCard> artists) {
-    final distinctArtists = LinkedHashSet<ArtistCard>.from(artists).toList();
-    return distinctArtists;
+  List<Info> removeDuplicates(List<Info> artists) {
+    final distinctInfos = LinkedHashSet<Info>.from(artists).toList();
+    return distinctInfos;
   }
 
-  Future<List<ArtistCard>> _requestInfo(String letter, int limit, String genre,
+  Future<List<Info>> _requestInfo(String letter, int limit, String genre,
       int offset, RequestType type) async {
     String uri;
 
     if (genre == "") {
       uri =
-          // "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=artist,track,album&limit=$limit&offset=$offset";
           "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=${type.name}&limit=$limit&offset=$offset";
-      // "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=track&limit=$limit&offset=$offset";
     } else {
       uri =
           'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"&type=artist&limit=$limit&offset=$offset';
@@ -155,10 +159,10 @@ class DataNotifier extends StateNotifier<DataState> {
     // 'https://api.spotify.com/v1/search?q=$letter&type=artist&limit=$limit');
     final items = out.data["artists"]["items"];
 
-    List<ArtistCard> foundArtists = [];
+    List<Info> allOuputs = [];
     for (final item in items) {
-      foundArtists.add(ArtistCard.fromJson(item));
+      allOuputs.add(ArtistCard.fromJson(item));
     }
-    return foundArtists;
+    return allOuputs;
   }
 }
