@@ -112,13 +112,13 @@ class InnerArtistGrid extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Expanded(
-                        child: imageData.imageUrl != ""
+                        child: imageData.getImage() != ""
                             ? Hero(
-                                tag: imageData.imageUrl,
+                                tag: imageData.getImage(),
                                 child: FadeInImage.memoryNetwork(
                                   fadeInDuration:
                                       const Duration(milliseconds: 300),
-                                  image: imageData.imageUrl,
+                                  image: imageData.getImage(),
                                   fit: BoxFit.cover,
                                   placeholder: widget.placeholder,
                                 ),

@@ -3,23 +3,28 @@ import 'package:jukebox_spotify_flutter/classes/info.dart';
 
 part 'artist.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, createToJson: true, createFactory: true)
 class ArtistCard extends Info {
-  final int followers;
-  final String genres;
+  // @JsonKey(name: 'followers.total')
+  // final int followers;
+  final List<dynamic>? genres;
   // Add other relevant data like title, description, etc.
   ArtistCard({
     required super.name,
-    required super.imageUrl,
+    required super.images,
     required super.id,
     required super.popularity,
     required this.genres,
-    required this.followers,
+    // required this.followers,
   });
 
   factory ArtistCard.fromJson(Map<String, dynamic> json) =>
       _$ArtistCardFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$ArtistCardToJson(this);
 }
+
+// @JsonSerializable()
+// class Followers {
+//   final int total;
+// }

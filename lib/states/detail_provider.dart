@@ -31,7 +31,7 @@ final topTracksProvider =
         artistName: artist.name,
         albumName: albumName,
         popularity: popularity,
-        imageUrl: trackImg,
+        images: images,
         durationMs: duration,
         id: id));
   }

@@ -6,18 +6,18 @@ part of 'album.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-AlbumCard _$AlbumCardFromJson(Map<String, dynamic> json) => AlbumCard(
-      name: json['type'] as String,
-      imageUrl: json['imageUrl'] as String,
+AlbumCard _$AlbumCardFromJson(Map json) => AlbumCard(
+      name: json['name'] as String,
+      images: json['images'] as List<dynamic>?,
       id: json['id'] as String,
       artistName: json['artistName'] as String,
       popularity: (json['popularity'] as num).toInt(),
     );
 
 Map<String, dynamic> _$AlbumCardToJson(AlbumCard instance) => <String, dynamic>{
-      'type': instance.name,
+      'name': instance.name,
       'id': instance.id,
-      'imageUrl': instance.imageUrl,
+      'images': instance.images,
       'popularity': instance.popularity,
       'artistName': instance.artistName,
     };

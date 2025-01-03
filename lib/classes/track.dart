@@ -11,7 +11,7 @@ class SimpleTrack extends Info {
   // Add other relevant data like title, description, etc.
   SimpleTrack({
     required super.name,
-    required super.imageUrl,
+    required super.images,
     required super.id,
     required super.popularity,
     required this.durationMs,
@@ -22,7 +22,6 @@ class SimpleTrack extends Info {
   factory SimpleTrack.fromJson(Map<String, dynamic> json) =>
       _$SimpleTrackFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$SimpleTrackToJson(this);
 
   String prettyDuration() {

@@ -9,7 +9,7 @@ class AlbumCard extends Info {
   // Add other relevant data like title, description, etc.
   AlbumCard({
     required super.name,
-    required super.imageUrl,
+    required super.images,
     required super.id,
     required this.artistName,
     required super.popularity,
@@ -18,6 +18,5 @@ class AlbumCard extends Info {
   factory AlbumCard.fromJson(Map<String, dynamic> json) =>
       _$AlbumCardFromJson(json);
 
-  @override
   Map<String, dynamic> toJson() => _$AlbumCardToJson(this);
 }

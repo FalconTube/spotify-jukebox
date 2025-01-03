@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
@@ -86,11 +87,11 @@ class DataNotifier extends StateNotifier<DataState> {
 
   //
   // Sorts all artists by their amount of followers in descending order
-  void sortByFollowersDescending(List<ArtistCard> artists) {
-    artists.sort((a, b) => b.followers.compareTo(a.followers));
-  }
+  // void sortByFollowersDescending(List<ArtistCard> artists) {
+  //   artists.sort((a, b) => b.followers.compareTo(a.followers));
+  // }
 
-  // Sorts all arists by their amount of popularity in descending order
+  // Sorts all artists by their amount of popularity in descending order
   void sortByPopularityDescending(List<ArtistCard> artists) {
     artists.sort((a, b) => b.popularity.compareTo(a.popularity));
   }
@@ -104,12 +105,12 @@ class DataNotifier extends StateNotifier<DataState> {
   // Some things do not have a genre.
   // I guess they are not music then, so remove them.
   void removeWithoutGenre(List<ArtistCard> artists) {
-    artists.removeWhere((artist) => artist.genres == "");
+    artists.removeWhere((artist) => artist.genres!.isEmpty);
   }
 
   // We do not want "Hoerspiel"
   void removeHoerspiel(List<ArtistCard> artists) {
-    artists.removeWhere((artist) => artist.genres.contains("hoerspiel"));
+    artists.removeWhere((artist) => artist.genres!.contains("hoerspiel"));
   }
 
   List<Info> removeAlreadyExisting(List<Info> curArt, List<Info> newArt) {
@@ -148,44 +149,15 @@ class DataNotifier extends StateNotifier<DataState> {
       uri =
           'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"&type=artist&limit=$limit&offset=$offset';
     }
-    Log.log(uri);
 
     final api = await SpotifyApiService.api;
     final out = await api.get(uri);
     // 'https://api.spotify.com/v1/search?q=$letter&type=artist&limit=$limit');
-    Log.log(out.data);
     final items = out.data["artists"]["items"];
 
     List<ArtistCard> foundArtists = [];
     for (final item in items) {
-      final name = item["name"].toString();
-      final pop = item["popularity"];
-      final follows = item["followers"]["total"];
-      final id = item["id"];
-      String img;
-      // Not all artists have an image
-      final images = item["images"];
-      if (images.toString() == "[]") {
-        img = "";
-      } else {
-        img = images[0]["url"].toString();
-      }
-      // Not all artists have a genre
-      // TODO: Dirty implementation, fix this.
-      String gen;
-      final genres = item["genres"];
-      if (genres.toString() == "[]") {
-        gen = "";
-      } else {
-        gen = genres.toString();
-      }
-      foundArtists.add(ArtistCard(
-          imageUrl: img,
-          name: name,
-          popularity: pop,
-          followers: follows,
-          genres: gen,
-          id: id));
+      foundArtists.add(ArtistCard.fromJson(item));
     }
     return foundArtists;
   }

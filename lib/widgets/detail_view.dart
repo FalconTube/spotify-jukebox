@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
@@ -15,8 +14,7 @@ class DetailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (info is ArtistCard) return CircularProgressIndicator();
-    // final artist = ArtistCard.fromSuperclass(info, "", 0);
+    // if (info is ArtistCard) return CircularProgressIndicator();
     final ArtistCard artist = info as ArtistCard;
     final topTracks = ref.watch(topTracksProvider(artist));
     return Scaffold(
@@ -31,12 +29,12 @@ class DetailView extends ConsumerWidget {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
-                  background: artist.imageUrl != ""
+                  background: artist.getImage() != ""
                       ? Hero(
-                          tag: artist.imageUrl,
+                          tag: artist.getImage(),
                           child: FadeInImage.memoryNetwork(
                             fadeInDuration: const Duration(milliseconds: 300),
-                            image: artist.imageUrl,
+                            image: artist.getImage(),
                             fit: BoxFit.cover,
                             placeholder: pl,
                           ),
@@ -56,11 +54,11 @@ class DetailView extends ConsumerWidget {
                       constraints: BoxConstraints(maxWidth: 600),
                       child: ListTile(
                           visualDensity: VisualDensity(vertical: 4),
-                          leading: track.imageUrl != ""
+                          leading: track.getImage() != ""
                               ? FadeInImage.memoryNetwork(
                                   fadeInDuration:
                                       const Duration(milliseconds: 300),
-                                  image: track.imageUrl,
+                                  image: track.getImage(),
                                   fit: BoxFit.fitHeight,
                                   placeholder: pl,
                                 )
