@@ -185,7 +185,6 @@ class DataNotifier extends StateNotifier<DataState> {
           popularity: pop,
           followers: follows,
           genres: gen,
-          type: type,
           id: id));
     }
     return foundArtists;

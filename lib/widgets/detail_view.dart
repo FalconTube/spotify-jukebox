@@ -15,8 +15,9 @@ class DetailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (info.type != RequestType.artist) return CircularProgressIndicator();
-    final artist = ArtistCard.fromSuperclass(info, "", 0);
+    if (info is ArtistCard) return CircularProgressIndicator();
+    // final artist = ArtistCard.fromSuperclass(info, "", 0);
+    final ArtistCard artist = info as ArtistCard;
     final topTracks = ref.watch(topTracksProvider(artist));
     return Scaffold(
       body: CustomScrollView(

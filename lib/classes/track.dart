@@ -1,5 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
 
+part 'track.g.dart';
+
+@JsonSerializable()
 class SimpleTrack extends Info {
   final String artistName;
   final String albumName;
@@ -10,11 +14,16 @@ class SimpleTrack extends Info {
     required super.imageUrl,
     required super.id,
     required super.popularity,
-    required super.type,
     required this.durationMs,
     required this.artistName,
     required this.albumName,
   });
+
+  factory SimpleTrack.fromJson(Map<String, dynamic> json) =>
+      _$SimpleTrackFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$SimpleTrackToJson(this);
 
   String prettyDuration() {
     int durationSec = (durationMs / 1000).toInt();

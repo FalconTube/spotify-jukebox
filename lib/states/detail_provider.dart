@@ -33,7 +33,6 @@ final topTracksProvider =
         popularity: popularity,
         imageUrl: trackImg,
         durationMs: duration,
-        type: RequestType.track,
         id: id));
   }
   return trackItems;

@@ -1,5 +1,9 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
 
+part 'album.g.dart';
+
+@JsonSerializable()
 class AlbumCard extends Info {
   final String artistName;
   // Add other relevant data like title, description, etc.
@@ -7,8 +11,13 @@ class AlbumCard extends Info {
     required super.name,
     required super.imageUrl,
     required super.id,
-    required super.type,
     required this.artistName,
     required super.popularity,
   });
+
+  factory AlbumCard.fromJson(Map<String, dynamic> json) =>
+      _$AlbumCardFromJson(json);
+
+  @override
+  Map<String, dynamic> toJson() => _$AlbumCardToJson(this);
 }
