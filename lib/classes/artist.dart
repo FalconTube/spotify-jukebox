@@ -1,23 +1,29 @@
-// 1. Define your data model (if applicable)
-class ArtistCard {
-  final String name;
+import 'package:jukebox_spotify_flutter/classes/info.dart';
+
+class ArtistCard extends Info {
   final int followers;
-  final int popularity;
-  final String imageUrl;
   final String genres;
-  final String id;
   // Add other relevant data like title, description, etc.
   ArtistCard({
-    required this.name,
-    required this.followers,
-    required this.popularity,
-    required this.imageUrl,
+    required super.name,
+    required super.imageUrl,
+    required super.id,
+    required super.popularity,
+    required super.type,
     required this.genres,
-    required this.id,
+    required this.followers,
   });
 
-  @override
-  String toString() {
-    return "Name: $name, Pop: $popularity, Fol: $followers Img: $imageUrl, Genres: $genres, ID: $id";
+  factory ArtistCard.fromSuperclass(
+      Info superInstance, String genres, int followers) {
+    return ArtistCard(
+      name: superInstance.name,
+      imageUrl: superInstance.imageUrl,
+      id: superInstance.id,
+      popularity: superInstance.popularity,
+      type: superInstance.type,
+      genres: genres,
+      followers: followers,
+    );
   }
 }

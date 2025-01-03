@@ -6,10 +6,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
-import 'package:jukebox_spotify_flutter/states/chosen_genre_filter.dart';
+import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
+import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
@@ -74,9 +75,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       debounce = Timer(const Duration(milliseconds: 1500), () {
         ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
         final genre = ref.read(chosenGenreFilterProvider);
-        ref
-            .read(dataProvider.notifier)
-            .resetAndFetch(searchQuery: _controller.text, genre: genre);
+        final requestType = ref.read(chosenSearchFilter);
+        ref.read(dataProvider.notifier).resetAndFetch(
+            searchQuery: _controller.text,
+            genre: genre,
+            requestType: requestType);
         ref.read(isLoadingProvider.notifier).state = false;
       });
     });
@@ -100,9 +103,15 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            MySearchbar(
-              textcontroller: _controller,
-              focusNode: _searchFocusNode,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ChipRow(),
+                MySearchbar(
+                  textcontroller: _controller,
+                  focusNode: _searchFocusNode,
+                ),
+              ],
             ),
             Expanded(
                 child: Scaffold(

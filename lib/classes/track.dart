@@ -1,20 +1,20 @@
-class SimpleTrack {
-  final String name;
+import 'package:jukebox_spotify_flutter/classes/info.dart';
+
+class SimpleTrack extends Info {
   final String artistName;
-  final String img;
+  final String albumName;
   final int durationMs;
   // Add other relevant data like title, description, etc.
   SimpleTrack({
-    required this.name,
-    required this.artistName,
-    required this.img,
+    required super.name,
+    required super.imageUrl,
+    required super.id,
+    required super.popularity,
+    required super.type,
     required this.durationMs,
+    required this.artistName,
+    required this.albumName,
   });
-
-  @override
-  String toString() {
-    return "Name: $name, Artist: $artistName, Img: $img";
-  }
 
   String prettyDuration() {
     int durationSec = (durationMs / 1000).toInt();

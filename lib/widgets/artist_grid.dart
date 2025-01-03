@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
-import 'package:jukebox_spotify_flutter/states/chosen_genre_filter.dart';
+import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
 
@@ -38,9 +38,10 @@ class _ArtistGridState extends ConsumerState<ArtistGrid> {
   void _scrollListener() {
     final query = ref.read(searchQueryProvider);
     final genre = ref.read(chosenGenreFilterProvider);
+    final requestType = ref.read(chosenSearchFilter);
     if (_scrollController.position.pixels >=
         (_scrollController.position.maxScrollExtent * 2 / 3)) {
-      ref.read(dataProvider.notifier).fetchData(query, genre);
+      ref.read(dataProvider.notifier).fetchData(query, genre, requestType);
     }
   }
 
@@ -104,7 +105,7 @@ class InnerArtistGrid extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => DetailView(artist: imageData)),
+                          builder: (context) => DetailView(info: imageData)),
                     );
                   },
                   child: Column(

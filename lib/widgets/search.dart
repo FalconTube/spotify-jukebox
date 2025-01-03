@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class MySearchbar extends ConsumerWidget {
   const MySearchbar({
@@ -16,39 +17,43 @@ class MySearchbar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(isLoadingProvider);
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[900], // Background color
-          borderRadius: BorderRadius.circular(30.0), // Rounded corners
-        ),
-        child: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
-              child: isLoading
-                  ? SizedBox(
-                      height: iconSize,
-                      width: iconSize,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: const CircularProgressIndicator(),
-                      ))
-                  : Icon(Icons.search,
-                      color: Colors.grey, size: iconSize), // Search icon
-            ),
-            Expanded(
-              child: TextField(
-                controller: textcontroller,
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  border: InputBorder.none, // Remove default border
-                  hintStyle: const TextStyle(color: Colors.grey),
+    return SizedBox(
+      width: 500,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[900], // Background color
+            borderRadius: BorderRadius.circular(30.0), // Rounded corners
+          ),
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: isLoading
+                    ? SizedBox(
+                        height: iconSize,
+                        width: iconSize,
+                        child: Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child:
+                              SpinKitPulse(size: iconSize, color: Colors.grey),
+                        ))
+                    : Icon(Icons.search,
+                        color: Colors.grey, size: iconSize), // Search icon
+              ),
+              Expanded(
+                child: TextField(
+                  controller: textcontroller,
+                  decoration: InputDecoration(
+                    hintText: "Search...",
+                    border: InputBorder.none, // Remove default border
+                    hintStyle: const TextStyle(color: Colors.grey),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

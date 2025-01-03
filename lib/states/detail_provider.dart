@@ -3,6 +3,7 @@ import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
 final topTracksProvider =
     FutureProvider.family<List<SimpleTrack>, ArtistCard>((ref, artist) async {
@@ -14,7 +15,10 @@ final topTracksProvider =
   final tracks = out.data["tracks"];
   for (final track in tracks) {
     final trackName = track["name"].toString();
+    final popularity = track["popularity"].toInt();
+    final albumName = track["album"]["name"].toString();
     final duration = track["duration_ms"].toInt();
+    final id = track["id"].toString();
     String trackImg;
     final images = track["album"]["images"];
     if (images.toString() == "[]") {
@@ -25,8 +29,12 @@ final topTracksProvider =
     trackItems.add(SimpleTrack(
         name: trackName,
         artistName: artist.name,
-        img: trackImg,
-        durationMs: duration));
+        albumName: albumName,
+        popularity: popularity,
+        imageUrl: trackImg,
+        durationMs: duration,
+        type: RequestType.track,
+        id: id));
   }
   return trackItems;
 });

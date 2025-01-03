@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
+import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
+import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
 class DetailView extends ConsumerWidget {
-  const DetailView({super.key, required this.artist});
+  const DetailView({super.key, required this.info});
 
-  final ArtistCard artist;
+  final Info info;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (info.type != RequestType.artist) return CircularProgressIndicator();
+    final artist = ArtistCard.fromSuperclass(info, "", 0);
     final topTracks = ref.watch(topTracksProvider(artist));
     return Scaffold(
       body: CustomScrollView(
@@ -51,11 +55,11 @@ class DetailView extends ConsumerWidget {
                       constraints: BoxConstraints(maxWidth: 600),
                       child: ListTile(
                           visualDensity: VisualDensity(vertical: 4),
-                          leading: track.img != ""
+                          leading: track.imageUrl != ""
                               ? FadeInImage.memoryNetwork(
                                   fadeInDuration:
                                       const Duration(milliseconds: 300),
-                                  image: track.img,
+                                  image: track.imageUrl,
                                   fit: BoxFit.fitHeight,
                                   placeholder: pl,
                                 )

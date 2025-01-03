@@ -3,6 +3,9 @@ import 'dart:collection';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
+import 'package:jukebox_spotify_flutter/classes/info.dart';
+import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
 // Provider for managing the data and API calls
 final dataProvider = StateNotifierProvider<DataNotifier, DataState>((ref) {
@@ -11,7 +14,7 @@ final dataProvider = StateNotifierProvider<DataNotifier, DataState>((ref) {
 
 // State for the data provider
 class DataState {
-  final List<ArtistCard> data;
+  final List<Info> data;
   final bool isLoading;
   final String? error;
   final int page; // Keep track of the current page
@@ -24,7 +27,7 @@ class DataState {
   });
 
   DataState copyWith({
-    List<ArtistCard>? data,
+    List<Info>? data,
     bool? isLoading,
     String? error,
     int? page,
@@ -40,24 +43,28 @@ class DataState {
 
 class DataNotifier extends StateNotifier<DataState> {
   DataNotifier() : super(DataState()) {
-    fetchData("A", ""); // Initial data fetch
+    fetchData("A", "", RequestType.artist); // Initial data fetch
   }
-  void resetAndFetch({required String searchQuery, required String genre}) {
+  void resetAndFetch(
+      {required String searchQuery,
+      required String genre,
+      required RequestType requestType}) {
     state = DataState(); // Reset state to initial values.
-    fetchData(searchQuery, genre); // Fetch with the new URL
+    fetchData(searchQuery, genre, requestType); // Fetch with the new URL
   }
 
-  Future<void> fetchData(String searchQuery, String genre) async {
+  Future<void> fetchData(
+      String searchQuery, String genre, RequestType requestType) async {
     if (state.isLoading) return; // Prevent concurrent requests
     if (searchQuery == "") return; // Nothing to do if empty
 
     state = state.copyWith(isLoading: true, error: null);
     int currentAmountItems = state.data.length;
-    final artists = await _getMostRelevantArtists(
-        searchQuery, 40, genre, currentAmountItems);
-    sortByFollowersDescending(artists);
+    final artists = await _requestInfo(
+        searchQuery, 2, genre, currentAmountItems, requestType);
+    // sortByFollowersDescending(artists);
     // sortByPopularityDescending(artists);
-    // removeNotStartingWithLetter(artists, artistLetter);
+    // removeNotStartingWithLetter(artists, "f");
     removeWithoutGenre(artists);
     removeHoerspiel(artists);
     // Remove possible duplicates
@@ -88,8 +95,7 @@ class DataNotifier extends StateNotifier<DataState> {
     artists.sort((a, b) => b.popularity.compareTo(a.popularity));
   }
 
-  // Sorts all artists by their amount of followers in descending order
-  void removeNotStartingWithLetter(List<ArtistCard> artists, String letter) {
+  void removeNotStartingWithLetter(List<Info> artists, String letter) {
     artists.removeWhere((artist) =>
         artist.name.toLowerCase().startsWith(letter.toLowerCase()) == false);
     // artists.sort((a, b) => b.followers.compareTo(a.followers));
@@ -106,15 +112,14 @@ class DataNotifier extends StateNotifier<DataState> {
     artists.removeWhere((artist) => artist.genres.contains("hoerspiel"));
   }
 
-  List<ArtistCard> removeAlreadyExisting(
-      List<ArtistCard> curArt, List<ArtistCard> newArt) {
+  List<Info> removeAlreadyExisting(List<Info> curArt, List<Info> newArt) {
     // Create list of names of artists
     List<String> curArtNames = [];
     for (final artist in curArt) {
       curArtNames.add(artist.name);
     }
     // Now check if they are already present in existing
-    List<ArtistCard> distinctArtists = [];
+    List<Info> distinctArtists = [];
     for (final artist in newArt) {
       if (curArtNames.contains(artist.name)) {
         continue;
@@ -130,21 +135,25 @@ class DataNotifier extends StateNotifier<DataState> {
     return distinctArtists;
   }
 
-  Future<List<ArtistCard>> _getMostRelevantArtists(
-      String letter, int limit, String genre, int offset) async {
+  Future<List<ArtistCard>> _requestInfo(String letter, int limit, String genre,
+      int offset, RequestType type) async {
     String uri;
 
     if (genre == "") {
       uri =
-          "https://api.spotify.com/v1/search?q=$letter&type=artist&limit=$limit&offset=$offset";
+          // "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=artist,track,album&limit=$limit&offset=$offset";
+          "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=${type.name}&limit=$limit&offset=$offset";
+      // "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=track&limit=$limit&offset=$offset";
     } else {
       uri =
-          'https://api.spotify.com/v1/search?q=$letter genre:"$genre"&type=artist&limit=$limit&offset=$offset';
+          'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"&type=artist&limit=$limit&offset=$offset';
     }
+    Log.log(uri);
 
     final api = await SpotifyApiService.api;
     final out = await api.get(uri);
     // 'https://api.spotify.com/v1/search?q=$letter&type=artist&limit=$limit');
+    Log.log(out.data);
     final items = out.data["artists"]["items"];
 
     List<ArtistCard> foundArtists = [];
@@ -176,6 +185,7 @@ class DataNotifier extends StateNotifier<DataState> {
           popularity: pop,
           followers: follows,
           genres: gen,
+          type: type,
           id: id));
     }
     return foundArtists;
