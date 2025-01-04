@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
+import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
@@ -13,9 +15,36 @@ class ArtistDetailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // if (info is ArtistCard) return CircularProgressIndicator();
-    final ArtistCard artist = info as ArtistCard;
-    final topTracks = ref.watch(topTracksProvider(artist));
+    Log.log(info.runtimeType);
+    switch (info.runtimeType) {
+      case ArtistCard:
+        ArtistCard artist = info as ArtistCard;
+        AsyncValue<List<SimpleTrack>> topTracks =
+            ref.watch(topTracksProvider(artist));
+        return ArtistOrAlbum(info: artist, tracks: topTracks);
+      case AlbumCard:
+        AlbumCard album = info as AlbumCard;
+        AsyncValue<List<SimpleTrack>> albumTracks =
+            ref.watch(albumTracksProvider(album));
+        return ArtistOrAlbum(info: album, tracks: albumTracks);
+      default:
+        return CircularProgressIndicator();
+    }
+  }
+}
+
+class ArtistOrAlbum extends StatelessWidget {
+  final Info info;
+  final AsyncValue<List<SimpleTrack>> tracks;
+
+  const ArtistOrAlbum({
+    super.key,
+    required this.info,
+    required this.tracks,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -24,28 +53,27 @@ class ArtistDetailView extends ConsumerWidget {
               elevation: 5,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                  title: Text(artist.name,
+                  title: Text(info.name,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       )),
-                  background: artist.getImage() != ""
+                  background: info.getImage() != ""
                       ? Hero(
-                          tag: artist.getImage(),
+                          tag: info.getImage(),
                           child: FadeInImage.memoryNetwork(
                             fadeInDuration: const Duration(milliseconds: 300),
-                            image: artist.getImage(),
+                            image: info.getImage(),
                             fit: BoxFit.cover,
                             placeholder: pl,
                           ),
                         )
                       : Image.asset("favicon.png", fit: BoxFit.cover))),
-          topTracks.when(
+          tracks.when(
             data: (tracks) {
               return SliverList(
                   delegate: SliverChildBuilderDelegate(
                       childCount: tracks.length, (context, index) {
                 final track = tracks[index];
-                Log.log("Index: $index, all: ${tracks.length}");
                 return Padding(
                   padding: const EdgeInsets.all(10),
                   child: Center(
