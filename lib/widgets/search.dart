@@ -52,6 +52,13 @@ class MySearchbar extends ConsumerWidget {
                   ),
                 ),
               ),
+              Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: IconButton(
+                      onPressed: () {
+                        textcontroller.text = "";
+                      },
+                      icon: Icon(Icons.delete))),
             ],
           ),
         ),

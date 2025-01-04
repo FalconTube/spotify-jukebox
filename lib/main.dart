@@ -128,16 +128,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             }
           }),
           Expanded(
-              child: Scaffold(
-            body: ArtistGrid(placeholder: pl),
-            floatingActionButton: FloatingActionButton.extended(
-                heroTag: 'f1',
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  _controller.text = "";
-                },
-                label: Text("Clear Search")),
-          )),
+            child: ArtistGrid(placeholder: pl),
+          ),
           GenreFilter(),
           MyKeyboard(textcontroller: _controller, focusNode: _searchFocusNode),
         ]),
