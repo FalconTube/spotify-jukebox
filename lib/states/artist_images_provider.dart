@@ -45,18 +45,18 @@ class DataState {
 
 class DataNotifier extends StateNotifier<DataState> {
   DataNotifier() : super(DataState()) {
-    fetchData("A", "", RequestType.artist); // Initial data fetch
+    fetchData("A", "", []); // Initial data fetch
   }
   void resetAndFetch(
       {required String searchQuery,
       required String genre,
-      required RequestType requestType}) {
+      required List<RequestType> requestType}) {
     state = DataState(); // Reset state to initial values.
     fetchData(searchQuery, genre, requestType); // Fetch with the new URL
   }
 
   Future<void> fetchData(
-      String searchQuery, String genre, RequestType requestType) async {
+      String searchQuery, String genre, List<RequestType> requestType) async {
     if (state.isLoading) return; // Prevent concurrent requests
     if (searchQuery == "") return; // Nothing to do if empty
 
@@ -144,16 +144,26 @@ class DataNotifier extends StateNotifier<DataState> {
   }
 
   Future<List<Info>> _requestInfo(String letter, int limit, String genre,
-      int offset, RequestType type) async {
+      int offset, List<RequestType> type) async {
     String uri;
+    String typeFilter;
+    // If no value give, search for all
+    if (type.isEmpty) {
+      // typeFilter = "&type=${RequestType.artist.name}";
+      typeFilter =
+          "&type=${RequestType.artist.name},${RequestType.album.name},${RequestType.track.name}";
+    } else {
+      typeFilter = "&type=${type.join(",")}";
+    }
 
     if (genre == "") {
       uri =
-          "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=${type.name}&limit=$limit&offset=$offset";
+          "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}$typeFilter&limit=$limit&offset=$offset";
     } else {
       uri =
-          'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"&type=artist&limit=$limit&offset=$offset';
+          'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"$typeFilter&limit=$limit&offset=$offset';
     }
+    Log.log(uri);
 
     final api = await SpotifyApiService.api;
     final out = await api.get(uri);
