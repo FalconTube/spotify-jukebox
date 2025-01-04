@@ -211,7 +211,7 @@ class PlayableNetworkImage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     color: Colors.black
-                        .withValues(alpha: 0.5), // Semi-transparent background
+                        .withValues(alpha: 0.9), // Semi-transparent background
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: const Icon(

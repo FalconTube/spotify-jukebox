@@ -40,7 +40,7 @@ class GenreFilter extends ConsumerWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.zero)),
                 backgroundColor: genreFilter == genres[index]
-                    ? Theme.of(context).colorScheme.inversePrimary
+                    ? Theme.of(context).colorScheme.primaryContainer
                     : null,
               ),
               child: Text(genres[index]),

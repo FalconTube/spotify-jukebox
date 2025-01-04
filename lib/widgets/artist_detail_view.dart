@@ -80,6 +80,7 @@ class ArtistOrAlbum extends StatelessWidget {
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 600),
                       child: ListTile(
+                          // isThreeLine: true,
                           visualDensity: VisualDensity(vertical: 4),
                           leading: track.getImage() != ""
                               ? FadeInImage.memoryNetwork(
@@ -90,10 +91,32 @@ class ArtistOrAlbum extends StatelessWidget {
                                   placeholder: pl,
                                 )
                               : Image.asset("favicon.png", fit: BoxFit.cover),
-                          trailing: Text(
-                            track.prettyDuration(),
+                          trailing: Material(
+                            // Added Material for inkwell effect and elevation
+                            color: Colors
+                                .transparent, // Make the background transparent
+                            child: InkWell(
+                              onTap: () {},
+                              borderRadius: BorderRadius.circular(
+                                  24.0), // Optional: Rounded corners for the InkWell
+                              child: Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withValues(
+                                      alpha:
+                                          0.5), // Semi-transparent background
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
+                                child: const Icon(
+                                  Icons.play_arrow,
+                                  color: Colors.white,
+                                  size: 36.0,
+                                ),
+                              ),
+                            ),
                           ),
-                          title: Text(track.name)),
+                          title: Text(track.name),
+                          subtitle: Text(track.prettyDuration())),
                     ),
                   ),
                 );

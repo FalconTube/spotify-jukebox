@@ -11,6 +11,7 @@ import 'package:jukebox_spotify_flutter/states/loading_state.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
+import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
 import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
@@ -18,6 +19,7 @@ import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 late ByteData placeholderRaw;
 late Uint8List pl;
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await SpotifyApiService.api;
 
@@ -96,9 +98,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         title: Text(widget.title),
       ),
+      drawer: CustomDrawer(),
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           LayoutBuilder(
