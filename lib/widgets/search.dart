@@ -18,7 +18,7 @@ class MySearchbar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(isLoadingProvider);
     return SizedBox(
-      width: 500,
+      width: 400,
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: Container(

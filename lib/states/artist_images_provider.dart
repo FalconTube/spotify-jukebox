@@ -163,7 +163,6 @@ class DataNotifier extends StateNotifier<DataState> {
       uri =
           'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"$typeFilter&limit=$limit&offset=$offset';
     }
-    Log.log(uri);
 
     final api = await SpotifyApiService.api;
     final out = await api.get(uri);

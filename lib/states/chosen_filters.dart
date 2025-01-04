@@ -3,5 +3,4 @@ import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
 final chosenGenreFilterProvider = StateProvider<String>((ref) => '');
 
-final chosenSearchFilter =
-    StateProvider<List<RequestType>>((ref) => [RequestType.artist]);
+final chosenSearchFilter = StateProvider<List<RequestType>>((ref) => []);

@@ -100,35 +100,47 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ChipRow(),
-                MySearchbar(
-                  textcontroller: _controller,
-                  focusNode: _searchFocusNode,
-                ),
-              ],
-            ),
-            Expanded(
-                child: Scaffold(
-              body: ArtistGrid(placeholder: pl),
-              floatingActionButton: FloatingActionButton.extended(
-                  heroTag: 'f1',
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    _controller.text = "";
-                  },
-                  label: Text("Clear Search")),
-            )),
-            GenreFilter(),
-            MyKeyboard(
-                textcontroller: _controller, focusNode: _searchFocusNode),
-          ],
-        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth > 700) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ChipRow(),
+                  MySearchbar(
+                    textcontroller: _controller,
+                    focusNode: _searchFocusNode,
+                  ),
+                ],
+              );
+            } else {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ChipRow(),
+                  MySearchbar(
+                    textcontroller: _controller,
+                    focusNode: _searchFocusNode,
+                  ),
+                ],
+              );
+            }
+          }),
+          Expanded(
+              child: Scaffold(
+            body: ArtistGrid(placeholder: pl),
+            floatingActionButton: FloatingActionButton.extended(
+                heroTag: 'f1',
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  _controller.text = "";
+                },
+                label: Text("Clear Search")),
+          )),
+          GenreFilter(),
+          MyKeyboard(textcontroller: _controller, focusNode: _searchFocusNode),
+        ]),
       ),
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'f2',
