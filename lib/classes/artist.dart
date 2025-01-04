@@ -8,12 +8,13 @@ class ArtistCard extends Info {
   // @JsonKey(name: 'followers.total')
   // final int followers;
   final List<dynamic>? genres;
+  final int popularity;
   // Add other relevant data like title, description, etc.
   ArtistCard({
     required super.name,
     required super.images,
     required super.id,
-    required super.popularity,
+    required this.popularity,
     required this.genres,
     // required this.followers,
   });

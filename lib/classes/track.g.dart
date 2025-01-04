@@ -6,17 +6,15 @@ part of 'track.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SimpleTrack _$SimpleTrackFromJson(Map json) => SimpleTrack(
+SimpleTrack _$SimpleTrackFromJson(Map<String, dynamic> json) => SimpleTrack(
       name: json['name'] as String,
       images: json['images'] as List<dynamic>?,
       id: json['id'] as String,
-      popularity: (json['popularity'] as num).toInt(),
       durationMs: (json['duration_ms'] as num).toInt(),
       allArtists: (json['artists'] as List<dynamic>)
-          .map((e) => TrackArtist.fromJson(Map<String, dynamic>.from(e as Map)))
+          .map((e) => TrackArtist.fromJson(e as Map<String, dynamic>))
           .toList(),
-      album:
-          TrackAlbum.fromJson(Map<String, dynamic>.from(json['album'] as Map)),
+      album: TrackAlbum.fromJson(json['album'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SimpleTrackToJson(SimpleTrack instance) =>
@@ -24,13 +22,12 @@ Map<String, dynamic> _$SimpleTrackToJson(SimpleTrack instance) =>
       'name': instance.name,
       'id': instance.id,
       'images': instance.images,
-      'popularity': instance.popularity,
       'artists': instance.allArtists.map((e) => e.toJson()).toList(),
       'album': instance.album.toJson(),
       'duration_ms': instance.durationMs,
     };
 
-TrackArtist _$TrackArtistFromJson(Map json) => TrackArtist(
+TrackArtist _$TrackArtistFromJson(Map<String, dynamic> json) => TrackArtist(
       name: json['name'] as String,
     );
 
@@ -39,11 +36,10 @@ Map<String, dynamic> _$TrackArtistToJson(TrackArtist instance) =>
       'name': instance.name,
     };
 
-TrackAlbum _$TrackAlbumFromJson(Map json) => TrackAlbum(
+TrackAlbum _$TrackAlbumFromJson(Map<String, dynamic> json) => TrackAlbum(
       name: json['name'] as String,
       images: (json['images'] as List<dynamic>?)
-          ?.map(
-              (e) => SimpleImage.fromJson(Map<String, dynamic>.from(e as Map)))
+          ?.map((e) => SimpleImage.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

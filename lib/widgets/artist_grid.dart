@@ -1,14 +1,13 @@
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/classes/artist.dart';
 
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
-import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
+import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
   final Uint8List placeholder;
@@ -104,8 +103,12 @@ class InnerArtistGrid extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => DetailView(info: imageData)),
+                      MaterialPageRoute(builder: (context) {
+                        if (imageData is ArtistCard) {
+                          return ArtistDetailView(info: imageData);
+                        }
+                        return CircularProgressIndicator();
+                      }),
                     );
                   },
                   child: Column(

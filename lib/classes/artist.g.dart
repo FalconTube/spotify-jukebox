@@ -6,7 +6,7 @@ part of 'artist.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ArtistCard _$ArtistCardFromJson(Map json) => ArtistCard(
+ArtistCard _$ArtistCardFromJson(Map<String, dynamic> json) => ArtistCard(
       name: json['name'] as String,
       images: json['images'] as List<dynamic>?,
       id: json['id'] as String,
@@ -19,6 +19,6 @@ Map<String, dynamic> _$ArtistCardToJson(ArtistCard instance) =>
       'name': instance.name,
       'id': instance.id,
       'images': instance.images,
-      'popularity': instance.popularity,
       'genres': instance.genres,
+      'popularity': instance.popularity,
     };

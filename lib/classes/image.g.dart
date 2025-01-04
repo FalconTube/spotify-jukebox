@@ -6,7 +6,7 @@ part of 'image.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SimpleImage _$SimpleImageFromJson(Map json) => SimpleImage(
+SimpleImage _$SimpleImageFromJson(Map<String, dynamic> json) => SimpleImage(
       url: json['url'] as String,
       width: (json['width'] as num).toInt(),
       height: (json['height'] as num).toInt(),

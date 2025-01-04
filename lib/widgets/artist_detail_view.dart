@@ -5,10 +5,9 @@ import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
-import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
-class DetailView extends ConsumerWidget {
-  const DetailView({super.key, required this.info});
+class ArtistDetailView extends ConsumerWidget {
+  const ArtistDetailView({super.key, required this.info});
 
   final Info info;
 

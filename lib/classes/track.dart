@@ -18,7 +18,6 @@ class SimpleTrack extends Info {
     required super.name,
     required super.images,
     required super.id,
-    required super.popularity,
     required this.durationMs,
     required this.allArtists,
     required this.album,

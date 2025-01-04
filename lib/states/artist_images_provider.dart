@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
+import 'package:jukebox_spotify_flutter/classes/response_data.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
@@ -156,13 +157,16 @@ class DataNotifier extends StateNotifier<DataState> {
 
     final api = await SpotifyApiService.api;
     final out = await api.get(uri);
-    // 'https://api.spotify.com/v1/search?q=$letter&type=artist&limit=$limit');
-    final items = out.data["artists"]["items"];
+    final ResponseData response = ResponseData.fromJson(out.data);
 
-    List<Info> allOuputs = [];
-    for (final item in items) {
-      allOuputs.add(ArtistCard.fromJson(item));
-    }
-    return allOuputs;
+    // Flutter magic
+    // Iterate over all items per category and append to list
+    List<Info> allOutputs = [
+      ...?response.artists?.items,
+      ...?response.albums?.items,
+      ...?response.tracks?.items,
+    ];
+
+    return allOutputs;
   }
 }
