@@ -1,14 +1,16 @@
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/classes/album.dart';
+import 'package:jukebox_spotify_flutter/classes/artist.dart';
+import 'package:jukebox_spotify_flutter/classes/info.dart';
+import 'package:jukebox_spotify_flutter/main.dart';
 
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
-import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
+import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
   final Uint8List placeholder;
@@ -104,27 +106,21 @@ class InnerArtistGrid extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => DetailView(info: imageData)),
+                      MaterialPageRoute(builder: (context) {
+                        return ArtistDetailView(info: imageData);
+                      }),
                     );
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(
-                        child: imageData.imageUrl != ""
-                            ? Hero(
-                                tag: imageData.imageUrl,
-                                child: FadeInImage.memoryNetwork(
-                                  fadeInDuration:
-                                      const Duration(milliseconds: 300),
-                                  image: imageData.imageUrl,
-                                  fit: BoxFit.cover,
-                                  placeholder: widget.placeholder,
-                                ),
-                              )
-                            : Image.asset("favicon.png", fit: BoxFit.cover),
-                      ),
+                      if (imageData is ArtistCard)
+                        ArtistImage(imageData: imageData),
+
+                      if (imageData is AlbumCard)
+                        AlbumImage(imageData: imageData),
+
+                      // AlbumImage(imageData: imageData),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
@@ -146,6 +142,55 @@ class InnerArtistGrid extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+}
+
+class ArtistImage extends StatelessWidget {
+  const ArtistImage({
+    super.key,
+    required this.imageData,
+  });
+
+  final Info imageData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: imageData.getImage() != ""
+          ? Hero(
+              tag: imageData.getImage(),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(imageData.getImage()),
+              ),
+            )
+          : CircleAvatar(backgroundImage: AssetImage("favicon.png")),
+    );
+  }
+}
+
+class AlbumImage extends StatelessWidget {
+  const AlbumImage({
+    super.key,
+    required this.imageData,
+  });
+
+  final Info imageData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: imageData.getImage() != ""
+          ? Hero(
+              tag: imageData.getImage(),
+              child: FadeInImage.memoryNetwork(
+                fadeInDuration: const Duration(milliseconds: 300),
+                image: imageData.getImage(),
+                fit: BoxFit.cover,
+                placeholder: pl,
+              ),
+            )
+          : Image.asset("favicon.png", fit: BoxFit.cover),
     );
   }
 }

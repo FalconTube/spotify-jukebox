@@ -46,6 +46,7 @@ dependencies:
   dio_cache_interceptor_hive_store: ^4.0.0
   virtual_keyboard_multi_language: ^1.1.2
   flutter_spinkit: ^5.2.1
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +58,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  json_serializable: ^6.9.2
+  build_runner: ^2.4.14
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

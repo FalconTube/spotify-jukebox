@@ -1,9 +1,11 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
+import 'package:jukebox_spotify_flutter/classes/response_data.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
@@ -43,41 +45,41 @@ class DataState {
 
 class DataNotifier extends StateNotifier<DataState> {
   DataNotifier() : super(DataState()) {
-    fetchData("A", "", RequestType.artist); // Initial data fetch
+    fetchData("A", "", []); // Initial data fetch
   }
   void resetAndFetch(
       {required String searchQuery,
       required String genre,
-      required RequestType requestType}) {
+      required List<RequestType> requestType}) {
     state = DataState(); // Reset state to initial values.
     fetchData(searchQuery, genre, requestType); // Fetch with the new URL
   }
 
   Future<void> fetchData(
-      String searchQuery, String genre, RequestType requestType) async {
+      String searchQuery, String genre, List<RequestType> requestType) async {
     if (state.isLoading) return; // Prevent concurrent requests
     if (searchQuery == "") return; // Nothing to do if empty
 
     state = state.copyWith(isLoading: true, error: null);
     int currentAmountItems = state.data.length;
-    final artists = await _requestInfo(
+    final infos = await _requestInfo(
         searchQuery, 2, genre, currentAmountItems, requestType);
-    // sortByFollowersDescending(artists);
-    // sortByPopularityDescending(artists);
-    // removeNotStartingWithLetter(artists, "f");
-    removeWithoutGenre(artists);
-    removeHoerspiel(artists);
+    // sortByFollowersDescending(infos);
+    // sortByPopularityDescending(infos);
+    // removeNotStartingWithLetter(infos, "f");
+    removeWithoutGenre(infos);
+    removeHoerspiel(infos);
     // Remove possible duplicates
     if (currentAmountItems > 1) {
-      final distinctArtists = removeAlreadyExisting(state.data, artists);
+      final distinctInfos = removeAlreadyExisting(state.data, infos);
       state = state.copyWith(
-        data: [...state.data, ...distinctArtists], // Append new data
+        data: [...state.data, ...distinctInfos], // Append new data
         isLoading: false,
         page: state.page + 1, // Increment page number
       );
     } else {
       state = state.copyWith(
-        data: [...state.data, ...artists], // Append new data
+        data: [...state.data, ...infos], // Append new data
         isLoading: false,
         page: state.page + 1, // Increment page number
       );
@@ -86,11 +88,11 @@ class DataNotifier extends StateNotifier<DataState> {
 
   //
   // Sorts all artists by their amount of followers in descending order
-  void sortByFollowersDescending(List<ArtistCard> artists) {
-    artists.sort((a, b) => b.followers.compareTo(a.followers));
-  }
+  // void sortByFollowersDescending(List<ArtistCard> artists) {
+  //   artists.sort((a, b) => b.followers.compareTo(a.followers));
+  // }
 
-  // Sorts all arists by their amount of popularity in descending order
+  // Sorts all artists by their amount of popularity in descending order
   void sortByPopularityDescending(List<ArtistCard> artists) {
     artists.sort((a, b) => b.popularity.compareTo(a.popularity));
   }
@@ -103,13 +105,19 @@ class DataNotifier extends StateNotifier<DataState> {
 
   // Some things do not have a genre.
   // I guess they are not music then, so remove them.
-  void removeWithoutGenre(List<ArtistCard> artists) {
-    artists.removeWhere((artist) => artist.genres == "");
+  void removeWithoutGenre(List<Info> infos) {
+    infos.removeWhere((info) {
+      if (info is ArtistCard) return info.genres!.isEmpty;
+      return false;
+    });
   }
 
   // We do not want "Hoerspiel"
-  void removeHoerspiel(List<ArtistCard> artists) {
-    artists.removeWhere((artist) => artist.genres.contains("hoerspiel"));
+  void removeHoerspiel(List<Info> infos) {
+    infos.removeWhere((info) {
+      if (info is ArtistCard) return info.genres!.contains("hoerspiel");
+      return false;
+    });
   }
 
   List<Info> removeAlreadyExisting(List<Info> curArt, List<Info> newArt) {
@@ -130,64 +138,45 @@ class DataNotifier extends StateNotifier<DataState> {
     return distinctArtists;
   }
 
-  List<ArtistCard> removeDuplicates(List<ArtistCard> artists) {
-    final distinctArtists = LinkedHashSet<ArtistCard>.from(artists).toList();
-    return distinctArtists;
+  List<Info> removeDuplicates(List<Info> artists) {
+    final distinctInfos = LinkedHashSet<Info>.from(artists).toList();
+    return distinctInfos;
   }
 
-  Future<List<ArtistCard>> _requestInfo(String letter, int limit, String genre,
-      int offset, RequestType type) async {
+  Future<List<Info>> _requestInfo(String letter, int limit, String genre,
+      int offset, List<RequestType> type) async {
     String uri;
+    String typeFilter;
+    // If no value give, search for all
+    if (type.isEmpty) {
+      // typeFilter = "&type=${RequestType.artist.name}";
+      typeFilter =
+          "&type=${RequestType.artist.name},${RequestType.album.name},${RequestType.track.name}";
+    } else {
+      typeFilter = "&type=${type.join(",")}";
+    }
 
     if (genre == "") {
       uri =
-          // "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=artist,track,album&limit=$limit&offset=$offset";
-          "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=${type.name}&limit=$limit&offset=$offset";
-      // "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}&type=track&limit=$limit&offset=$offset";
+          "https://api.spotify.com/v1/search?q=${letter.toUpperCase()}$typeFilter&limit=$limit&offset=$offset";
     } else {
       uri =
-          'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"&type=artist&limit=$limit&offset=$offset';
+          'https://api.spotify.com/v1/search?q=${letter.toUpperCase()} genre:"$genre"$typeFilter&limit=$limit&offset=$offset';
     }
     Log.log(uri);
 
     final api = await SpotifyApiService.api;
     final out = await api.get(uri);
-    // 'https://api.spotify.com/v1/search?q=$letter&type=artist&limit=$limit');
-    Log.log(out.data);
-    final items = out.data["artists"]["items"];
+    final ResponseData response = ResponseData.fromJson(out.data);
 
-    List<ArtistCard> foundArtists = [];
-    for (final item in items) {
-      final name = item["name"].toString();
-      final pop = item["popularity"];
-      final follows = item["followers"]["total"];
-      final id = item["id"];
-      String img;
-      // Not all artists have an image
-      final images = item["images"];
-      if (images.toString() == "[]") {
-        img = "";
-      } else {
-        img = images[0]["url"].toString();
-      }
-      // Not all artists have a genre
-      // TODO: Dirty implementation, fix this.
-      String gen;
-      final genres = item["genres"];
-      if (genres.toString() == "[]") {
-        gen = "";
-      } else {
-        gen = genres.toString();
-      }
-      foundArtists.add(ArtistCard(
-          imageUrl: img,
-          name: name,
-          popularity: pop,
-          followers: follows,
-          genres: gen,
-          type: type,
-          id: id));
-    }
-    return foundArtists;
+    // Flutter magic
+    // Iterate over all items per category and append to list
+    List<Info> allOutputs = [
+      ...?response.artists?.items,
+      ...?response.albums?.items,
+      ...?response.tracks?.items,
+    ];
+
+    return allOutputs;
   }
 }
