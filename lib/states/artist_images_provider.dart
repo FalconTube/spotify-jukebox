@@ -45,7 +45,7 @@ class DataState {
 
 class DataNotifier extends StateNotifier<DataState> {
   DataNotifier() : super(DataState()) {
-    fetchData("A", "", []); // Initial data fetch
+    fetchData("As I lay dy", "", []); // Initial data fetch
   }
   void resetAndFetch(
       {required String searchQuery,

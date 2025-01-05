@@ -13,6 +13,7 @@ class SimpleTrack extends Info {
   final TrackAlbum album;
   @JsonKey(name: "duration_ms")
   final int durationMs;
+  final String uri;
   // Add other relevant data like title, description, etc.
   SimpleTrack({
     required super.name,
@@ -21,6 +22,7 @@ class SimpleTrack extends Info {
     required this.durationMs,
     required this.allArtists,
     required this.album,
+    required this.uri,
   });
 
   factory SimpleTrack.fromJson(Map<String, dynamic> json) =>

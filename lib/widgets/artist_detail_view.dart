@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/api/spotify_sdk.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
@@ -7,6 +8,7 @@ import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 class ArtistDetailView extends ConsumerWidget {
   const ArtistDetailView({super.key, required this.info});
@@ -96,7 +98,12 @@ class ArtistOrAlbum extends StatelessWidget {
                             color: Colors
                                 .transparent, // Make the background transparent
                             child: InkWell(
-                              onTap: () {},
+                              onTap: () async {
+                                Log.log(track.uri);
+                                await SpotifySdk.queue(spotifyUri: track.uri);
+                                Future.delayed(Durations.long4);
+                                // await AllSDKFuncs.play(track.uri);
+                              },
                               borderRadius: BorderRadius.circular(
                                   24.0), // Optional: Rounded corners for the InkWell
                               child: Container(
