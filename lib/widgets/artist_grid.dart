@@ -100,7 +100,6 @@ class InnerArtistGrid extends StatelessWidget {
         itemCount: dataState.data.length + (dataState.isLoading ? 1 : 0),
         // itemCount: imageList.length,
         itemBuilder: (context, index) {
-          Log.log(dataState.data.length);
           if (index < dataState.data.length) {
             final imageData = dataState.data[index];
             return Padding(

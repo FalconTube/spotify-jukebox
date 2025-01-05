@@ -15,6 +15,7 @@ SimpleTrack _$SimpleTrackFromJson(Map<String, dynamic> json) => SimpleTrack(
           .map((e) => TrackArtist.fromJson(e as Map<String, dynamic>))
           .toList(),
       album: TrackAlbum.fromJson(json['album'] as Map<String, dynamic>),
+      uri: json['uri'] as String,
     );
 
 Map<String, dynamic> _$SimpleTrackToJson(SimpleTrack instance) =>
@@ -25,6 +26,7 @@ Map<String, dynamic> _$SimpleTrackToJson(SimpleTrack instance) =>
       'artists': instance.allArtists.map((e) => e.toJson()).toList(),
       'album': instance.album.toJson(),
       'duration_ms': instance.durationMs,
+      'uri': instance.uri,
     };
 
 TrackArtist _$TrackArtistFromJson(Map<String, dynamic> json) => TrackArtist(

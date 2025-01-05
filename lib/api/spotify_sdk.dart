@@ -1,19 +1,21 @@
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:spotify_sdk/spotify_sdk_web.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 
 class AllSDKFuncs {
-  String token = "";
-  Future<void> connectToSpotifyRemote() async {
+  static Future<void> connectToSpotifyRemote() async {
+    // String token = "";
     try {
-      token = await getAccessToken();
+      // token = await AllSDKFuncs.getAccessToken();
+
+      String clientId = dotenv.env['CLIENT_ID'].toString();
+      String redirectUrl = dotenv.env['REDIRECT_URL'].toString();
       var result = await SpotifySdk.connectToSpotifyRemote(
-          clientId: "240ac9748340493fb136500a0e3acd95",
-          redirectUrl: "http://localhost:44344/",
-          playerName: "Small Player",
-          accessToken: token);
+          clientId: clientId,
+          redirectUrl: redirectUrl,
+          playerName: "Large Player");
+      // accessToken: token);
 
       Log.log(result
           ? 'connect to spotify successful'
@@ -27,11 +29,13 @@ class AllSDKFuncs {
 
   Future<void> deleteToken() async {}
 
-  Future<String> getAccessToken() async {
+  static Future<String> getAccessToken() async {
     try {
+      String clientId = dotenv.env['CLIENT_ID'].toString();
+      String redirectUrl = dotenv.env['REDIRECT_URL'].toString();
       var authenticationToken = await SpotifySdk.getAccessToken(
-        clientId: "240ac9748340493fb136500a0e3acd95",
-        redirectUrl: "http://localhost:44344/",
+        clientId: clientId,
+        redirectUrl: redirectUrl,
         scope:
             'streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private',
       );
@@ -46,9 +50,10 @@ class AllSDKFuncs {
     }
   }
 
-  Future<void> play() async {
+  static Future<void> play(String track) async {
     try {
-      await SpotifySdk.play(spotifyUri: 'spotify:track:0hKjGGWCAthLTNAbO5drvs');
+      // await SpotifySdk.play(spotifyUri: 'spotify:track:0hKjGGWCAthLTNAbO5drvs');
+      await SpotifySdk.play(spotifyUri: track);
     } on PlatformException catch (e) {
       Log.log(e.code, message: e.message);
     } on MissingPluginException {
@@ -56,7 +61,7 @@ class AllSDKFuncs {
     }
   }
 
-  Future<void> resume() async {
+  static Future<void> resume() async {
     try {
       await SpotifySdk.resume();
     } on PlatformException catch (e) {
@@ -66,7 +71,7 @@ class AllSDKFuncs {
     }
   }
 
-  Future<void> pause() async {
+  static Future<void> pause() async {
     try {
       await SpotifySdk.pause();
     } on PlatformException catch (e) {
@@ -76,7 +81,8 @@ class AllSDKFuncs {
     }
   }
 
-  Future<void> logout() async {
+  static Future<void> logout() async {
     var result = await SpotifySdk.disconnect();
+    Log.log(result);
   }
 }
