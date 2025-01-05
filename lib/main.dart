@@ -32,7 +32,7 @@ void main() async {
   spotifySdkEnabled = dotenv.env['SPOTIFY_SDK_ENABLED'].toString() == 'true';
 
   // Placeholder image for now
-  placeholderRaw = await rootBundle.load('images/favicon.png');
+  placeholderRaw = await rootBundle.load('favicon.png');
   pl = Uint8List.view(placeholderRaw.buffer);
   runApp(ProviderScope(child: MyApp()));
 }
@@ -129,7 +129,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             (spotifySdkEnabled && !_sdkConnected)
                 ? IconButton(
                     onPressed: () async {
-                      Log.log("connecting");
+                      Log.log("API connect...");
+                      final api = await SpotifyApiService.api;
+                      final result = await api.connectToSpotify();
+                      Log.log("API connect result: $result");
+                      Log.log("SDK connect...");
                       await AllSDKFuncs.connectToSpotifyRemote();
                       setState(() {
                         _sdkConnected = true;
@@ -147,18 +151,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           true => _sdkConnected
               ? MainWidget(
                   controller: _controller, searchFocusNode: _searchFocusNode)
-              : Container(
-                  child: IconButton(
-                  onPressed: () async {
-                    final api = await SpotifyApiService.api;
-                    final result = await api.connectToSpotify();
-                    setState(() {
-                      _sdkConnected = true;
-                    });
-                    Log.log("Connection: ${result}");
-                  },
-                  icon: Icon(Icons.connected_tv),
-                )),
+              : Container(),
         });
   }
 }
