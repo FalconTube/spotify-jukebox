@@ -16,7 +16,9 @@ import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
 import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
+import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
+import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
 
 late ByteData placeholderRaw;
 late Uint8List pl;
@@ -138,13 +140,25 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           ],
         ),
         drawer: CustomDrawer(),
+        bottomNavigationBar: WebPlayerBottomBar(),
         body: switch (spotifySdkEnabled) {
           false => MainWidget(
               controller: _controller, searchFocusNode: _searchFocusNode),
           true => _sdkConnected
               ? MainWidget(
                   controller: _controller, searchFocusNode: _searchFocusNode)
-              : Container(),
+              : Container(
+                  child: IconButton(
+                  onPressed: () async {
+                    final api = await SpotifyApiService.api;
+                    final result = await api.connectToSpotify();
+                    setState(() {
+                      _sdkConnected = true;
+                    });
+                    Log.log("Connection: ${result}");
+                  },
+                  icon: Icon(Icons.connected_tv),
+                )),
         });
   }
 }
@@ -162,40 +176,64 @@ class MainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-          if (constraints.maxWidth > 700) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ChipRow(),
-                MySearchbar(
-                  textcontroller: _controller,
-                  focusNode: _searchFocusNode,
-                ),
-              ],
-            );
-          } else {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ChipRow(),
-                MySearchbar(
-                  textcontroller: _controller,
-                  focusNode: _searchFocusNode,
-                ),
-              ],
-            );
-          }
-        }),
-        Expanded(
-          child: ArtistGrid(placeholder: pl),
-        ),
-        GenreFilter(),
-        MyKeyboard(textcontroller: _controller, focusNode: _searchFocusNode),
-      ]),
+    return Row(
+      children: [
+        MainCenter(controller: _controller, searchFocusNode: _searchFocusNode),
+        SidebarPlayer(),
+      ],
+    );
+  }
+}
+
+class MainCenter extends StatelessWidget {
+  const MainCenter({
+    super.key,
+    required TextEditingController controller,
+    required FocusNode searchFocusNode,
+  })  : _controller = controller,
+        _searchFocusNode = searchFocusNode;
+
+  final TextEditingController _controller;
+  final FocusNode _searchFocusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Center(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            if (constraints.maxWidth > 700) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ChipRow(),
+                  MySearchbar(
+                    textcontroller: _controller,
+                    focusNode: _searchFocusNode,
+                  ),
+                ],
+              );
+            } else {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ChipRow(),
+                  MySearchbar(
+                    textcontroller: _controller,
+                    focusNode: _searchFocusNode,
+                  ),
+                ],
+              );
+            }
+          }),
+          Expanded(
+            child: ArtistGrid(placeholder: pl),
+          ),
+          GenreFilter(),
+          MyKeyboard(textcontroller: _controller, focusNode: _searchFocusNode),
+        ]),
+      ),
     );
   }
 }
