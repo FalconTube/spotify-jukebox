@@ -8,6 +8,7 @@ import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
+import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 class ArtistDetailView extends ConsumerWidget {
@@ -35,7 +36,7 @@ class ArtistDetailView extends ConsumerWidget {
   }
 }
 
-class ArtistOrAlbum extends StatelessWidget {
+class ArtistOrAlbum extends ConsumerWidget {
   final Info info;
   final AsyncValue<List<SimpleTrack>> tracks;
 
@@ -46,9 +47,9 @@ class ArtistOrAlbum extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Material(
+      child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
               expandedHeight: 350,
@@ -99,10 +100,9 @@ class ArtistOrAlbum extends StatelessWidget {
                                 .transparent, // Make the background transparent
                             child: InkWell(
                               onTap: () async {
-                                Log.log(track.uri);
                                 await SpotifySdk.queue(spotifyUri: track.uri);
                                 Future.delayed(Durations.long4);
-                                // await AllSDKFuncs.play(track.uri);
+                                ref.read(queueProvider.notifier).refreshQueue();
                               },
                               borderRadius: BorderRadius.circular(
                                   24.0), // Optional: Rounded corners for the InkWell

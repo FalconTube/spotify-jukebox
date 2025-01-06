@@ -16,9 +16,12 @@ import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
 import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
+import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:spotify_sdk/spotify_sdk_web.dart';
 
 late ByteData placeholderRaw;
 late Uint8List pl;
@@ -102,7 +105,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   void dispose() async {
     _controller.dispose();
     _searchFocusNode.dispose();
-    await AllSDKFuncs.logout();
+    await SpotifySdk.disconnect();
 
     super.dispose();
   }
@@ -126,21 +129,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     icon: Icon(Icons.exit_to_app))
                 : Container(),
             // Connect
-            (spotifySdkEnabled && !_sdkConnected)
-                ? IconButton(
-                    onPressed: () async {
-                      Log.log("API connect...");
-                      final api = await SpotifyApiService.api;
-                      final result = await api.connectToSpotify();
-                      Log.log("API connect result: $result");
-                      Log.log("SDK connect...");
-                      await AllSDKFuncs.connectToSpotifyRemote();
-                      setState(() {
-                        _sdkConnected = true;
-                      });
-                    },
-                    icon: Icon(Icons.settings_remote))
-                : Container(),
           ],
         ),
         drawer: CustomDrawer(),
@@ -151,8 +139,39 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           true => _sdkConnected
               ? MainWidget(
                   controller: _controller, searchFocusNode: _searchFocusNode)
-              : Container(),
+              : SpotifyLogin(context),
         });
+  }
+
+  Center SpotifyLogin(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        height: 300,
+        width: 300,
+        child: Card(
+          elevation: 5,
+          color: Theme.of(context).colorScheme.primaryContainer,
+          child: Column(
+            spacing: 20,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("spotify_logo_black.png", width: 80, height: 80),
+              ElevatedButton(
+                child: Text("Log in to Spotify Premium"),
+                onPressed: () async {
+                  await AllSDKFuncs.connectToSpotifyRemote();
+                  final api = await SpotifyApiService.api;
+                  final result = await api.connectToSpotify();
+                  setState(() {
+                    _sdkConnected = true;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -223,7 +242,7 @@ class MainCenter extends StatelessWidget {
           Expanded(
             child: ArtistGrid(placeholder: pl),
           ),
-          GenreFilter(),
+          // GenreFilter(),
           MyKeyboard(textcontroller: _controller, focusNode: _searchFocusNode),
         ]),
       ),
