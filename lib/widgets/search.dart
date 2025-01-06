@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 
 class MySearchbar extends ConsumerWidget {
   const MySearchbar({

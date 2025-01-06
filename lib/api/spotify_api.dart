@@ -6,6 +6,7 @@ import 'package:js/js_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:typed_data';
@@ -14,6 +15,7 @@ import 'package:crypto/crypto.dart';
 
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:spotify_sdk/spotify_sdk_web.dart';
 import 'package:synchronized/synchronized.dart' as synchronized;
 
@@ -236,7 +238,7 @@ class SpotifyApi {
     var redirectUrl = redirectUri;
     // var playerName = call.arguments[ParamNames.playerName] as String?;
     var scopes =
-        'streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private';
+        'streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private, playlist-read-private';
 
     // get initial token
     await _authorizeSpotify(
@@ -287,22 +289,17 @@ class SpotifyApi {
 
   Future<String> _getSpotifyAuthToken() async {
     return await _getTokenLock.synchronized<String>(() async {
-      Log.log("In start");
       if (_spotifyToken?.accessToken != null) {
-        Log.log("In first if");
         // attempt to use the previously authorized credentials
         if (_spotifyToken!.expiry >
             DateTime.now().millisecondsSinceEpoch / 1000) {
-          Log.log("In exp");
           // access token valid
           return "foo";
           return _spotifyToken!.accessToken;
         } else {
-          Log.log("In else");
           // access token invalid, refresh it
           var newToken = await _refreshSpotifyToken(
               _spotifyToken!.clientId, _spotifyToken!.refreshToken);
-          Log.log(newToken.toString());
           _spotifyToken = SpotifyToken(
               clientId: _spotifyToken!.clientId,
               accessToken: newToken['access_token'] as String,
@@ -474,6 +471,55 @@ class SpotifyApi {
       return imageData;
     } on Exception catch (e) {
       Log.log(e.toString());
+      rethrow;
+    }
+  }
+
+  Future<String?> getDeviceID() async {
+    String uri = "https://api.spotify.com/v1/me/player/devices";
+    final out = await _dio.get(uri);
+    final devices = out.data["devices"];
+    // final deviceId = out.data["devices"][0]["id"];
+    String? deviceId;
+    for (final device in devices) {
+      final name = device["name"];
+      if (name != "Jukebox") continue;
+      deviceId = device["id"];
+    }
+    return deviceId;
+  }
+
+  Future<void> playPlaylist(String spotifyUri) async {
+    final ps = await SpotifySdk.getPlayerState();
+    final outx = SpotifySdk.getPlayerState();
+    Dio dio = _dio;
+
+    // Set content type
+    dio.options.contentType = Headers.jsonContentType;
+
+    // Prepare data
+    final data = {
+      "context_uri": "spotify:playlist:$spotifyUri",
+      // "offset": {
+      //   "position": 5,
+      // },
+      "position_ms": 0,
+    };
+
+    final deviceId = await getDeviceID();
+    if (deviceId == null) {
+      throw Exception("Could not obtain device ID of Jukebox");
+    }
+
+    try {
+      final response = await dio.put(
+        'https://api.spotify.com/v1/me/player/play?device_id=$deviceId',
+        data: data,
+      );
+      return;
+    } on DioException catch (e) {
+      // Handle error
+      Log.log(e.error);
       rethrow;
     }
   }

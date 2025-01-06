@@ -45,7 +45,7 @@ class DataState {
 
 class DataNotifier extends StateNotifier<DataState> {
   DataNotifier() : super(DataState()) {
-    fetchData("As I lay dy", "", []); // Initial data fetch
+    fetchData("", "", []); // Initial data fetch
   }
   void resetAndFetch(
       {required String searchQuery,
@@ -58,7 +58,10 @@ class DataNotifier extends StateNotifier<DataState> {
   Future<void> fetchData(
       String searchQuery, String genre, List<RequestType> requestType) async {
     if (state.isLoading) return; // Prevent concurrent requests
-    if (searchQuery == "") return; // Nothing to do if empty
+    if (searchQuery == "") {
+      state = DataState(isLoading: false, error: null);
+      return;
+    }
 
     state = state.copyWith(isLoading: true, error: null);
     int currentAmountItems = state.data.length;

@@ -13,6 +13,7 @@ import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
+import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
   final Uint8List placeholder;
@@ -55,6 +56,10 @@ class _ArtistGridState extends ConsumerState<ArtistGrid> {
 
     if (dataState.isLoading && dataState.data.isEmpty) {
       return const Center(child: CircularProgressIndicator());
+    }
+
+    if (!dataState.isLoading && dataState.data.isEmpty) {
+      return const Center(child: SearchPlaceholderCard());
     }
 
     if (dataState.error != null) {
