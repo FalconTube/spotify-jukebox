@@ -1,0 +1,15 @@
+version: '3'
+
+tasks:
+  debug:
+    cmds:
+      # - flutter run -d chrome --web-renderer auto
+      - flutter run -d chrome --web-port=44344 
+
+  buildjson:
+    cmds:
+      - dart run build_runner build --delete-conflicting-outputs
+
+  watchjson:
+    cmds:
+      - dart run build_runner watch --delete-conflicting-outputs
