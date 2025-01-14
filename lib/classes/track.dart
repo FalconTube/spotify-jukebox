@@ -1,8 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
-import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/image.dart';
-import 'package:jukebox_spotify_flutter/classes/album.dart';
 
 part 'track.g.dart';
 

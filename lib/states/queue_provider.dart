@@ -1,11 +1,7 @@
-import 'package:dio/dio.dart';
-import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
 
 class QueueProvider extends StateNotifier<List<SimpleTrack>> {
   QueueProvider() : super([]); // Initial state is an empty string.

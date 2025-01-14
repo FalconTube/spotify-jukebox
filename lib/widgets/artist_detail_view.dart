@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jukebox_spotify_flutter/api/spotify_sdk.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';

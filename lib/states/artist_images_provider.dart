@@ -1,12 +1,10 @@
 import 'dart:collection';
-import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/classes/response_data.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/types/request_type.dart';
 
 // Provider for managing the data and API calls

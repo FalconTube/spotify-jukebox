@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
-import 'package:jukebox_spotify_flutter/api/spotify_sdk.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 class WebPlayerBottomBar extends StatefulWidget {
