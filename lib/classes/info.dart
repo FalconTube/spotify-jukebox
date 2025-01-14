@@ -1,5 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
 abstract class Info {
   final String name;
   final String id;

@@ -4,7 +4,6 @@ import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/simplified_track_object.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 
 final topTracksProvider =
     FutureProvider.family<List<SimpleTrack>, ArtistCard>((ref, artist) async {

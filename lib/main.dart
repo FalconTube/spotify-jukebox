@@ -6,7 +6,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_sdk.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
@@ -14,14 +13,11 @@ import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
-import 'package:jukebox_spotify_flutter/widgets/genre_filter.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
-import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:spotify_sdk/spotify_sdk_web.dart';
 
 late ByteData placeholderRaw;
 late Uint8List pl;
@@ -161,7 +157,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 onPressed: () async {
                   await AllSDKFuncs.connectToSpotifyRemote();
                   final api = await SpotifyApiService.api;
-                  final result = await api.connectToSpotify();
+                  await api.connectToSpotify();
                   setState(() {
                     _sdkConnected = true;
                   });

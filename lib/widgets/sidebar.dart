@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
 
 class SidebarPlayer extends ConsumerStatefulWidget {
   const SidebarPlayer({super.key});
@@ -32,8 +30,17 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("Upcoming Songs",
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Row(
+              children: [
+                Text("Upcoming Songs",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                IconButton.filled(
+                    onPressed: () {
+                      ref.read(queueProvider.notifier).refreshQueue();
+                    },
+                    icon: Icon(Icons.refresh))
+              ],
+            ),
           ),
           Expanded(
             child: queue.isEmpty
@@ -53,7 +60,6 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
                     },
                     itemCount: queue.length,
                     itemBuilder: (context, index) {
-                      Log.log("Queue: $queue");
                       final track = queue[index];
                       return ListTile(
                           key: ValueKey(track.uri),
