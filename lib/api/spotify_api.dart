@@ -56,9 +56,6 @@ class SpotifyApi {
 
   final Dio _dio = Dio();
   final Dio _dioNoCache = Dio();
-  late SharedPreferences _prefs;
-
-  String? _accessToken;
 
   final synchronized.Lock _getTokenLock = synchronized.Lock(reentrant: true);
   SpotifyToken? _spotifyToken;
@@ -291,7 +288,6 @@ class SpotifyApi {
         if (_spotifyToken!.expiry >
             DateTime.now().millisecondsSinceEpoch / 1000) {
           // access token valid
-          return "foo";
           return _spotifyToken!.accessToken;
         } else {
           // access token invalid, refresh it
@@ -318,9 +314,6 @@ class SpotifyApi {
   }
 
   Future<void> _init() async {
-    // Access token
-    _prefs = await SharedPreferences.getInstance();
-    // _accessToken = _prefs.getString('spotify_access_token');
     // Dio cache
     late CacheStore cacheStore;
     cacheStore = HiveCacheStore(null);
@@ -361,17 +354,8 @@ class SpotifyApi {
       onRequest: (options, handler) async {
         // if (_accessToken != null) {
         if (_spotifyToken != null) {
-          if (_spotifyToken!.expiry >
-              DateTime.now().millisecondsSinceEpoch / 1000) {
-            Log.log("Token not expired");
-            options.headers['Authorization'] =
-                'Bearer ${_spotifyToken!.accessToken}';
-          } else {
-            Log.log("Token expired");
-            options.headers['Authorization'] =
-                'Bearer ${await _getSpotifyAuthToken()}';
-          }
-          // options.headers['Authorization'] = 'Bearer $_accessToken';
+          options.headers['Authorization'] =
+              'Bearer ${await _getSpotifyAuthToken()}';
         }
         return handler.next(options);
       },
