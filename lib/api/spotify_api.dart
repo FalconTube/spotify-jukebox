@@ -59,6 +59,7 @@ class SpotifyApi {
   final String apiBaseUrl = 'https://api.spotify.com/v1';
 
   final Dio _dio = Dio();
+  final Dio _dioNoCache = Dio();
   late SharedPreferences _prefs;
 
   String? _accessToken;
@@ -357,8 +358,10 @@ class SpotifyApi {
     );
 
     _dio.options.baseUrl = apiBaseUrl;
+    _dioNoCache.options.baseUrl = apiBaseUrl;
+
     // Add token handling
-    _dio.interceptors.add(InterceptorsWrapper(
+    final authInterceptor = InterceptorsWrapper(
       onRequest: (options, handler) async {
         // if (_accessToken != null) {
         if (_spotifyToken != null) {
@@ -391,7 +394,9 @@ class SpotifyApi {
         }
         return handler.next(e);
       },
-    ));
+    );
+    _dio.interceptors.add(authInterceptor);
+    _dioNoCache.interceptors.add(authInterceptor);
     // Add cache
     _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
   }
@@ -437,8 +442,14 @@ class SpotifyApi {
   }
 
   Future<Response> get(String path,
-      {Map<String, dynamic>? queryParameters}) async {
-    return _dio.get(path, queryParameters: queryParameters);
+      {Map<String, dynamic>? queryParameters,
+      Options? options,
+      bool withoutCache = false}) async {
+    if (withoutCache == true) {
+      return _dioNoCache.get(path,
+          queryParameters: queryParameters, options: options);
+    }
+    return _dio.get(path, queryParameters: queryParameters, options: options);
   }
 
   Future<Response> post(String path, {dynamic data}) async {
@@ -477,7 +488,7 @@ class SpotifyApi {
 
   Future<String?> getDeviceID() async {
     String uri = "https://api.spotify.com/v1/me/player/devices";
-    final out = await _dio.get(uri);
+    final out = await get(uri, withoutCache: true);
     final devices = out.data["devices"];
     // final deviceId = out.data["devices"][0]["id"];
     String? deviceId;
@@ -489,20 +500,15 @@ class SpotifyApi {
     return deviceId;
   }
 
-  Future<void> playPlaylist(String spotifyUri) async {
-    final ps = await SpotifySdk.getPlayerState();
-    final outx = SpotifySdk.getPlayerState();
-    Dio dio = _dio;
-
+  /// Plays a [spotifyUri] and assumes that it is a playlist
+  /// If [selectOnly] is true, will immediately stop playback
+  Future<void> playOrSelectPlaylist(String spotifyUri,
+      {bool selectOnly = false}) async {
     // Set content type
-    dio.options.contentType = Headers.jsonContentType;
 
     // Prepare data
     final data = {
       "context_uri": "spotify:playlist:$spotifyUri",
-      // "offset": {
-      //   "position": 5,
-      // },
       "position_ms": 0,
     };
 
@@ -512,11 +518,25 @@ class SpotifyApi {
     }
 
     try {
-      final response = await dio.put(
+      await _dio.put(
         'https://api.spotify.com/v1/me/player/play?device_id=$deviceId',
+        options: Options(contentType: Headers.jsonContentType),
         data: data,
       );
-      return;
+    } on DioException catch (e) {
+      // Handle error
+      Log.log(e.error);
+      rethrow;
+    }
+    Future.delayed(Duration(milliseconds: 800));
+    if (selectOnly == false) return;
+
+    // Now pause if selectOnly is true
+    try {
+      await _dio.put(
+        'https://api.spotify.com/v1/me/player/pause?device_id=$deviceId',
+        options: Options(contentType: Headers.jsonContentType),
+      );
     } on DioException catch (e) {
       // Handle error
       Log.log(e.error);

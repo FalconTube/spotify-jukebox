@@ -32,8 +32,17 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("Upcoming Songs",
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Row(
+              children: [
+                Text("Upcoming Songs",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                IconButton.filled(
+                    onPressed: () {
+                      ref.read(queueProvider.notifier).refreshQueue();
+                    },
+                    icon: Icon(Icons.refresh))
+              ],
+            ),
           ),
           Expanded(
             child: queue.isEmpty
@@ -53,7 +62,6 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
                     },
                     itemCount: queue.length,
                     itemBuilder: (context, index) {
-                      Log.log("Queue: $queue");
                       final track = queue[index];
                       return ListTile(
                           key: ValueKey(track.uri),

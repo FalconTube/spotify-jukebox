@@ -101,7 +101,8 @@ class ArtistOrAlbum extends ConsumerWidget {
                             child: InkWell(
                               onTap: () async {
                                 await SpotifySdk.queue(spotifyUri: track.uri);
-                                Future.delayed(Durations.long4);
+                                await Future.delayed(
+                                    Duration(milliseconds: 300));
                                 ref.read(queueProvider.notifier).refreshQueue();
                               },
                               borderRadius: BorderRadius.circular(

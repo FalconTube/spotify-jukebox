@@ -65,12 +65,15 @@ class WebPlayerBottomBarState extends State<WebPlayerBottomBar> {
           IconButton(
             icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
             onPressed: () async {
-              final api = await SpotifyApiService.api;
-              await api.playPlaylist("4fsfUApjaJvJIvjuC3qOJt");
-              Future.delayed(Durations.extralong4);
-              SpotifySdk.resume();
+              final pstate = await SpotifySdk.getPlayerState();
               setState(() {
-                _isPlaying = !_isPlaying;
+                if (pstate?.isPaused == true) {
+                  SpotifySdk.resume();
+                  _isPlaying = true;
+                } else {
+                  SpotifySdk.pause();
+                  _isPlaying = false;
+                }
               });
             },
           ),
@@ -79,6 +82,16 @@ class WebPlayerBottomBarState extends State<WebPlayerBottomBar> {
             icon: Icon(Icons.skip_next),
             onPressed: () {
               SpotifySdk.skipNext();
+              // Handle next action
+            },
+          ),
+          // Next Button
+          IconButton(
+            icon: Icon(Icons.select_all_rounded),
+            onPressed: () async {
+              final api = await SpotifyApiService.api;
+              await api.playOrSelectPlaylist("4fsfUApjaJvJIvjuC3qOJt",
+                  selectOnly: true);
               // Handle next action
             },
           ),
