@@ -19,7 +19,8 @@ abstract class Info {
   }
 
   String getImage() {
-    if (images == null) return "";
+    // Check if empty or null
+    if (images?.isEmpty == true) return "";
     return images![0]["url"];
   }
 }

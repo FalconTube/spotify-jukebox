@@ -1,0 +1,1465 @@
+[
+  {
+    "path": "v1/me/player/devices",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "devices": [
+        {
+          "id": "96d12006a8ab0f4bb698d3d15128655316da30a1",
+          "is_active": false,
+          "is_private_session": false,
+          "is_restricted": false,
+          "name": "Jukebox",
+          "supports_volume": true,
+          "type": "Computer",
+          "volume_percent": 100
+        }
+      ]
+    }
+  },
+  {
+    "path": "v1/me/player/play",
+    "method": "PUT",
+    "statusCode": 200,
+    "data": {}
+  },
+  {
+    "path": "https://api.spotify.com/v1/me/player/queue",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "currently_playing": {
+        "album": {
+          "album_type": "compilation",
+          "total_tracks": 9,
+          "available_markets": [
+            "CA",
+            "BR",
+            "IT"
+          ],
+          "external_urls": {
+            "spotify": "string"
+          },
+          "href": "string",
+          "id": "2up3OPMp9Tb4dAKM2erWXQ",
+          "images": [],
+          "name": "string",
+          "release_date": "1981-12",
+          "release_date_precision": "year",
+          "restrictions": {
+            "reason": "market"
+          },
+          "type": "album",
+          "uri": "spotify:album:2up3OPMp9Tb4dAKM2erWXQ",
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "string"
+              },
+              "href": "string",
+              "id": "string",
+              "name": "string",
+              "type": "artist",
+              "uri": "string"
+            }
+          ]
+        },
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "string"
+            },
+            "href": "string",
+            "id": "string",
+            "name": "string",
+            "type": "artist",
+            "uri": "string"
+          }
+        ],
+        "available_markets": [
+          "string"
+        ],
+        "disc_number": 0,
+        "duration_ms": 0,
+        "explicit": false,
+        "external_ids": {
+          "isrc": "string",
+          "ean": "string",
+          "upc": "string"
+        },
+        "external_urls": {
+          "spotify": "string"
+        },
+        "href": "string",
+        "id": "string",
+        "is_playable": false,
+        "linked_from": {},
+        "restrictions": {
+          "reason": "string"
+        },
+        "name": "string",
+        "popularity": 0,
+        "preview_url": "string",
+        "track_number": 0,
+        "type": "track",
+        "uri": "string",
+        "is_local": false
+      },
+      "queue": [
+        {
+          "album": {
+            "album_type": "compilation",
+            "total_tracks": 9,
+            "available_markets": [
+              "CA",
+              "BR",
+              "IT"
+            ],
+            "external_urls": {
+              "spotify": "string"
+            },
+            "href": "string",
+            "id": "2up3OPMp9Tb4dAKM2erWXQ",
+            "images": [],
+            "name": "string",
+            "release_date": "1981-12",
+            "release_date_precision": "year",
+            "restrictions": {
+              "reason": "market"
+            },
+            "type": "album",
+            "uri": "spotify:album:2up3OPMp9Tb4dAKM2erWXQ",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "string"
+                },
+                "href": "string",
+                "id": "string",
+                "name": "string",
+                "type": "artist",
+                "uri": "string"
+              }
+            ]
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "string"
+              },
+              "href": "string",
+              "id": "string",
+              "name": "string",
+              "type": "artist",
+              "uri": "string"
+            }
+          ],
+          "available_markets": [
+            "string"
+          ],
+          "disc_number": 0,
+          "duration_ms": 0,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "string",
+            "ean": "string",
+            "upc": "string"
+          },
+          "external_urls": {
+            "spotify": "string"
+          },
+          "href": "string",
+          "id": "string",
+          "is_playable": false,
+          "linked_from": {},
+          "restrictions": {
+            "reason": "string"
+          },
+          "name": "string",
+          "popularity": 0,
+          "preview_url": "string",
+          "track_number": 0,
+          "type": "track",
+          "uri": "string",
+          "is_local": false
+        }
+      ]
+    }
+  },
+  {
+    "path": "v1/tracks",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "tracks": [
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/12Chz98pHFMPJEknJQMWvI"
+                },
+                "href": "https://api.spotify.com/v1/artists/12Chz98pHFMPJEknJQMWvI",
+                "id": "12Chz98pHFMPJEknJQMWvI",
+                "name": "Muse",
+                "type": "artist",
+                "uri": "spotify:artist:12Chz98pHFMPJEknJQMWvI"
+              }
+            ],
+            "available_markets": [],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/0lw68yx3MhKflWFqCsGkIs"
+            },
+            "href": "https://api.spotify.com/v1/albums/0lw68yx3MhKflWFqCsGkIs",
+            "id": "0lw68yx3MhKflWFqCsGkIs",
+            "images": [],
+            "name": "Black Holes and Revelations",
+            "release_date": "2006-06-19",
+            "release_date_precision": "day",
+            "total_tracks": 12,
+            "type": "album",
+            "uri": "spotify:album:0lw68yx3MhKflWFqCsGkIs"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/12Chz98pHFMPJEknJQMWvI"
+              },
+              "href": "https://api.spotify.com/v1/artists/12Chz98pHFMPJEknJQMWvI",
+              "id": "12Chz98pHFMPJEknJQMWvI",
+              "name": "Muse",
+              "type": "artist",
+              "uri": "spotify:artist:12Chz98pHFMPJEknJQMWvI"
+            }
+          ],
+          "available_markets": [],
+          "disc_number": 1,
+          "duration_ms": 366213,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "GBAHT0500600"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/7ouMYWpwJ422jRcDASZB7P"
+          },
+          "href": "https://api.spotify.com/v1/tracks/7ouMYWpwJ422jRcDASZB7P",
+          "id": "7ouMYWpwJ422jRcDASZB7P",
+          "is_local": false,
+          "name": "Knights of Cydonia",
+          "popularity": 65,
+          "preview_url": null,
+          "track_number": 11,
+          "type": "track",
+          "uri": "spotify:track:7ouMYWpwJ422jRcDASZB7P"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/12Chz98pHFMPJEknJQMWvI"
+                },
+                "href": "https://api.spotify.com/v1/artists/12Chz98pHFMPJEknJQMWvI",
+                "id": "12Chz98pHFMPJEknJQMWvI",
+                "name": "Muse",
+                "type": "artist",
+                "uri": "spotify:artist:12Chz98pHFMPJEknJQMWvI"
+              }
+            ],
+            "available_markets": [],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/0eFHYz8NmK75zSplL5qlfM"
+            },
+            "href": "https://api.spotify.com/v1/albums/0eFHYz8NmK75zSplL5qlfM",
+            "id": "0eFHYz8NmK75zSplL5qlfM",
+            "images": [],
+            "name": "The Resistance",
+            "release_date": "2009-09-10",
+            "release_date_precision": "day",
+            "total_tracks": 11,
+            "type": "album",
+            "uri": "spotify:album:0eFHYz8NmK75zSplL5qlfM"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/12Chz98pHFMPJEknJQMWvI"
+              },
+              "href": "https://api.spotify.com/v1/artists/12Chz98pHFMPJEknJQMWvI",
+              "id": "12Chz98pHFMPJEknJQMWvI",
+              "name": "Muse",
+              "type": "artist",
+              "uri": "spotify:artist:12Chz98pHFMPJEknJQMWvI"
+            }
+          ],
+          "available_markets": [],
+          "disc_number": 1,
+          "duration_ms": 304840,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "GBAHT0900320"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/4VqPOruhp5EdPBeR92t6lQ"
+          },
+          "href": "https://api.spotify.com/v1/tracks/4VqPOruhp5EdPBeR92t6lQ",
+          "id": "4VqPOruhp5EdPBeR92t6lQ",
+          "is_local": false,
+          "name": "Uprising",
+          "popularity": 74,
+          "preview_url": null,
+          "track_number": 1,
+          "type": "track",
+          "uri": "spotify:track:4VqPOruhp5EdPBeR92t6lQ"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/12Chz98pHFMPJEknJQMWvI"
+                },
+                "href": "https://api.spotify.com/v1/artists/12Chz98pHFMPJEknJQMWvI",
+                "id": "12Chz98pHFMPJEknJQMWvI",
+                "name": "Muse",
+                "type": "artist",
+                "uri": "spotify:artist:12Chz98pHFMPJEknJQMWvI"
+              }
+            ],
+            "available_markets": [],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/0HcHPBu9aaF1MxOiZmUQTl"
+            },
+            "href": "https://api.spotify.com/v1/albums/0HcHPBu9aaF1MxOiZmUQTl",
+            "id": "0HcHPBu9aaF1MxOiZmUQTl",
+            "images": [],
+            "name": "Absolution",
+            "release_date": "2004-03-23",
+            "release_date_precision": "day",
+            "total_tracks": 15,
+            "type": "album",
+            "uri": "spotify:album:0HcHPBu9aaF1MxOiZmUQTl"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/12Chz98pHFMPJEknJQMWvI"
+              },
+              "href": "https://api.spotify.com/v1/artists/12Chz98pHFMPJEknJQMWvI",
+              "id": "12Chz98pHFMPJEknJQMWvI",
+              "name": "Muse",
+              "type": "artist",
+              "uri": "spotify:artist:12Chz98pHFMPJEknJQMWvI"
+            }
+          ],
+          "available_markets": [],
+          "disc_number": 1,
+          "duration_ms": 237039,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "GBCVT0300078"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/2takcwOaAZWiXQijPHIx7B"
+          },
+          "href": "https://api.spotify.com/v1/tracks/2takcwOaAZWiXQijPHIx7B",
+          "id": "2takcwOaAZWiXQijPHIx7B",
+          "is_local": false,
+          "name": "Time is Running Out",
+          "popularity": 5,
+          "preview_url": null,
+          "track_number": 3,
+          "type": "track",
+          "uri": "spotify:track:2takcwOaAZWiXQijPHIx7B"
+        }
+      ]
+    }
+  },
+  {
+    "path": "v1/artists",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "tracks": [
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/4rG0MhkU6UojACJxkMHIXB"
+            },
+            "href": "https://api.spotify.com/v1/albums/4rG0MhkU6UojACJxkMHIXB",
+            "id": "4rG0MhkU6UojACJxkMHIXB",
+            "images": [],
+            "is_playable": true,
+            "name": "Planet Pit (Deluxe Version)",
+            "release_date": "2011-06-17",
+            "release_date_precision": "day",
+            "total_tracks": 16,
+            "type": "album",
+            "uri": "spotify:album:4rG0MhkU6UojACJxkMHIXB"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/4D75GcNG95ebPtNvoNVXhz"
+              },
+              "href": "https://api.spotify.com/v1/artists/4D75GcNG95ebPtNvoNVXhz",
+              "id": "4D75GcNG95ebPtNvoNVXhz",
+              "name": "AFROJACK",
+              "type": "artist",
+              "uri": "spotify:artist:4D75GcNG95ebPtNvoNVXhz"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/21E3waRsmPlU7jZsS13rcj"
+              },
+              "href": "https://api.spotify.com/v1/artists/21E3waRsmPlU7jZsS13rcj",
+              "id": "21E3waRsmPlU7jZsS13rcj",
+              "name": "Ne-Yo",
+              "type": "artist",
+              "uri": "spotify:artist:21E3waRsmPlU7jZsS13rcj"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1ruutHJcECI7cos2n5TqpO"
+              },
+              "href": "https://api.spotify.com/v1/artists/1ruutHJcECI7cos2n5TqpO",
+              "id": "1ruutHJcECI7cos2n5TqpO",
+              "name": "Nayer",
+              "type": "artist",
+              "uri": "spotify:artist:1ruutHJcECI7cos2n5TqpO"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 252306,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USJAY1100032"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/4QNpBfC0zvjKqPJcyqBy9W"
+          },
+          "href": "https://api.spotify.com/v1/tracks/4QNpBfC0zvjKqPJcyqBy9W",
+          "id": "4QNpBfC0zvjKqPJcyqBy9W",
+          "is_local": false,
+          "is_playable": true,
+          "name": "Give Me Everything (feat. Nayer)",
+          "popularity": 84,
+          "preview_url": null,
+          "track_number": 2,
+          "type": "track",
+          "uri": "spotify:track:4QNpBfC0zvjKqPJcyqBy9W"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/2F7tejLHzTqFq2XLol9ZGy"
+            },
+            "href": "https://api.spotify.com/v1/albums/2F7tejLHzTqFq2XLol9ZGy",
+            "id": "2F7tejLHzTqFq2XLol9ZGy",
+            "images": [],
+            "is_playable": true,
+            "name": "Global Warming: Meltdown (Deluxe Version)",
+            "release_date": "2012",
+            "release_date_precision": "year",
+            "total_tracks": 17,
+            "type": "album",
+            "uri": "spotify:album:2F7tejLHzTqFq2XLol9ZGy"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/6LqNN22kT3074XbTVUrhzX"
+              },
+              "href": "https://api.spotify.com/v1/artists/6LqNN22kT3074XbTVUrhzX",
+              "id": "6LqNN22kT3074XbTVUrhzX",
+              "name": "Kesha",
+              "type": "artist",
+              "uri": "spotify:artist:6LqNN22kT3074XbTVUrhzX"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 204160,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USRC11301695"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/3cHyrEgdyYRjgJKSOiOtcS"
+          },
+          "href": "https://api.spotify.com/v1/tracks/3cHyrEgdyYRjgJKSOiOtcS",
+          "id": "3cHyrEgdyYRjgJKSOiOtcS",
+          "is_local": false,
+          "is_playable": true,
+          "name": "Timber",
+          "popularity": 83,
+          "preview_url": null,
+          "track_number": 13,
+          "type": "track",
+          "uri": "spotify:track:3cHyrEgdyYRjgJKSOiOtcS"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/23zg3TcAtWQy7J6upgbUnj"
+                },
+                "href": "https://api.spotify.com/v1/artists/23zg3TcAtWQy7J6upgbUnj",
+                "id": "23zg3TcAtWQy7J6upgbUnj",
+                "name": "USHER",
+                "type": "artist",
+                "uri": "spotify:artist:23zg3TcAtWQy7J6upgbUnj"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/6A1F3Fkq5dYeYYNkXflcTX"
+            },
+            "href": "https://api.spotify.com/v1/albums/6A1F3Fkq5dYeYYNkXflcTX",
+            "id": "6A1F3Fkq5dYeYYNkXflcTX",
+            "images": [],
+            "is_playable": true,
+            "name": "Raymond v Raymond (Expanded Edition)",
+            "release_date": "2010-03-30",
+            "release_date_precision": "day",
+            "total_tracks": 22,
+            "type": "album",
+            "uri": "spotify:album:6A1F3Fkq5dYeYYNkXflcTX"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/23zg3TcAtWQy7J6upgbUnj"
+              },
+              "href": "https://api.spotify.com/v1/artists/23zg3TcAtWQy7J6upgbUnj",
+              "id": "23zg3TcAtWQy7J6upgbUnj",
+              "name": "USHER",
+              "type": "artist",
+              "uri": "spotify:artist:23zg3TcAtWQy7J6upgbUnj"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 220800,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USLF21000041"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/4356Typ82hUiFAynbLYbPn"
+          },
+          "href": "https://api.spotify.com/v1/tracks/4356Typ82hUiFAynbLYbPn",
+          "id": "4356Typ82hUiFAynbLYbPn",
+          "is_local": false,
+          "is_playable": true,
+          "name": "DJ Got Us Fallin' In Love (feat. Pitbull)",
+          "popularity": 81,
+          "preview_url": null,
+          "track_number": 16,
+          "type": "track",
+          "uri": "spotify:track:4356Typ82hUiFAynbLYbPn"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/4EUf4YyNjuXypWY6W5wEDm"
+            },
+            "href": "https://api.spotify.com/v1/albums/4EUf4YyNjuXypWY6W5wEDm",
+            "id": "4EUf4YyNjuXypWY6W5wEDm",
+            "images": [],
+            "is_playable": true,
+            "name": "Globalization",
+            "release_date": "2014-11-21",
+            "release_date_precision": "day",
+            "total_tracks": 11,
+            "type": "album",
+            "uri": "spotify:album:4EUf4YyNjuXypWY6W5wEDm"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/21E3waRsmPlU7jZsS13rcj"
+              },
+              "href": "https://api.spotify.com/v1/artists/21E3waRsmPlU7jZsS13rcj",
+              "id": "21E3waRsmPlU7jZsS13rcj",
+              "name": "Ne-Yo",
+              "type": "artist",
+              "uri": "spotify:artist:21E3waRsmPlU7jZsS13rcj"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 229360,
+          "explicit": true,
+          "external_ids": {
+            "isrc": "USRC11402647"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/2bJvI42r8EF3wxjOuDav4r"
+          },
+          "href": "https://api.spotify.com/v1/tracks/2bJvI42r8EF3wxjOuDav4r",
+          "id": "2bJvI42r8EF3wxjOuDav4r",
+          "is_local": false,
+          "is_playable": true,
+          "name": "Time of Our Lives",
+          "popularity": 81,
+          "preview_url": null,
+          "track_number": 4,
+          "type": "track",
+          "uri": "spotify:track:2bJvI42r8EF3wxjOuDav4r"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/4rG0MhkU6UojACJxkMHIXB"
+            },
+            "href": "https://api.spotify.com/v1/albums/4rG0MhkU6UojACJxkMHIXB",
+            "id": "4rG0MhkU6UojACJxkMHIXB",
+            "images": [],
+            "is_playable": true,
+            "name": "Planet Pit (Deluxe Version)",
+            "release_date": "2011-06-17",
+            "release_date_precision": "day",
+            "total_tracks": 16,
+            "type": "album",
+            "uri": "spotify:album:4rG0MhkU6UojACJxkMHIXB"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7bXgB6jMjp9ATFy66eO08Z"
+              },
+              "href": "https://api.spotify.com/v1/artists/7bXgB6jMjp9ATFy66eO08Z",
+              "id": "7bXgB6jMjp9ATFy66eO08Z",
+              "name": "Chris Brown",
+              "type": "artist",
+              "uri": "spotify:artist:7bXgB6jMjp9ATFy66eO08Z"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 227280,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USJAY1100015"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/62zFEHfAYl5kdHYOivj4BC"
+          },
+          "href": "https://api.spotify.com/v1/tracks/62zFEHfAYl5kdHYOivj4BC",
+          "id": "62zFEHfAYl5kdHYOivj4BC",
+          "is_local": false,
+          "is_playable": true,
+          "name": "International Love (feat. Chris Brown)",
+          "popularity": 77,
+          "preview_url": null,
+          "track_number": 8,
+          "type": "track",
+          "uri": "spotify:track:62zFEHfAYl5kdHYOivj4BC"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/2F7tejLHzTqFq2XLol9ZGy"
+            },
+            "href": "https://api.spotify.com/v1/albums/2F7tejLHzTqFq2XLol9ZGy",
+            "id": "2F7tejLHzTqFq2XLol9ZGy",
+            "images": [],
+            "is_playable": true,
+            "name": "Global Warming: Meltdown (Deluxe Version)",
+            "release_date": "2012",
+            "release_date_precision": "year",
+            "total_tracks": 17,
+            "type": "album",
+            "uri": "spotify:album:2F7tejLHzTqFq2XLol9ZGy"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/1l7ZsJRRS8wlW3WfJfPfNS"
+              },
+              "href": "https://api.spotify.com/v1/artists/1l7ZsJRRS8wlW3WfJfPfNS",
+              "id": "1l7ZsJRRS8wlW3WfJfPfNS",
+              "name": "Christina Aguilera",
+              "type": "artist",
+              "uri": "spotify:artist:1l7ZsJRRS8wlW3WfJfPfNS"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 229506,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USRC11201328"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/0Hf4aIJpsN4Os2f0y0VqWl"
+          },
+          "href": "https://api.spotify.com/v1/tracks/0Hf4aIJpsN4Os2f0y0VqWl",
+          "id": "0Hf4aIJpsN4Os2f0y0VqWl",
+          "is_local": false,
+          "is_playable": true,
+          "name": "Feel This Moment (feat. Christina Aguilera)",
+          "popularity": 76,
+          "preview_url": null,
+          "track_number": 3,
+          "type": "track",
+          "uri": "spotify:track:0Hf4aIJpsN4Os2f0y0VqWl"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/00zN65JStpVnpJn9ckMsQI"
+            },
+            "href": "https://api.spotify.com/v1/albums/00zN65JStpVnpJn9ckMsQI",
+            "id": "00zN65JStpVnpJn9ckMsQI",
+            "images": [],
+            "is_playable": true,
+            "name": "Pitbull Starring In Rebelution",
+            "release_date": "2009-08-31",
+            "release_date_precision": "day",
+            "total_tracks": 14,
+            "type": "album",
+            "uri": "spotify:album:00zN65JStpVnpJn9ckMsQI"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 237640,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USJAY0900063"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/6Rb0ptOEjBjPPQUlQtQGbL"
+          },
+          "href": "https://api.spotify.com/v1/tracks/6Rb0ptOEjBjPPQUlQtQGbL",
+          "id": "6Rb0ptOEjBjPPQUlQtQGbL",
+          "is_local": false,
+          "is_playable": true,
+          "name": "Hotel Room Service",
+          "popularity": 70,
+          "preview_url": null,
+          "track_number": 8,
+          "type": "track",
+          "uri": "spotify:track:6Rb0ptOEjBjPPQUlQtQGbL"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/4EUf4YyNjuXypWY6W5wEDm"
+            },
+            "href": "https://api.spotify.com/v1/albums/4EUf4YyNjuXypWY6W5wEDm",
+            "id": "4EUf4YyNjuXypWY6W5wEDm",
+            "images": [],
+            "is_playable": true,
+            "name": "Globalization",
+            "release_date": "2014-11-21",
+            "release_date_precision": "day",
+            "total_tracks": 11,
+            "type": "album",
+            "uri": "spotify:album:4EUf4YyNjuXypWY6W5wEDm"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3s73tswJycj6HTBNNN393z"
+              },
+              "href": "https://api.spotify.com/v1/artists/3s73tswJycj6HTBNNN393z",
+              "id": "3s73tswJycj6HTBNNN393z",
+              "name": "John Ryan",
+              "type": "artist",
+              "uri": "spotify:artist:3s73tswJycj6HTBNNN393z"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 236200,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USRC11401783"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/4Y7XAxTANhu3lmnLAzhWJW"
+          },
+          "href": "https://api.spotify.com/v1/tracks/4Y7XAxTANhu3lmnLAzhWJW",
+          "id": "4Y7XAxTANhu3lmnLAzhWJW",
+          "is_local": false,
+          "is_playable": true,
+          "name": "Fireball (feat. John Ryan)",
+          "popularity": 75,
+          "preview_url": null,
+          "track_number": 3,
+          "type": "track",
+          "uri": "spotify:track:4Y7XAxTANhu3lmnLAzhWJW"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/52iwsT98xCoGgiGntTiR7K"
+                },
+                "href": "https://api.spotify.com/v1/artists/52iwsT98xCoGgiGntTiR7K",
+                "id": "52iwsT98xCoGgiGntTiR7K",
+                "name": "Quevedo",
+                "type": "artist",
+                "uri": "spotify:artist:52iwsT98xCoGgiGntTiR7K"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/3V2ApPxUSquOkjLQU3wmjh"
+            },
+            "href": "https://api.spotify.com/v1/albums/3V2ApPxUSquOkjLQU3wmjh",
+            "id": "3V2ApPxUSquOkjLQU3wmjh",
+            "images": [],
+            "is_playable": true,
+            "name": "BUENAS NOCHES",
+            "release_date": "2024-11-22",
+            "release_date_precision": "day",
+            "total_tracks": 18,
+            "type": "album",
+            "uri": "spotify:album:3V2ApPxUSquOkjLQU3wmjh"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/52iwsT98xCoGgiGntTiR7K"
+              },
+              "href": "https://api.spotify.com/v1/artists/52iwsT98xCoGgiGntTiR7K",
+              "id": "52iwsT98xCoGgiGntTiR7K",
+              "name": "Quevedo",
+              "type": "artist",
+              "uri": "spotify:artist:52iwsT98xCoGgiGntTiR7K"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 165762,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "ES03H2400011"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/67LKV40NfSSGIJnm0xz6fi"
+          },
+          "href": "https://api.spotify.com/v1/tracks/67LKV40NfSSGIJnm0xz6fi",
+          "id": "67LKV40NfSSGIJnm0xz6fi",
+          "is_local": false,
+          "is_playable": true,
+          "name": "MR. MOONDIAL",
+          "popularity": 74,
+          "preview_url": null,
+          "track_number": 10,
+          "type": "track",
+          "uri": "spotify:track:67LKV40NfSSGIJnm0xz6fi"
+        },
+        {
+          "album": {
+            "album_type": "album",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+                },
+                "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+                "id": "0TnOYISbd1XYRBk9myaseg",
+                "name": "Pitbull",
+                "type": "artist",
+                "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+              }
+            ],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/4rG0MhkU6UojACJxkMHIXB"
+            },
+            "href": "https://api.spotify.com/v1/albums/4rG0MhkU6UojACJxkMHIXB",
+            "id": "4rG0MhkU6UojACJxkMHIXB",
+            "images": [],
+            "is_playable": true,
+            "name": "Planet Pit (Deluxe Version)",
+            "release_date": "2011-06-17",
+            "release_date_precision": "day",
+            "total_tracks": 16,
+            "type": "album",
+            "uri": "spotify:album:4rG0MhkU6UojACJxkMHIXB"
+          },
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/3aQeKQSyrW4qWr35idm0cy"
+              },
+              "href": "https://api.spotify.com/v1/artists/3aQeKQSyrW4qWr35idm0cy",
+              "id": "3aQeKQSyrW4qWr35idm0cy",
+              "name": "T-Pain",
+              "type": "artist",
+              "uri": "spotify:artist:3aQeKQSyrW4qWr35idm0cy"
+            }
+          ],
+          "disc_number": 1,
+          "duration_ms": 234453,
+          "explicit": false,
+          "external_ids": {
+            "isrc": "USJAY1000153"
+          },
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/3rfhI32Il2hVRKDkuGeeen"
+          },
+          "href": "https://api.spotify.com/v1/tracks/3rfhI32Il2hVRKDkuGeeen",
+          "id": "3rfhI32Il2hVRKDkuGeeen",
+          "is_local": false,
+          "is_playable": true,
+          "name": "Hey Baby (Drop It to the Floor) (feat. T-Pain)",
+          "popularity": 74,
+          "preview_url": null,
+          "track_number": 4,
+          "type": "track",
+          "uri": "spotify:track:3rfhI32Il2hVRKDkuGeeen"
+        }
+      ]
+    }
+  },
+  {
+    "path": "v1/albums",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "href": "https://api.spotify.com/v1/albums/4aawyAB9vmqN3uQ7FjRGTy/tracks?offset=0&limit=2&locale=en-US,en;q%3D0.5",
+      "items": [
+        {
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/7iJrDbKM5fEkGdm5kpjFzS"
+              },
+              "href": "https://api.spotify.com/v1/artists/7iJrDbKM5fEkGdm5kpjFzS",
+              "id": "7iJrDbKM5fEkGdm5kpjFzS",
+              "name": "Sensato",
+              "type": "artist",
+              "uri": "spotify:artist:7iJrDbKM5fEkGdm5kpjFzS"
+            }
+          ],
+          "available_markets": [],
+          "disc_number": 1,
+          "duration_ms": 85400,
+          "explicit": true,
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/6OmhkSOpvYBokMKQxpIGx2"
+          },
+          "href": "https://api.spotify.com/v1/tracks/6OmhkSOpvYBokMKQxpIGx2",
+          "id": "6OmhkSOpvYBokMKQxpIGx2",
+          "name": "Global Warming (feat. Sensato)",
+          "preview_url": null,
+          "track_number": 1,
+          "type": "track",
+          "uri": "spotify:track:6OmhkSOpvYBokMKQxpIGx2",
+          "is_local": false
+        },
+        {
+          "artists": [
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/0TnOYISbd1XYRBk9myaseg"
+              },
+              "href": "https://api.spotify.com/v1/artists/0TnOYISbd1XYRBk9myaseg",
+              "id": "0TnOYISbd1XYRBk9myaseg",
+              "name": "Pitbull",
+              "type": "artist",
+              "uri": "spotify:artist:0TnOYISbd1XYRBk9myaseg"
+            },
+            {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/artist/2L8yW8GIoirHEdeW4bWQXq"
+              },
+              "href": "https://api.spotify.com/v1/artists/2L8yW8GIoirHEdeW4bWQXq",
+              "id": "2L8yW8GIoirHEdeW4bWQXq",
+              "name": "TJR",
+              "type": "artist",
+              "uri": "spotify:artist:2L8yW8GIoirHEdeW4bWQXq"
+            }
+          ],
+          "available_markets": [],
+          "disc_number": 1,
+          "duration_ms": 206120,
+          "explicit": false,
+          "external_urls": {
+            "spotify": "https://open.spotify.com/track/2iblMMIgSznA464mNov7A8"
+          },
+          "href": "https://api.spotify.com/v1/tracks/2iblMMIgSznA464mNov7A8",
+          "id": "2iblMMIgSznA464mNov7A8",
+          "name": "Don't Stop the Party (feat. TJR)",
+          "preview_url": null,
+          "track_number": 2,
+          "type": "track",
+          "uri": "spotify:track:2iblMMIgSznA464mNov7A8",
+          "is_local": false
+        }
+      ],
+      "limit": 2,
+      "next": "https://api.spotify.com/v1/albums/4aawyAB9vmqN3uQ7FjRGTy/tracks?offset=2&limit=2&locale=en-US,en;q%3D0.5",
+      "offset": 0,
+      "previous": null,
+      "total": 18
+    }
+  },
+  {
+    "path": "v1/search",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "tracks": {
+        "href": "https://api.spotify.com/v1/search?offset=0&limit=2&query=ARCHITECTS&type=track&locale=en-US,en;q%3D0.5",
+        "limit": 2,
+        "next": "https://api.spotify.com/v1/search?offset=2&limit=2&query=ARCHITECTS&type=track&locale=en-US,en;q%3D0.5",
+        "offset": 0,
+        "previous": null,
+        "total": 900,
+        "items": [
+          {
+            "album": {
+              "album_type": "single",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/3ZztVuWxHzNpl0THurTFCv"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/3ZztVuWxHzNpl0THurTFCv",
+                  "id": "3ZztVuWxHzNpl0THurTFCv",
+                  "name": "Architects",
+                  "type": "artist",
+                  "uri": "spotify:artist:3ZztVuWxHzNpl0THurTFCv"
+                }
+              ],
+              "available_markets": [],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/29w7d7KKgGkgQ4qmu56SQe"
+              },
+              "href": "https://api.spotify.com/v1/albums/29w7d7KKgGkgQ4qmu56SQe",
+              "id": "29w7d7KKgGkgQ4qmu56SQe",
+              "images": [],
+              "is_playable": true,
+              "name": "Curse",
+              "release_date": "2024-04-09",
+              "release_date_precision": "day",
+              "total_tracks": 2,
+              "type": "album",
+              "uri": "spotify:album:29w7d7KKgGkgQ4qmu56SQe"
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/3ZztVuWxHzNpl0THurTFCv"
+                },
+                "href": "https://api.spotify.com/v1/artists/3ZztVuWxHzNpl0THurTFCv",
+                "id": "3ZztVuWxHzNpl0THurTFCv",
+                "name": "Architects",
+                "type": "artist",
+                "uri": "spotify:artist:3ZztVuWxHzNpl0THurTFCv"
+              }
+            ],
+            "available_markets": [],
+            "disc_number": 1,
+            "duration_ms": 181134,
+            "explicit": false,
+            "external_ids": {
+              "isrc": "USEP42418001"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/65VHUZPZKgaG4SJVRkBPzn"
+            },
+            "href": "https://api.spotify.com/v1/tracks/65VHUZPZKgaG4SJVRkBPzn",
+            "id": "65VHUZPZKgaG4SJVRkBPzn",
+            "is_local": false,
+            "is_playable": true,
+            "name": "Curse",
+            "popularity": 60,
+            "preview_url": null,
+            "track_number": 1,
+            "type": "track",
+            "uri": "spotify:track:65VHUZPZKgaG4SJVRkBPzn"
+          },
+          {
+            "album": {
+              "album_type": "album",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/6Wr3hh341P84m3EI8qdn9O"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/6Wr3hh341P84m3EI8qdn9O",
+                  "id": "6Wr3hh341P84m3EI8qdn9O",
+                  "name": "Rise Against",
+                  "type": "artist",
+                  "uri": "spotify:artist:6Wr3hh341P84m3EI8qdn9O"
+                }
+              ],
+              "available_markets": [],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/2Gq0ERke26yxdGuRvrqFTD"
+              },
+              "href": "https://api.spotify.com/v1/albums/2Gq0ERke26yxdGuRvrqFTD",
+              "id": "2Gq0ERke26yxdGuRvrqFTD",
+              "images": [],
+              "is_playable": true,
+              "name": "Endgame",
+              "release_date": "2011-01-01",
+              "release_date_precision": "day",
+              "total_tracks": 12,
+              "type": "album",
+              "uri": "spotify:album:2Gq0ERke26yxdGuRvrqFTD"
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/6Wr3hh341P84m3EI8qdn9O"
+                },
+                "href": "https://api.spotify.com/v1/artists/6Wr3hh341P84m3EI8qdn9O",
+                "id": "6Wr3hh341P84m3EI8qdn9O",
+                "name": "Rise Against",
+                "type": "artist",
+                "uri": "spotify:artist:6Wr3hh341P84m3EI8qdn9O"
+              }
+            ],
+            "available_markets": [],
+            "disc_number": 1,
+            "duration_ms": 222626,
+            "explicit": false,
+            "external_ids": {
+              "isrc": "USUM71101030"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/1O7oz3f9EuSeeX0J7t5z6J"
+            },
+            "href": "https://api.spotify.com/v1/tracks/1O7oz3f9EuSeeX0J7t5z6J",
+            "id": "1O7oz3f9EuSeeX0J7t5z6J",
+            "is_local": false,
+            "is_playable": true,
+            "name": "Architects",
+            "popularity": 49,
+            "preview_url": null,
+            "track_number": 1,
+            "type": "track",
+            "uri": "spotify:track:1O7oz3f9EuSeeX0J7t5z6J"
+          }
+        ]
+      },
+      "artists": {
+        "href": "https://api.spotify.com/v1/search?offset=0&limit=2&query=ARCHITECTS&type=artist&locale=en-US,en;q%3D0.5",
+        "limit": 2,
+        "next": "https://api.spotify.com/v1/search?offset=2&limit=2&query=ARCHITECTS&type=artist&locale=en-US,en;q%3D0.5",
+        "offset": 0,
+        "previous": null,
+        "total": 899,
+        "items": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/3ZztVuWxHzNpl0THurTFCv"
+            },
+            "followers": {
+              "href": null,
+              "total": 1066963
+            },
+            "genres": [
+              "mathcore",
+              "melodic metalcore",
+              "metalcore",
+              "progressive metalcore",
+              "uk metalcore"
+            ],
+            "href": "https://api.spotify.com/v1/artists/3ZztVuWxHzNpl0THurTFCv",
+            "id": "3ZztVuWxHzNpl0THurTFCv",
+            "images": [],
+            "name": "Architects",
+            "popularity": 66,
+            "type": "artist",
+            "uri": "spotify:artist:3ZztVuWxHzNpl0THurTFCv"
+          },
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/51NurCNENfDJqCtC4kgUZC"
+            },
+            "followers": {
+              "href": null,
+              "total": 3523
+            },
+            "genres": [
+              "pop edm"
+            ],
+            "href": "https://api.spotify.com/v1/artists/51NurCNENfDJqCtC4kgUZC",
+            "id": "51NurCNENfDJqCtC4kgUZC",
+            "images": [],
+            "name": "We Architects",
+            "popularity": 50,
+            "type": "artist",
+            "uri": "spotify:artist:51NurCNENfDJqCtC4kgUZC"
+          }
+        ]
+      },
+      "albums": {
+        "href": "https://api.spotify.com/v1/search?offset=0&limit=2&query=ARCHITECTS&type=album&locale=en-US,en;q%3D0.5",
+        "limit": 2,
+        "next": "https://api.spotify.com/v1/search?offset=2&limit=2&query=ARCHITECTS&type=album&locale=en-US,en;q%3D0.5",
+        "offset": 0,
+        "previous": null,
+        "total": 899,
+        "items": [
+          {
+            "album_type": "album",
+            "total_tracks": 15,
+            "available_markets": [],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/7qemUq4n71awwVPOaX7jw4"
+            },
+            "href": "https://api.spotify.com/v1/albums/7qemUq4n71awwVPOaX7jw4",
+            "id": "7qemUq4n71awwVPOaX7jw4",
+            "images": [],
+            "name": "For Those That Wish To Exist",
+            "release_date": "2021-02-26",
+            "release_date_precision": "day",
+            "type": "album",
+            "uri": "spotify:album:7qemUq4n71awwVPOaX7jw4",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/3ZztVuWxHzNpl0THurTFCv"
+                },
+                "href": "https://api.spotify.com/v1/artists/3ZztVuWxHzNpl0THurTFCv",
+                "id": "3ZztVuWxHzNpl0THurTFCv",
+                "name": "Architects",
+                "type": "artist",
+                "uri": "spotify:artist:3ZztVuWxHzNpl0THurTFCv"
+              }
+            ]
+          },
+          {
+            "album_type": "album",
+            "total_tracks": 11,
+            "available_markets": [],
+            "external_urls": {
+              "spotify": "https://open.spotify.com/album/3gh9LlHXtUEPkqsWj60Qy7"
+            },
+            "href": "https://api.spotify.com/v1/albums/3gh9LlHXtUEPkqsWj60Qy7",
+            "id": "3gh9LlHXtUEPkqsWj60Qy7",
+            "images": [],
+            "name": "Holy Hell",
+            "release_date": "2018-11-09",
+            "release_date_precision": "day",
+            "type": "album",
+            "uri": "spotify:album:3gh9LlHXtUEPkqsWj60Qy7",
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/3ZztVuWxHzNpl0THurTFCv"
+                },
+                "href": "https://api.spotify.com/v1/artists/3ZztVuWxHzNpl0THurTFCv",
+                "id": "3ZztVuWxHzNpl0THurTFCv",
+                "name": "Architects",
+                "type": "artist",
+                "uri": "spotify:artist:3ZztVuWxHzNpl0THurTFCv"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+]

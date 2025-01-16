@@ -7,6 +7,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/classes/mock_interceptor.dart';
+import 'package:jukebox_spotify_flutter/classes/track.dart';
+import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 import 'package:crypto/crypto.dart';
 
@@ -16,9 +20,9 @@ import 'package:spotify_sdk/spotify_sdk_web.dart';
 import 'package:synchronized/synchronized.dart' as synchronized;
 
 class SpotifyApiService {
-  final String clientId = dotenv.env['CLIENT_ID'].toString();
-  // final String clientSecret = dotenv.env['CLIENT_SECRET'].toString();
-  final String redirectUri = dotenv.env['REDIRECT_URL'].toString();
+  final String clientId = dotenv.get('CLIENT_ID');
+  // final String clientSecret = dotenv.get('CLIENT_SECRET');
+  final String redirectUri = dotenv.get('REDIRECT_URL');
   final String authEndpoint = 'https://accounts.spotify.com/authorize';
   final String tokenEndpoint = 'https://accounts.spotify.com/api/token';
   final String apiBaseUrl = 'https://api.spotify.com/v1';
@@ -47,9 +51,9 @@ class SpotifyApiService {
 }
 
 class SpotifyApi {
-  final String clientId = dotenv.env['CLIENT_ID'].toString();
+  final String clientId = dotenv.get('CLIENT_ID');
   // final String clientSecret = dotenv.env['CLIENT_SECRET'].toString();
-  final String redirectUri = dotenv.env['REDIRECT_URL'].toString();
+  final String redirectUri = dotenv.get('REDIRECT_URL');
   final String authEndpoint = 'https://accounts.spotify.com/authorize';
   final String tokenEndpoint = 'https://accounts.spotify.com/api/token';
   final String apiBaseUrl = 'https://api.spotify.com/v1';
@@ -349,6 +353,11 @@ class SpotifyApi {
     _dio.options.baseUrl = apiBaseUrl;
     _dioNoCache.options.baseUrl = apiBaseUrl;
 
+    // Add mock interceptor, if in development mode
+    final doMock = dotenv.getBool("MOCK_API", fallback: false);
+    Log.log("Mock is: $doMock");
+    if (doMock == true) _dio.interceptors.add(MockInterceptor());
+
     // Add token handling
     final authInterceptor = InterceptorsWrapper(
       onRequest: (options, handler) async {
@@ -377,8 +386,13 @@ class SpotifyApi {
     );
     _dio.interceptors.add(authInterceptor);
     _dioNoCache.interceptors.add(authInterceptor);
+
+    // Add token handling, if not mocking
+    if (doMock == false) {
+      _dio.interceptors.add(authInterceptor);
+    }
     // Add cache
-    _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
+    // _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
   }
 
   // Future<bool> _refreshTokenFunc() async {

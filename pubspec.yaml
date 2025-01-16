@@ -50,6 +50,7 @@ dependencies:
   synchronized: ^3.3.0+3
   crypto: ^3.0.6
   js: ^0.7.1
+  template_expressions: ^3.3.1+2
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,7 @@ dev_dependencies:
   json_serializable: ^6.9.2
   build_runner: ^2.4.14
   dio_mock_interceptor: ^2.1.0
+  verbal_expressions: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
