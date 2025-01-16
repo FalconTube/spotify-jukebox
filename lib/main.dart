@@ -28,7 +28,7 @@ void main() async {
   // Init with env variables
   await dotenv.load(fileName: '.env');
   await SpotifyApiService.api;
-  spotifySdkEnabled = dotenv.env['SPOTIFY_SDK_ENABLED'].toString() == 'true';
+  spotifySdkEnabled = dotenv.getBool('SPOTIFY_SDK_ENABLED', fallback: true);
 
   // Placeholder image for now
   placeholderRaw = await rootBundle.load('favicon.png');

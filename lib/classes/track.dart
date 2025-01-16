@@ -39,7 +39,8 @@ class SimpleTrack extends Info {
 
   @override
   String getImage() {
-    if (album.images == null) return "";
+    // Check if images is null or empty
+    if (album.images?.isEmpty == true) return "";
     return album.images![0].url;
   }
 
