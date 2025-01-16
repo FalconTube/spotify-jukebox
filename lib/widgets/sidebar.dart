@@ -11,15 +11,6 @@ class SidebarPlayer extends ConsumerStatefulWidget {
 }
 
 class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
-  // List<String> _upcomingSongs = [
-  //   'Song 1',
-  //   'Song 2',
-  //   'Song 3',
-  //   'Song 4',
-  //   'Song 5',
-  //   'Song 6',
-  //   'Song 7',
-  // ];
   @override
   Widget build(BuildContext context) {
     final queue = ref.watch(queueProvider);
@@ -45,19 +36,20 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
           Expanded(
             child: queue.isEmpty
                 ? Container()
-                : ReorderableListView.builder(
-                    onReorder: (int oldIndex, int newIndex) {
-                      // TODO: reorder list via API endpoint: https://developer.spotify.com/documentation/web-api/reference/reorder-or-replace-playlists-tracks
-                      // ref.read(queueProvider.notifier).state = List.from(queue)
-                      //   ..move(oldIndex, newIndex);
-                      // setState(() async {
-                      //   if (oldIndex < newIndex) {
-                      //     newIndex -= 1;
-                      //   }
-                      //   final String item = _upcomingSongs.removeAt(oldIndex);
-                      //   _upcomingSongs.insert(newIndex, item);
-                      // });
-                    },
+                : ListView.builder(
+                    // BUG: Spotify API or SDK don't have option to alter queue
+                    //
+                    // onReorder: (int oldIndex, int newIndex) {
+                    //   // TODO: reorder list via API endpoint: https://developer.spotify.com/documentation/web-api/reference/reorder-or-replace-playlists-tracks
+                    //
+                    //   setState(() {
+                    //     if (oldIndex < newIndex) {
+                    //       newIndex -= 1;
+                    //     }
+                    //     final SimpleTrack item = queue.removeAt(oldIndex);
+                    //     queue.insert(newIndex, item);
+                    //   });
+                    // },
                     itemCount: queue.length,
                     itemBuilder: (context, index) {
                       final track = queue[index];

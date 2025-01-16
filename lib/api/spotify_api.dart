@@ -8,9 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/classes/mock_interceptor.dart';
-import 'package:jukebox_spotify_flutter/classes/track.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math' as math;
 import 'package:crypto/crypto.dart';
 
@@ -356,7 +353,10 @@ class SpotifyApi {
     // Add mock interceptor, if in development mode
     final doMock = dotenv.getBool("MOCK_API", fallback: false);
     Log.log("Mock is: $doMock");
-    if (doMock == true) _dio.interceptors.add(MockInterceptor());
+    if (doMock == true) {
+      _dio.interceptors.add(MockInterceptor());
+      _dioNoCache.interceptors.add(MockInterceptor());
+    }
 
     // Add token handling
     final authInterceptor = InterceptorsWrapper(
@@ -384,15 +384,12 @@ class SpotifyApi {
         return handler.next(e);
       },
     );
+    // Add token handling
     _dio.interceptors.add(authInterceptor);
     _dioNoCache.interceptors.add(authInterceptor);
 
-    // Add token handling, if not mocking
-    if (doMock == false) {
-      _dio.interceptors.add(authInterceptor);
-    }
     // Add cache
-    // _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
+    _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
   }
 
   // Future<bool> _refreshTokenFunc() async {

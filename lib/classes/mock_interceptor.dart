@@ -47,9 +47,6 @@ class MockInterceptor extends Interceptor {
     await _futureManifestLoaded;
     await Future.wait(_futuresBundleLoaded);
 
-    for (final route in _routes.keys) {
-      if (route.contains("api.spo")) {}
-    }
     Map<String, dynamic>? route = _routes[options.path];
 
     if (route == null) {
@@ -58,7 +55,6 @@ class MockInterceptor extends Interceptor {
         ..add("v1/")
         ..word();
 
-      // final hasMatch = regex.hasMatch(options.path);
       final regex = expression.toRegExp();
       final match = regex.stringMatch(options.path);
 
@@ -70,11 +66,7 @@ class MockInterceptor extends Interceptor {
           // If exist, then use it as route
           route = potentialRoute;
         }
-        Log.log(
-            "Could not find a match in any mock json for smaller route: $match");
       }
-      Log.log(
-          "Could not extract a route from the large API call ${options.path}");
     }
 
     if (route == null) {
@@ -83,6 +75,7 @@ class MockInterceptor extends Interceptor {
           error: "Can't find route setting: ${options.path}"));
       return;
     }
+    Log.log("Mocking route ${route["path"]}");
 
     String method = route['method'] as String;
     if (options.method != method) {
@@ -107,7 +100,6 @@ class MockInterceptor extends Interceptor {
     }
 
     Map<String, dynamic>? vars = route['vars'];
-    Log.log(vars);
     var exContext = vars ?? {};
 
     exContext.putIfAbsent(
