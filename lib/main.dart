@@ -128,7 +128,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           ],
         ),
         drawer: CustomDrawer(),
-        bottomNavigationBar: WebPlayerBottomBar(),
+        bottomNavigationBar: (spotifySdkEnabled && _sdkConnected)
+            ? WebPlayerBottomBar()
+            // ? Text("connected")
+            : Text(""),
         body: switch (spotifySdkEnabled) {
           false => MainWidget(
               controller: _controller, searchFocusNode: _searchFocusNode),
