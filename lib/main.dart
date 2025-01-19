@@ -91,10 +91,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
         final genre = ref.read(chosenGenreFilterProvider);
         final requestType = ref.read(chosenSearchFilter);
+        final searchResultAmount =
+            ref.read(settingsProvider).searchResultAmount;
         ref.read(dataProvider.notifier).resetAndFetch(
             searchQuery: _controller.text,
             genre: genre,
-            requestType: requestType);
+            requestType: requestType,
+            searchResultAmount: searchResultAmount);
         ref.read(isLoadingProvider.notifier).state = false;
       });
     });

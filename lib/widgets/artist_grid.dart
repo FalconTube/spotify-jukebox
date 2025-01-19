@@ -11,6 +11,7 @@ import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
+import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
 import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 
@@ -43,9 +44,12 @@ class _ArtistGridState extends ConsumerState<ArtistGrid> {
     final query = ref.read(searchQueryProvider);
     final genre = ref.read(chosenGenreFilterProvider);
     final requestType = ref.read(chosenSearchFilter);
+    final searchResultAmount = ref.read(settingsProvider).searchResultAmount;
     if (_scrollController.position.pixels >=
         (_scrollController.position.maxScrollExtent * 2 / 3)) {
-      ref.read(dataProvider.notifier).fetchData(query, genre, requestType);
+      ref
+          .read(dataProvider.notifier)
+          .fetchData(query, genre, requestType, searchResultAmount);
     }
   }
 

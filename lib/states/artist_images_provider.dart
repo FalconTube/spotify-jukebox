@@ -43,18 +43,20 @@ class DataState {
 
 class DataNotifier extends StateNotifier<DataState> {
   DataNotifier() : super(DataState()) {
-    fetchData("", "", []); // Initial data fetch
+    fetchData("", "", [], 8); // Initial data fetch
   }
   void resetAndFetch(
       {required String searchQuery,
       required String genre,
-      required List<RequestType> requestType}) {
+      required List<RequestType> requestType,
+      required int searchResultAmount}) {
     state = DataState(); // Reset state to initial values.
-    fetchData(searchQuery, genre, requestType); // Fetch with the new URL
+    fetchData(searchQuery, genre, requestType,
+        searchResultAmount); // Fetch with the new URL
   }
 
-  Future<void> fetchData(
-      String searchQuery, String genre, List<RequestType> requestType) async {
+  Future<void> fetchData(String searchQuery, String genre,
+      List<RequestType> requestType, int searchResultAmount) async {
     if (state.isLoading) return; // Prevent concurrent requests
     if (searchQuery == "") {
       state = DataState(isLoading: false, error: null);
@@ -63,8 +65,8 @@ class DataNotifier extends StateNotifier<DataState> {
 
     state = state.copyWith(isLoading: true, error: null);
     int currentAmountItems = state.data.length;
-    final infos = await _requestInfo(
-        searchQuery, 2, genre, currentAmountItems, requestType);
+    final infos = await _requestInfo(searchQuery, searchResultAmount, genre,
+        currentAmountItems, requestType);
     // sortByFollowersDescending(infos);
     // sortByPopularityDescending(infos);
     // removeNotStartingWithLetter(infos, "f");

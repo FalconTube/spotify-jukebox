@@ -45,10 +45,13 @@ class ChipRow extends ConsumerWidget {
                     }
                     final query = ref.read(searchQueryProvider);
                     final genre = ref.read(chosenGenreFilterProvider);
+                    final searchResultAmount =
+                        ref.read(settingsProvider).searchResultAmount;
                     ref.read(dataProvider.notifier).resetAndFetch(
                         searchQuery: query,
                         genre: genre,
-                        requestType: chipNotifier.state);
+                        requestType: chipNotifier.state,
+                        searchResultAmount: searchResultAmount);
                   },
                 ),
               )

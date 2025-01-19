@@ -60,6 +60,20 @@ class CustomDrawer extends ConsumerWidget {
                       .updateDebounceDelay(value);
                 }),
           ),
+          ListTile(
+            title: const Text('Search Results'),
+            subtitle: Slider(
+                min: 2,
+                max: 20,
+                divisions: 9,
+                label: settings.searchResultAmount.toString(),
+                value: settings.searchResultAmount.toDouble(),
+                onChanged: (double value) {
+                  ref
+                      .read(settingsProvider.notifier)
+                      .updateSearchResultAmount(value);
+                }),
+          ),
           const Divider(), // Adds a visual separator
           ListTile(
             title: const Text('Close Drawer'),

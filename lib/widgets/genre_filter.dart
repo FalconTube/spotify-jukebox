@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
+import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 
 class GenreFilter extends ConsumerWidget {
   const GenreFilter({super.key});
@@ -31,10 +32,13 @@ class GenreFilter extends ConsumerWidget {
                     genres[index];
                 final query = ref.read(searchQueryProvider);
                 final requestType = ref.read(chosenSearchFilter);
+                final searchResultAmount =
+                    ref.read(settingsProvider).searchResultAmount;
                 ref.read(dataProvider.notifier).resetAndFetch(
                     searchQuery: query,
                     genre: genres[index],
-                    requestType: requestType);
+                    requestType: requestType,
+                    searchResultAmount: searchResultAmount);
               },
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
