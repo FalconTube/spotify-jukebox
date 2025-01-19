@@ -773,10 +773,11 @@ packages:
   spotify_sdk:
     dependency: "direct main"
     description:
-      name: spotify_sdk
-      sha256: "4c7a3b79f0370e7ae8ac07cad5e630d0bb3ad118f4c16219ec37f6988a65465e"
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: "ft/access"
+      resolved-ref: f840742421a7a077053b8642407fa187bcb5ff20
+      url: "https://github.com/FalconTube/spotify_sdk"
+    source: git
     version: "3.0.2"
   sprintf:
     dependency: transitive

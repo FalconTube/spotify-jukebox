@@ -159,8 +159,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 child: Text("Log in to Spotify Premium"),
                 onPressed: () async {
                   await AllSDKFuncs.connectToSpotifyRemote();
-                  final api = await SpotifyApiService.api;
-                  await api.connectToSpotify();
                   setState(() {
                     _sdkConnected = true;
                   });
