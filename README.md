@@ -1,16 +1,14 @@
-# jukebox_spotify_flutter
+# Jukebox Spotify Flutter
 
-A new Flutter project.
+Spotify interface without a :arrow_forward: **Play** button, just an :arrow_heading_up: **Add to Queue** button.
 
-## Getting Started
+## Elevator Pitch
 
-This project is a starting point for a Flutter application.
+- You have some friends over and listen to music via Spotify :headphones:.
+- You create a sick playlist/queue based on the wishes of your friends :musical_score:.
+- Then you pass your phone to a friend, because they want choose a song :iphone:.
+- Instead of adding the song to the queue, they just hit play and BANG :boom:.
+  Everyone is annoyed.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+:dizzy: This simple WebApp solves this problem by providing a Spotify interface,
+in which you can **only add** songs to the **queue** i.e. you **can not** play them directly.
