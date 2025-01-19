@@ -25,6 +25,93 @@
     "data": {}
   },
   {
+    "path": "v1/me",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "display_name": "Foo Bar",
+      "email": "foo@bar.com",
+      "explicit_content": {
+        "filter_enabled": false,
+        "filter_locked": false
+      },
+      "external_urls": {
+        "spotify": "https://open.spotify.com/user/31i6q6grhvfs2vav2apd4atq7wsm"
+      },
+      "followers": {
+        "href": null,
+        "total": 0
+      },
+      "href": "https://api.spotify.com/v1/users/31i6q6grhvfs2vav2apd4atq7wsm",
+      "id": "31i6q6grhvfs2vav2apd4atq7wsm",
+      "images": [],
+      "product": "premium",
+      "type": "user",
+      "uri": "spotify:user:31i6q6grhvfs2vav2apd4atq7wsm"
+    }
+  },
+  {
+    "path": "https://api.spotify.com/v1/users/31i6q6grhvfs2vav2apd4atq7wsm/playlists",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "href": "https://api.spotify.com/v1/users/31i6q6grhvfs2vav2apd4atq7wsm/playlists?offset=0&limit=50&locale=en-US,en;q%3D0.5",
+      "limit": 50,
+      "next": null,
+      "offset": 0,
+      "previous": null,
+      "total": 1,
+      "items": [
+        {
+          "collaborative": false,
+          "description": "",
+          "external_urls": {
+            "spotify": "https://open.spotify.com/playlist/4fsfUApjaJvJIvjuC3qOJt"
+          },
+          "href": "https://api.spotify.com/v1/playlists/4fsfUApjaJvJIvjuC3qOJt",
+          "id": "4fsfUApjaJvJIvjuC3qOJt",
+          "images": [
+            {
+              "height": 640,
+              "url": "https://mosaic.scdn.co/640/ab67616d00001e024a1752cc82c920dfb2adaa00ab67616d00001e025b6bb2889c9276c2ad126831ab67616d00001e02bcbca2e5ce9d9509821a5a90ab67616d00001e02cbeac022298872feaf1988e4",
+              "width": 640
+            },
+            {
+              "height": 300,
+              "url": "https://mosaic.scdn.co/300/ab67616d00001e024a1752cc82c920dfb2adaa00ab67616d00001e025b6bb2889c9276c2ad126831ab67616d00001e02bcbca2e5ce9d9509821a5a90ab67616d00001e02cbeac022298872feaf1988e4",
+              "width": 300
+            },
+            {
+              "height": 60,
+              "url": "https://mosaic.scdn.co/60/ab67616d00001e024a1752cc82c920dfb2adaa00ab67616d00001e025b6bb2889c9276c2ad126831ab67616d00001e02bcbca2e5ce9d9509821a5a90ab67616d00001e02cbeac022298872feaf1988e4",
+              "width": 60
+            }
+          ],
+          "name": "mp1",
+          "owner": {
+            "display_name": "Yannic Falke",
+            "external_urls": {
+              "spotify": "https://open.spotify.com/user/31i6q6grhvfs2vav2apd4atq7wsm"
+            },
+            "href": "https://api.spotify.com/v1/users/31i6q6grhvfs2vav2apd4atq7wsm",
+            "id": "31i6q6grhvfs2vav2apd4atq7wsm",
+            "type": "user",
+            "uri": "spotify:user:31i6q6grhvfs2vav2apd4atq7wsm"
+          },
+          "primary_color": null,
+          "public": true,
+          "snapshot_id": "AAAACQ4mrBHnnZynzUby9xHkXsYndhVp",
+          "tracks": {
+            "href": "https://api.spotify.com/v1/playlists/4fsfUApjaJvJIvjuC3qOJt/tracks",
+            "total": 5
+          },
+          "type": "playlist",
+          "uri": "spotify:playlist:4fsfUApjaJvJIvjuC3qOJt"
+        }
+      ]
+    }
+  },
+  {
     "path": "https://api.spotify.com/v1/me/player/queue",
     "method": "GET",
     "statusCode": 200,
