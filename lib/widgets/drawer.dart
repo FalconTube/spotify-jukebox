@@ -46,6 +46,20 @@ class CustomDrawer extends ConsumerWidget {
               },
             ),
           ),
+          ListTile(
+            title: const Text('Search Delay'),
+            subtitle: Slider(
+                min: 0,
+                max: 2000,
+                divisions: 10,
+                label: settings.debounceDelay.toString(),
+                value: settings.debounceDelay,
+                onChanged: (double value) {
+                  ref
+                      .read(settingsProvider.notifier)
+                      .updateDebounceDelay(value);
+                }),
+          ),
           const Divider(), // Adds a visual separator
           ListTile(
             title: const Text('Close Drawer'),

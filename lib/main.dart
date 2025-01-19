@@ -10,6 +10,7 @@ import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
+import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
@@ -84,7 +85,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       // Check if another call is in flight
       if (debounce?.isActive ?? false) debounce?.cancel();
       // API with debounce
-      debounce = Timer(const Duration(milliseconds: 1500), () {
+      final debounceDelay = ref.watch(settingsProvider).debounceDelay.toInt();
+      debounce = Timer(Duration(milliseconds: debounceDelay), () {
+        // debounce = Timer(const Duration(milliseconds: 200), () {
         ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
         final genre = ref.read(chosenGenreFilterProvider);
         final requestType = ref.read(chosenSearchFilter);
