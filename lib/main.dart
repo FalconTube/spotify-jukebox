@@ -6,14 +6,18 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_sdk.dart';
+import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
+import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
+import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder.dart';
+import 'package:jukebox_spotify_flutter/widgets/playlist_page.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
@@ -68,6 +72,7 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   bool _sdkConnected = false;
+  bool _playlistSelected = false;
   final TextEditingController _controller = TextEditingController(text: "");
   final FocusNode _searchFocusNode = FocusNode();
   String compareValue = "";
@@ -114,6 +119,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isPlaylistChosen = ref.watch(isPlaylistSelected);
+    Log.log(isPlaylistChosen);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -121,14 +128,26 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           actions: [
             // Disconnect
             (spotifySdkEnabled && _sdkConnected)
-                ? IconButton(
-                    onPressed: () async {
-                      await AllSDKFuncs.logout();
-                      setState(() {
-                        _sdkConnected = false;
-                      });
-                    },
-                    icon: Icon(Icons.exit_to_app))
+                ? Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return PlaylistGridPage();
+                            }));
+                          },
+                          icon: Icon(Icons.playlist_add_sharp)),
+                      IconButton(
+                          onPressed: () async {
+                            await AllSDKFuncs.logout();
+                            setState(() {
+                              _sdkConnected = false;
+                            });
+                          },
+                          icon: Icon(Icons.exit_to_app)),
+                    ],
+                  )
                 : Container(),
             // Connect
           ],
@@ -136,14 +155,18 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         drawer: CustomDrawer(),
         bottomNavigationBar: (spotifySdkEnabled && _sdkConnected)
             ? WebPlayerBottomBar()
-            // ? Text("connected")
             : Text(""),
         body: switch (spotifySdkEnabled) {
-          false => MainWidget(
-              controller: _controller, searchFocusNode: _searchFocusNode),
-          true => _sdkConnected
+          false => isPlaylistChosen
               ? MainWidget(
                   controller: _controller, searchFocusNode: _searchFocusNode)
+              : NoPlaylistSelectedPlaceholder(),
+          true => _sdkConnected
+              ? isPlaylistChosen
+                  ? MainWidget(
+                      controller: _controller,
+                      searchFocusNode: _searchFocusNode)
+                  : NoPlaylistSelectedPlaceholder()
               : SpotifyLogin(context),
         });
   }
@@ -233,6 +256,7 @@ class MainCenter extends StatelessWidget {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Padding(padding: EdgeInsets.all(6)),
                   ChipRow(),
                   MySearchbar(
                     textcontroller: _controller,

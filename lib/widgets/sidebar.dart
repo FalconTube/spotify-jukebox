@@ -25,15 +25,10 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Upcoming Songs",
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                IconButton.filled(
-                    onPressed: () async {
-                      // final out = await SpotifySdk.getSpotifyAuthToken();
-                      await ref.read(queueProvider.notifier).refreshQueue();
-                    },
-                    icon: Icon(Icons.refresh))
+                    style: TextStyle(fontWeight: FontWeight.bold))
               ],
             ),
           ),

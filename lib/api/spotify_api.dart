@@ -276,7 +276,7 @@ class SpotifyApi {
       Log.log(e.error);
       rethrow;
     }
-    Future.delayed(Duration(milliseconds: 800));
+    await Future.delayed(Duration(milliseconds: 1000));
     if (selectOnly == false) return;
 
     // Now pause if selectOnly is true

@@ -13,6 +13,7 @@ import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
+import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
