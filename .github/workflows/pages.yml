@@ -35,6 +35,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Get Repo name
+        run: |
+          repo=$(echo "${{ github.repository }}" | cut -d '/' -f 2)
+          echo $repo
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -46,7 +51,7 @@ jobs:
         working-directory: ${{env.working-directory}}
 
       - name: Build web app
-        run: flutter build web --release
+        run: flutter build web --release --base-href "/spotify-jukebox/"
         working-directory: ${{env.working-directory}}
 
       - name: Upload artifact
