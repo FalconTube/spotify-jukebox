@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
+import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:spotify_sdk/models/artist.dart';
+import 'package:spotify_sdk/models/image_uri.dart';
+import 'package:spotify_sdk/models/player_state.dart';
+import 'package:spotify_sdk/models/track.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 class WebPlayerBottomBar extends StatefulWidget {
@@ -10,91 +15,127 @@ class WebPlayerBottomBar extends StatefulWidget {
 }
 
 class WebPlayerBottomBarState extends State<WebPlayerBottomBar> {
-  double _progressValue = 0.5; // Initial progress
-  bool _isPlaying = true;
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        spacing: 10,
-        children: [
-          // Image
-          Image.asset('favicon.png', // Replace with your image URL
-              width: 40,
-              height: 40,
-              fit: BoxFit.cover),
-          // Name and Progress
-          Expanded(
-            child: Column(
-              spacing: 4,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+    return buildPlayerStateWidget();
+  }
+
+  Widget buildPlayerStateWidget() {
+    double calcNormalizedProgress(Track? track, PlayerState? playerState) {
+      if (track != null && playerState != null) {
+        Log.log("Duration: ${track.duration}");
+        Log.log("Position: ${playerState.playbackPosition}");
+        final val = (1 / track.duration) * playerState.playbackPosition;
+        Log.log("Progress: $val");
+        return val;
+      }
+      return 0;
+    }
+
+    String getAllArtistNames(List<Artist> artists) {
+      List<String?> artistsNames = [];
+      for (final artist in artists) {
+        artistsNames.add(artist.name);
+      }
+      var out = artistsNames.join(",");
+      return out;
+    }
+
+    late ImageUri? currentTrackImageUri;
+    return StreamBuilder<PlayerState>(
+        stream: SpotifySdk.subscribePlayerState(),
+        builder: (BuildContext context, AsyncSnapshot<PlayerState> snapshot) {
+          var track = snapshot.data?.track;
+          currentTrackImageUri = track?.imageUri;
+          var playerState = snapshot.data;
+
+          if (playerState == null || track == null) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[900],
+              ),
+              height: 0,
+            );
+          }
+
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[900],
+            ),
+            height: 150,
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              spacing: 10,
               children: [
-                Text(
-                  'Song Title - Song Artist', // Replace with dynamic title
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
+                Image.network(
+                  currentTrackImageUri!.raw,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Center(
+                      child: CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, object, stackTrace) {
+                    return const Center(
+                      child: Icon(Icons.error, color: Colors.red),
+                    );
+                  },
                 ),
-                SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    trackHeight: 2.0,
-                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 4.0),
-                    overlayShape: RoundSliderOverlayShape(overlayRadius: 8.0),
+                // Name and Progress
+                Expanded(
+                  child: Column(
+                    spacing: 4,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        ' ${track.name} - ${getAllArtistNames(track.artists)}', // Replace with dynamic title
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      LinearProgressIndicator(
+                        value: calcNormalizedProgress(track, playerState),
+                      ),
+                    ],
                   ),
-                  child: Slider(
-                    value: _progressValue,
-                    onChanged: (value) {
-                      setState(() async {
-                        _progressValue = value;
-                      });
-                    },
-                  ),
+                ),
+
+                // Play/Pause Button
+                IconButton(
+                    icon: Icon(
+                        playerState.isPaused ? Icons.play_arrow : Icons.pause),
+                    // icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                    onPressed: () async {
+                      playerState.isPaused
+                          ? await SpotifySdk.resume()
+                          : await SpotifySdk.pause();
+                    }),
+                IconButton(
+                  icon: Icon(Icons.skip_next),
+                  onPressed: () async {
+                    await SpotifySdk.skipNext();
+                    // Handle next action
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.select_all_rounded),
+                  onPressed: () async {
+                    final api = await SpotifyApiService.api;
+                    await api.playOrSelectPlaylist("4fsfUApjaJvJIvjuC3qOJt",
+                        selectOnly: true);
+                    // Handle next action
+                  },
                 ),
               ],
             ),
-          ),
-
-          // Play/Pause Button
-          IconButton(
-            icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-            onPressed: () async {
-              final pstate = await SpotifySdk.getPlayerState();
-              setState(() {
-                if (pstate?.isPaused == true) {
-                  SpotifySdk.resume();
-                  _isPlaying = true;
-                } else {
-                  SpotifySdk.pause();
-                  _isPlaying = false;
-                }
-              });
-            },
-          ),
-          // Next Button
-          IconButton(
-            icon: Icon(Icons.skip_next),
-            onPressed: () {
-              SpotifySdk.skipNext();
-              // Handle next action
-            },
-          ),
-          // Next Button
-          IconButton(
-            icon: Icon(Icons.select_all_rounded),
-            onPressed: () async {
-              final api = await SpotifyApiService.api;
-              await api.playOrSelectPlaylist("4fsfUApjaJvJIvjuC3qOJt",
-                  selectOnly: true);
-              // Handle next action
-            },
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 }

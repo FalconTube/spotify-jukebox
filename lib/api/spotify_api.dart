@@ -6,6 +6,7 @@ import 'package:js/js_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/classes/mock_interceptor.dart';
 import 'dart:math' as math;
@@ -489,6 +490,14 @@ class SpotifyApi {
       deviceId = device["id"];
     }
     return deviceId;
+  }
+
+  Future<int> getTrackDuration(String trackUri) async {
+    String uri = "https://api.spotify.com/v1/tracks/$trackUri";
+    final out = await get(uri);
+    final track = SimpleTrack.fromJson(out.data);
+
+    return track.durationMs;
   }
 
   /// Plays a [spotifyUri] and assumes that it is a playlist
