@@ -12,7 +12,12 @@ class AllSDKFuncs {
       String clientId = dotenv.env['CLIENT_ID'].toString();
       String redirectUrl = dotenv.env['REDIRECT_URL'].toString();
       var result = await SpotifySdk.connectToSpotifyRemote(
-          clientId: clientId, redirectUrl: redirectUrl, playerName: "Jukebox");
+        clientId: clientId,
+        redirectUrl: redirectUrl,
+        playerName: "Jukebox",
+        scope:
+            'streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private',
+      );
       // accessToken: token);
 
       Log.log(result

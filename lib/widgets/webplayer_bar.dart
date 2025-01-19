@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:spotify_sdk/models/artist.dart';
 import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/models/track.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
-class WebPlayerBottomBar extends StatefulWidget {
+// class SidebarPlayer extends ConsumerStatefulWidget {
+//   const SidebarPlayer({super.key});
+//
+//   @override
+//   ConsumerState<SidebarPlayer> createState() => SidebarPlayerState();
+// }
+//
+// class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
+
+class WebPlayerBottomBar extends ConsumerStatefulWidget {
   const WebPlayerBottomBar({super.key});
 
   @override
   WebPlayerBottomBarState createState() => WebPlayerBottomBarState();
 }
 
-class WebPlayerBottomBarState extends State<WebPlayerBottomBar> {
+class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
   @override
   Widget build(BuildContext context) {
     return buildPlayerStateWidget();
@@ -57,6 +68,9 @@ class WebPlayerBottomBarState extends State<WebPlayerBottomBar> {
               height: 0,
             );
           }
+
+          // Update queue
+          ref.read(queueProvider.notifier).refreshQueue();
 
           return Container(
             decoration: BoxDecoration(
@@ -101,8 +115,8 @@ class WebPlayerBottomBarState extends State<WebPlayerBottomBar> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       LinearProgressIndicator(
-                        value: calcNormalizedProgress(track, playerState),
-                      ),
+                          // value: calcNormalizedProgress(track, playerState),
+                          value: 0.5),
                     ],
                   ),
                 ),

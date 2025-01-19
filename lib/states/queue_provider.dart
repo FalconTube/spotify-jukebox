@@ -6,13 +6,11 @@ import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 class QueueProvider extends StateNotifier<List<SimpleTrack>> {
   QueueProvider() : super([]); // Initial state is an empty string.
 
-  void refreshQueue() async {
+  Future<void> refreshQueue() async {
     final api = await SpotifyApiService.api;
     String uri = "https://api.spotify.com/v1/me/player/queue";
     // Disable cache for this request
     final out = await api.get(uri, withoutCache: true);
-    final req = out.requestOptions.extra;
-    Log.log(req);
     final queueItems = out.data["queue"];
     // Reset queue
     var queueTracks = <SimpleTrack>[];
@@ -20,8 +18,6 @@ class QueueProvider extends StateNotifier<List<SimpleTrack>> {
     for (final item in queueItems) {
       queueTracks.add(SimpleTrack.fromJson(item));
     }
-    // Log.log("Data: ${out.data}");
-    // Log.log("Items: $queueItems");
 
     state = queueTracks;
   }
