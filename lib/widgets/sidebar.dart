@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 class SidebarPlayer extends ConsumerStatefulWidget {
   const SidebarPlayer({super.key});
@@ -26,7 +29,9 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
                 Text("Upcoming Songs",
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 IconButton.filled(
-                    onPressed: () {
+                    onPressed: () async {
+                      final out = await SpotifySdk.getSpotifyAuthToken();
+                      Log.log(out);
                       ref.read(queueProvider.notifier).refreshQueue();
                     },
                     icon: Icon(Icons.refresh))
