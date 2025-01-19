@@ -22,7 +22,6 @@ import 'package:jukebox_spotify_flutter/widgets/search.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
-import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 late ByteData placeholderRaw;
@@ -55,9 +54,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.redAccent, brightness: Brightness.dark),
-          // seedColor: Colors.deepPurple, brightness: Brightness.dark),
           useMaterial3: true),
-      home: MyHomePage(title: 'Jukebox no Integration'),
+      home: MyHomePage(title: 'Spotify Jukebox'),
     );
   }
 }

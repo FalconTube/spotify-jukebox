@@ -13,7 +13,7 @@ class AppSettings {
   // Factory constructor to create from JSON (for persistence)
   factory AppSettings.fromJson(Map<String, dynamic> json) {
     return AppSettings(
-      showVirtualKeyboard: json['showVirtualKeyboard'] ?? true,
+      showVirtualKeyboard: json['showVirtualKeyboard'] ?? false,
       showTypeFilters: json['showTypeFilters'] ?? true,
       debounceDelay: json['debounceDelay'] ?? 1500,
       searchResultAmount: json['searchResultAmount'] ?? 8,
