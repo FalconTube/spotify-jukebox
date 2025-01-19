@@ -64,7 +64,8 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
                                   image: track.getImage(),
                                   fit: BoxFit.cover,
                                   placeholder: pl)
-                              : Image.asset("favicon.png", fit: BoxFit.cover));
+                              : Image.asset("assets/placeholder.png",
+                                  fit: BoxFit.cover));
                     },
                   ),
           ),

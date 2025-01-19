@@ -255,7 +255,7 @@ class ArtistImage extends StatelessWidget {
                 backgroundImage: NetworkImage(imageData.getImage()),
               ),
             )
-          : CircleAvatar(backgroundImage: AssetImage("favicon.png")),
+          : CircleAvatar(backgroundImage: AssetImage("assets/placeholder.png")),
     );
   }
 }
@@ -281,7 +281,7 @@ class AlbumImage extends StatelessWidget {
                 placeholder: pl,
               ),
             )
-          : Image.asset("favicon.png", fit: BoxFit.cover),
+          : Image.asset("assets/placeholder.png", fit: BoxFit.cover),
     );
   }
 }

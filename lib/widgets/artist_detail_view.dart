@@ -112,7 +112,7 @@ class TopBar extends StatelessWidget {
                       placeholder: pl,
                     ),
                   )
-                : Image.asset("favicon.png", fit: BoxFit.cover)));
+                : Image.asset("assets/placeholder.png", fit: BoxFit.cover)));
   }
 }
 
@@ -141,7 +141,7 @@ class MainList extends ConsumerWidget {
                         fit: BoxFit.fitHeight,
                         placeholder: pl,
                       )
-                    : Image.asset("favicon.png", fit: BoxFit.cover),
+                    : Image.asset("assets/placeholder.png", fit: BoxFit.cover),
                 trailing: Material(
                   // Added Material for inkwell effect and elevation
                   color: Colors.transparent, // Make the background transparent

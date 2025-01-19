@@ -22,6 +22,7 @@ import 'package:jukebox_spotify_flutter/widgets/search.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
 import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
+import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 late ByteData placeholderRaw;
@@ -36,7 +37,7 @@ void main() async {
   spotifySdkEnabled = dotenv.getBool('SPOTIFY_SDK_ENABLED', fallback: true);
 
   // Placeholder image for now
-  placeholderRaw = await rootBundle.load('favicon.png');
+  placeholderRaw = await rootBundle.load('assets/placeholder.png');
   pl = Uint8List.view(placeholderRaw.buffer);
   runApp(ProviderScope(child: MyApp()));
 }
@@ -72,7 +73,6 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   bool _sdkConnected = false;
-  bool _playlistSelected = false;
   final TextEditingController _controller = TextEditingController(text: "");
   final FocusNode _searchFocusNode = FocusNode();
   String compareValue = "";
@@ -120,7 +120,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final isPlaylistChosen = ref.watch(isPlaylistSelected);
-    Log.log(isPlaylistChosen);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -183,11 +182,18 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             spacing: 20,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("spotify_logo_black.png", width: 80, height: 80),
+              Image.asset("assets/spotify_logo_black.png",
+                  width: 80, height: 80),
               ElevatedButton(
                 child: Text("Log in to Spotify Premium"),
                 onPressed: () async {
-                  await AllSDKFuncs.connectToSpotifyRemote();
+                  try {
+                    await AllSDKFuncs.connectToSpotifyRemote();
+                    final playerState = await SpotifySdk.getPlayerState();
+                  } catch (e) {
+                    Log.log("Not connected to Spotify. Error $e");
+                    return;
+                  }
                   setState(() {
                     _sdkConnected = true;
                   });

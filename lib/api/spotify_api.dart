@@ -20,7 +20,6 @@ import 'package:synchronized/synchronized.dart' as synchronized;
 
 class SpotifyApiService {
   final String clientId = dotenv.get('CLIENT_ID');
-  // final String clientSecret = dotenv.get('CLIENT_SECRET');
   final String redirectUri = dotenv.get('REDIRECT_URL');
   final String authEndpoint = 'https://accounts.spotify.com/authorize';
   final String tokenEndpoint = 'https://accounts.spotify.com/api/token';
@@ -140,35 +139,6 @@ class SpotifyApi {
     // Add cache
     _dio.interceptors.add(DioCacheInterceptor(options: cacheOptions));
   }
-
-  // Future<bool> _refreshTokenFunc() async {
-  //   final credentials = "$clientId:$clientSecret";
-  //   String encoded = base64.encode(utf8.encode(credentials));
-  //   try {
-  //     final response = await Dio().post(
-  //       tokenEndpoint,
-  //       data: {
-  //         'grant_type': 'client_credentials',
-  //       },
-  //       options: Options(
-  //         headers: {
-  //           'Authorization': 'Basic $encoded',
-  //           'Content-Type': 'application/x-www-form-urlencoded'
-  //         },
-  //       ),
-  //     );
-  //
-  //     _accessToken = response.data['access_token'];
-  //
-  //     await _prefs.setString('spotify_access_token', _accessToken!);
-  //     return true;
-  //   } catch (e) {
-  //     // Handle refresh token error (e.g., token revoked)
-  //     await _prefs.remove('spotify_access_token');
-  //     _accessToken = null;
-  //     return false;
-  //   }
-  // }
 
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
     final options = Options(
