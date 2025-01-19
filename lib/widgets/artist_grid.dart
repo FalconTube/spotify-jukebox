@@ -10,11 +10,13 @@ import 'package:jukebox_spotify_flutter/main.dart';
 
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
+import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
 import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
   final Uint8List placeholder;
@@ -78,7 +80,7 @@ class _ArtistGridState extends ConsumerState<ArtistGrid> {
   }
 }
 
-class InnerArtistGrid extends StatelessWidget {
+class InnerArtistGrid extends ConsumerWidget {
   const InnerArtistGrid({
     super.key,
     required ScrollController scrollController,
@@ -91,7 +93,7 @@ class InnerArtistGrid extends StatelessWidget {
   final ArtistGrid widget;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GridView.builder(
@@ -119,9 +121,15 @@ class InnerArtistGrid extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 child: InkWell(
-                  onTap: () {
-                    if (imageData is SimpleTrack) return;
-                    Navigator.push(
+                  onTap: () async {
+                    if (imageData is SimpleTrack) {
+                      await SpotifySdk.queue(spotifyUri: imageData.uri);
+                      await Future.delayed(Duration(milliseconds: 300));
+                      ref.read(queueProvider.notifier).refreshQueue();
+                      return;
+                    }
+
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
                         return ArtistDetailView(info: imageData);
@@ -166,7 +174,7 @@ class InnerArtistGrid extends StatelessWidget {
   }
 }
 
-class PlayableNetworkImage extends StatelessWidget {
+class PlayableNetworkImage extends ConsumerWidget {
   final String imageUrl;
   final double imageWidth;
   final double imageHeight;
@@ -179,7 +187,7 @@ class PlayableNetworkImage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
       child: Stack(
         fit: StackFit.expand, // Important: Makes the image fill the SizedBox
