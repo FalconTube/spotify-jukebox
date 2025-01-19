@@ -14,6 +14,7 @@ class PlaylistGridPage extends ConsumerStatefulWidget {
 
 class PlaylistGridPageState extends ConsumerState<PlaylistGridPage> {
   Playlist? _selectedValue;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -93,13 +94,24 @@ class PlaylistGridPageState extends ConsumerState<PlaylistGridPage> {
         },
         floatingActionButton: _selectedValue != null
             ? FloatingActionButton.extended(
-                icon: Icon(Icons.check),
+                icon: _isLoading
+                    ? SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator())
+                    : Icon(Icons.check),
                 onPressed: () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
                   final api = await SpotifyApiService.api;
                   await api.playOrSelectPlaylist(_selectedValue!.id,
                       selectOnly: true);
 
                   ref.read(isPlaylistSelected.notifier).update((state) => true);
+                  setState(() {
+                    _isLoading = false;
+                  });
                   if (context.mounted) Navigator.pop(context);
                 },
                 label: Text("Choose Playlist"))
