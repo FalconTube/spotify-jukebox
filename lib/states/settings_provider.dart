@@ -24,7 +24,8 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
         }
       }
     }
-    return AppSettings(showVirtualKeyboard: true, showTypeFilters: true);
+    return AppSettings(
+        showVirtualKeyboard: true, showTypeFilters: true, debounceDelay: 1500);
   }
 
   Future<void> updateShowVirtualKeyboard(bool value) async {
@@ -34,6 +35,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
 
   Future<void> updateShowTypeFilters(bool value) async {
     state = state.copyWith(showTypeFilters: value);
+    await _saveSettings();
+  }
+
+  Future<void> updateDebounceDelay(double value) async {
+    state = state.copyWith(debounceDelay: value);
     await _saveSettings();
   }
 
