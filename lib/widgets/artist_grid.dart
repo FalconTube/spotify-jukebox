@@ -231,7 +231,7 @@ class PlayableNetworkImage extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: const Icon(
-                    Icons.play_arrow,
+                    Icons.queue_music,
                     color: Colors.white,
                     size: 36.0,
                   ),
