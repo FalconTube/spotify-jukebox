@@ -30,9 +30,8 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 IconButton.filled(
                     onPressed: () async {
-                      final out = await SpotifySdk.getSpotifyAuthToken();
-                      Log.log(out);
-                      ref.read(queueProvider.notifier).refreshQueue();
+                      // final out = await SpotifySdk.getSpotifyAuthToken();
+                      await ref.read(queueProvider.notifier).refreshQueue();
                     },
                     icon: Icon(Icons.refresh))
               ],
