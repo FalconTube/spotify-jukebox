@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -27,16 +28,76 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>jukebox_spotify_flutter</title>
   <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      /* Prevent scrollbars during loading */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #1A1111;
+      /* Example background color */
+    }
+
+    .loader {
+      border: 16px solid #f3f3f3;
+      /* Light grey */
+      border-top: 16px solid #733331;
+      /* Blue */
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    #loading-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #loading-text {
+      margin-top: 20px;
+      font-family: sans-serif;
+      color: #777;
+    }
+  </style>
+
+
 </head>
+
 <body>
-  <script src="flutter_bootstrap.js" async></script>
-  <script src="https://sdk.scdn.co/spotify-player.js"></script>
-  <script>
-    window.onSpotifyWebPlaybackSDKReady = (evt) => {};
-  </script>
+  <div id="loading-indicator">
+    <div class="loader"></div>
+    <div id="loading-text">Loading Spotify Jukebox ...<div>
+      </div>
+      <script src="flutter_bootstrap.js" async></script>
+      <script src="https://sdk.scdn.co/spotify-player.js"></script>
+      <script>
+        window.addEventListener('load', function () {
+          const loadingIndicator = document.getElementById('loading-indicator');
+          loadingIndicator.style.display = 'none'; // Hide the loader
+        });
+      </script>
+      <script>
+        window.onSpotifyWebPlaybackSDKReady = (evt) => { };
+      </script>
 </body>
+
 </html>

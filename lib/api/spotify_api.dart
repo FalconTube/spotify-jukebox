@@ -1,22 +1,13 @@
-import 'dart:convert';
-
-import 'dart:html';
-import 'package:js/js.dart';
-import 'package:js/js_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/classes/mock_interceptor.dart';
-import 'dart:math' as math;
-import 'package:crypto/crypto.dart';
 
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:spotify_sdk/spotify_sdk_web.dart';
-import 'package:synchronized/synchronized.dart' as synchronized;
 
 class SpotifyApiService {
   final String clientId = dotenv.get('CLIENT_ID');

@@ -52,7 +52,7 @@ jobs:
         working-directory: ${{env.working-directory}}
 
       - name: Build web app
-        run: flutter build web --release --base-href {{ steps.repo_name.outputs.repo }}
+        run: flutter build web --release --base-href "/${{ steps.repo_name.outputs.repo }}/"
         working-directory: ${{env.working-directory}}
 
       - name: Upload artifact
