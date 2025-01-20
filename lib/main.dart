@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
-import 'package:jukebox_spotify_flutter/api/spotify_sdk.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
@@ -137,7 +136,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           icon: Icon(Icons.playlist_add_sharp)),
                       IconButton(
                           onPressed: () async {
-                            await AllSDKFuncs.logout();
+                            await SpotifySdk.disconnect();
                             setState(() {
                               _sdkConnected = false;
                             });
@@ -186,8 +185,16 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 child: Text("Log in to Spotify Premium"),
                 onPressed: () async {
                   try {
-                    await AllSDKFuncs.connectToSpotifyRemote();
-                    final playerState = await SpotifySdk.getPlayerState();
+                    String clientId = dotenv.env['CLIENT_ID'].toString();
+                    String redirectUrl = dotenv.env['REDIRECT_URL'].toString();
+                    await SpotifySdk.connectToSpotifyRemote(
+                      clientId: clientId,
+                      redirectUrl: redirectUrl,
+                      playerName: "Jukebox",
+                      scope:
+                          'streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private',
+                    );
+                    await SpotifySdk.getPlayerState();
                   } catch (e) {
                     Log.log("Not connected to Spotify. Error $e");
                     return;
