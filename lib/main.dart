@@ -10,8 +10,10 @@ import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
+import 'package:jukebox_spotify_flutter/states/sdk_connected_provider.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
+import 'package:jukebox_spotify_flutter/states/sidebar_visible_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
@@ -77,7 +79,6 @@ class MyHomePage extends ConsumerStatefulWidget {
 }
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
-  bool _sdkConnected = false;
   final TextEditingController _controller = TextEditingController(text: "");
   final FocusNode _searchFocusNode = FocusNode();
   String compareValue = "";
@@ -124,6 +125,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _sdkConnected = ref.watch(isSdkConnected);
+    final doMock = dotenv.getBool("MOCK_API", fallback: false);
     final isPlaylistChosen = ref.watch(isPlaylistSelected);
     return Scaffold(
         appBar: AppBar(
@@ -131,7 +134,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           title: Text(widget.title),
           actions: [
             // Disconnect
-            (spotifySdkEnabled && _sdkConnected)
+            (_sdkConnected || doMock)
                 ? Row(
                     children: [
                       IconButton(
@@ -147,13 +150,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                       IconButton(
                           color:
                               Theme.of(context).colorScheme.onPrimaryContainer,
-                          onPressed: () async {
-                            await SpotifySdk.disconnect();
-                            setState(() {
-                              _sdkConnected = false;
-                            });
+                          onPressed: () {
+                            // Invert visibilty
+                            final sidebarState = ref.read(isSidebarVisible);
+                            ref
+                                .read(isSidebarVisible.notifier)
+                                .update((state) => !sidebarState);
                           },
-                          icon: Icon(Icons.exit_to_app)),
+                          icon: Icon(Icons.queue_play_next_sharp)),
                     ],
                   )
                 : Container(),
@@ -210,9 +214,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     Log.log("Not connected to Spotify. Error $e");
                     return;
                   }
-                  setState(() {
-                    _sdkConnected = true;
-                  });
+                  ref.read(isSdkConnected.notifier).update((state) => true);
                 },
               ),
             ],

@@ -138,7 +138,7 @@ class LowerPlayer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
       ),
-      height: 100,
+      height: 80,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         spacing: 10,
