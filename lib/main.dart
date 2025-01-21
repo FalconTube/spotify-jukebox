@@ -135,6 +135,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 ? Row(
                     children: [
                       IconButton(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
@@ -143,6 +145,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           },
                           icon: Icon(Icons.playlist_add_sharp)),
                       IconButton(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           onPressed: () async {
                             await SpotifySdk.disconnect();
                             setState(() {

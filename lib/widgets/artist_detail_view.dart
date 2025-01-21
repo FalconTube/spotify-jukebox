@@ -103,16 +103,48 @@ class TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        surfaceTintColor: Theme.of(context).colorScheme.primaryContainer,
         expandedHeight: 350,
         elevation: 5,
         pinned: true,
-        // forceElevated: true,
         floating: false,
+        leading: InkWell(
+          borderRadius: BorderRadius.circular(20), // Circular shape
+          onTap: () {
+            Navigator.of(context).maybePop();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 40, // Adjust size as needed
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.arrow_back_ios_new_rounded, // Use a modern back arrow
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  size: 20, // Adjust icon size
+                ),
+              ),
+            ),
+          ),
+        ),
         flexibleSpace: FlexibleSpaceBar(
-            title: Text(info.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                )),
+            title: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+              padding: EdgeInsets.all(3),
+              child: Text(info.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  )),
+            ),
             background: info.getImage() != ""
                 ? Hero(
                     tag: info.getImage(),

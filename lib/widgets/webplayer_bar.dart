@@ -111,7 +111,11 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
                     children: [
                       Text(
                         ' ${track.name} - ${getAllArtistNames(track.artists)}', // Replace with dynamic title
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                        ),
                         overflow: TextOverflow.ellipsis,
                       ),
                       LinearProgressIndicator(
@@ -123,6 +127,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
 
                 // Play/Pause Button
                 IconButton(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                     icon: Icon(
                         playerState.isPaused ? Icons.play_arrow : Icons.pause),
                     // icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
@@ -132,6 +137,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
                           : await SpotifySdk.pause();
                     }),
                 IconButton(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   icon: Icon(Icons.skip_next),
                   onPressed: () async {
                     await SpotifySdk.skipNext();
@@ -139,6 +145,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
                   },
                 ),
                 IconButton(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   icon: Icon(Icons.select_all_rounded),
                   onPressed: () async {
                     final api = await SpotifyApiService.api;
