@@ -161,9 +161,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           ],
         ),
         drawer: CustomDrawer(),
-        bottomNavigationBar: (spotifySdkEnabled && _sdkConnected)
-            ? WebPlayerBottomBar()
-            : Text(""),
+        bottomNavigationBar:
+            (_sdkConnected) ? WebPlayerBottomBar() : WebPlayerBottomBar(),
         body: switch (spotifySdkEnabled) {
           false => isPlaylistChosen
               ? MainWidget(
