@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
+import 'package:jukebox_spotify_flutter/states/sidebar_visible_provider.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 class SidebarPlayer extends ConsumerStatefulWidget {
@@ -17,8 +19,33 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
   @override
   Widget build(BuildContext context) {
     final queue = ref.watch(queueProvider);
+    final sidebarVisible = ref.watch(isSidebarVisible);
+
+    // If screen is large, use default size
+    // If screen is size, use full width
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLargeScreen = screenWidth > 600;
+    final double sidebarWidth = isLargeScreen ? 200 : screenWidth;
+
+    return sidebarVisible
+        ? _Sidebar(queue: queue, sidebarWidth: sidebarWidth)
+        : Container();
+  }
+}
+
+class _Sidebar extends StatelessWidget {
+  const _Sidebar({
+    required this.queue,
+    required this.sidebarWidth,
+  });
+
+  final List<SimpleTrack> queue;
+  final double sidebarWidth;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: sidebarWidth,
       color: Theme.of(context).colorScheme.surfaceContainerLowest,
       child: Column(
         children: [

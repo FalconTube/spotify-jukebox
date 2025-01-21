@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/states/sdk_connected_provider.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 class CustomDrawer extends ConsumerStatefulWidget {
   const CustomDrawer({super.key});
@@ -130,6 +132,20 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
                     );
                   },
                   label: Text('Choose color')),
+            ),
+          ),
+          ListTile(
+            title: const Text('Disconnect'),
+            subtitle: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: OutlinedButton.icon(
+                  label: const Text('Disconnect'),
+                  // color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  onPressed: () async {
+                    await SpotifySdk.disconnect();
+                    ref.read(isSdkConnected.notifier).update((state) => false);
+                  },
+                  icon: Icon(Icons.exit_to_app)),
             ),
           ),
           const Divider(), // Adds a visual separator
