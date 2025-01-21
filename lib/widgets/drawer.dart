@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 
-class CustomDrawer extends ConsumerWidget {
+class CustomDrawer extends ConsumerStatefulWidget {
   const CustomDrawer({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsProvider);
+  ConsumerState<CustomDrawer> createState() => CustomDrawerState();
+}
+
+class CustomDrawerState extends ConsumerState<CustomDrawer> {
+  @override
+  Widget build(BuildContext context) {
+    // final settings = ref.watch(settingsProvider);
+    final settings = ref.read(settingsProvider);
+    Color currentColor = settings.seedColor;
+    void changeColor(Color color) => setState(() {
+          currentColor = color;
+          ref.read(settingsProvider.notifier).updateSeedColor(color);
+        });
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -19,9 +32,18 @@ class CustomDrawer extends ConsumerWidget {
             child: Text(
               'Settings',
               style: TextStyle(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
                 fontSize: 24,
               ),
+            ),
+          ),
+          ListTile(
+            title: const Text('Light/Dark mode'),
+            trailing: Switch(
+              value: settings.brightness == Brightness.dark,
+              onChanged: (bool value) {
+                ref.read(settingsProvider.notifier).switchBrightness();
+              },
             ),
           ),
           ListTile(
@@ -73,6 +95,42 @@ class CustomDrawer extends ConsumerWidget {
                       .read(settingsProvider.notifier)
                       .updateSearchResultAmount(value);
                 }),
+          ),
+          ListTile(
+            title: const Text('Color Picker'),
+            subtitle: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: OutlinedButton.icon(
+                  icon: Icon(Icons.color_lens),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      barrierColor: Colors.transparent,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          // backgroundColor: Colors.transparent,
+                          titlePadding: const EdgeInsets.all(0),
+                          contentPadding: const EdgeInsets.all(0),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25))),
+                          content: SingleChildScrollView(
+                            child: ColorPicker(
+                              enableAlpha: false,
+                              labelTypes: [],
+                              displayThumbColor: true,
+                              pickerColor: currentColor,
+                              onColorChanged: (value) {
+                                changeColor(value);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  label: Text('Choose color')),
+            ),
           ),
           const Divider(), // Adds a visual separator
           ListTile(

@@ -40,21 +40,27 @@ void main() async {
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
+  @override
+  ConsumerState<MyApp> createState() => MyAppState();
+}
+
+class MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(settingsProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeAnimationDuration: Durations.extralong4,
+      themeAnimationDuration: Durations.medium1,
       title: 'Jukebox',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Color(0xFFFA00F8), brightness: Brightness.dark
-              // seedColor: Colors.redAccent, brightness: Brightness.dark
-              ),
+            seedColor: settings.seedColor,
+            brightness: settings.brightness,
+          ),
           useMaterial3: true),
       home: MyHomePage(title: 'Spotify Jukebox'),
     );

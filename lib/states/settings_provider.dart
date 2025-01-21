@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:jukebox_spotify_flutter/classes/settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
@@ -25,14 +26,27 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
       }
     }
     return AppSettings(
-        showVirtualKeyboard: true,
+        showVirtualKeyboard: false,
         showTypeFilters: true,
         debounceDelay: 1500,
-        searchResultAmount: 8);
+        searchResultAmount: 8,
+        brightness: Brightness.dark,
+        seedColor: Color(0xFFFA00F8));
   }
 
   Future<void> updateShowVirtualKeyboard(bool value) async {
     state = state.copyWith(showVirtualKeyboard: value);
+    await _saveSettings();
+  }
+
+  Future<void> switchBrightness() async {
+    Brightness newVal;
+    if (state.brightness == Brightness.light) {
+      newVal = Brightness.dark;
+    } else {
+      newVal = Brightness.light;
+    }
+    state = state.copyWith(brightness: newVal);
     await _saveSettings();
   }
 
@@ -48,6 +62,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
 
   Future<void> updateSearchResultAmount(double value) async {
     state = state.copyWith(searchResultAmount: value.toInt());
+    await _saveSettings();
+  }
+
+  void updateSeedColor(Color color) async {
+    state = state.copyWith(seedColor: color);
     await _saveSettings();
   }
 
