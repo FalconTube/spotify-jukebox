@@ -63,7 +63,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
           if (playerState == null || track == null) {
             return Container(
               decoration: BoxDecoration(
-                color: Colors.grey[900],
+                color: Theme.of(context).colorScheme.primaryContainer,
               ),
               height: 0,
             );
@@ -74,7 +74,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
 
           return Container(
             decoration: BoxDecoration(
-              color: Colors.grey[900],
+              color: Theme.of(context).colorScheme.primaryContainer,
             ),
             height: 150,
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

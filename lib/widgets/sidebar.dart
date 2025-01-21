@@ -19,7 +19,7 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
     final queue = ref.watch(queueProvider);
     return Container(
       width: 200,
-      color: Colors.grey[900],
+      color: Theme.of(context).colorScheme.surfaceContainerLowest,
       child: Column(
         children: [
           Padding(
@@ -28,7 +28,10 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Upcoming Songs",
-                    style: TextStyle(fontWeight: FontWeight.bold))
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18))
               ],
             ),
           ),

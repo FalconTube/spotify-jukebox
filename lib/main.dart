@@ -52,7 +52,9 @@ class MyApp extends StatelessWidget {
       title: 'Jukebox',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.redAccent, brightness: Brightness.dark),
+              seedColor: Color(0xFFFA00F8), brightness: Brightness.dark
+              // seedColor: Colors.redAccent, brightness: Brightness.dark
+              ),
           useMaterial3: true),
       home: MyHomePage(title: 'Spotify Jukebox'),
     );

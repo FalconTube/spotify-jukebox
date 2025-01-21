@@ -51,6 +51,7 @@ class SelectCard extends StatelessWidget {
     return Card(
       elevation: 2, // Add a subtle shadow
       margin: const EdgeInsets.all(16), // Add some margin around the card
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: InkWell(
         onTap: function,
         child: Padding(
@@ -65,14 +66,14 @@ class SelectCard extends StatelessWidget {
               Icon(
                 icon,
                 size: 64, // Make the icon larger
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
               Text(
                 text,
                 textAlign: TextAlign.center, // Center the text
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ),
             ],

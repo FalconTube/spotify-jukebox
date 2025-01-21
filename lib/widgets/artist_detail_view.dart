@@ -52,25 +52,36 @@ class ArtistOrAlbum extends ConsumerWidget {
       child: Row(
         children: [
           Expanded(
-            child: CustomScrollView(
-              slivers: <Widget>[
-                TopBar(info: info),
-                tracks.when(
-                  data: (tracks) {
-                    return MainList(tracks: tracks);
-                    // return const Text("Error");
-                  },
-                  error: (error, stackTrace) {
-                    return SliverToBoxAdapter(
-                        child: Text("Error: $error, Trace: $stackTrace"));
-                  },
-                  loading: () {
-                    return const SliverToBoxAdapter(
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  },
-                )
-              ],
+            child: Container(
+              decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                      center: Alignment(-0.4, -0.2),
+                      radius: 2.2,
+                      // end: Alignment.bottomRight,
+                      colors: [
+                    Theme.of(context).colorScheme.surfaceContainerLowest,
+                    Theme.of(context).colorScheme.surfaceContainer,
+                  ])),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  TopBar(info: info),
+                  tracks.when(
+                    data: (tracks) {
+                      return MainList(tracks: tracks);
+                      // return const Text("Error");
+                    },
+                    error: (error, stackTrace) {
+                      return SliverToBoxAdapter(
+                          child: Text("Error: $error, Trace: $stackTrace"));
+                    },
+                    loading: () {
+                      return const SliverToBoxAdapter(
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    },
+                  )
+                ],
+              ),
             ),
           ),
           SidebarPlayer()
@@ -131,45 +142,55 @@ class MainList extends ConsumerWidget {
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600),
-            child: ListTile(
-                // isThreeLine: true,
-                visualDensity: VisualDensity(vertical: 4),
-                leading: track.getImage() != ""
-                    ? FadeInImage.memoryNetwork(
-                        fadeInDuration: const Duration(milliseconds: 300),
-                        image: track.getImage(),
-                        fit: BoxFit.fitHeight,
-                        placeholder: pl,
-                      )
-                    : Image.asset("assets/placeholder.png", fit: BoxFit.cover),
-                trailing: Material(
-                  // Added Material for inkwell effect and elevation
-                  color: Colors.transparent, // Make the background transparent
-                  child: InkWell(
-                    onTap: () async {
-                      await SpotifySdk.queue(spotifyUri: track.uri);
-                      await Future.delayed(Duration(milliseconds: 300));
-                      ref.read(queueProvider.notifier).refreshQueue();
-                    },
-                    borderRadius: BorderRadius.circular(
-                        24.0), // Optional: Rounded corners for the InkWell
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(
-                            alpha: 0.5), // Semi-transparent background
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: const Icon(
-                        Icons.queue_music,
-                        color: Colors.white,
-                        size: 36.0,
+            child: Column(
+              children: [
+                ListTile(
+                    // isThreeLine: true,
+                    // tileColor: Theme.of(context).colorScheme.surfaceContainerLowest,
+                    visualDensity: VisualDensity(vertical: 4),
+                    leading: track.getImage() != ""
+                        ? FadeInImage.memoryNetwork(
+                            fadeInDuration: const Duration(milliseconds: 300),
+                            image: track.getImage(),
+                            fit: BoxFit.fitHeight,
+                            placeholder: pl,
+                          )
+                        : Image.asset("assets/placeholder.png",
+                            fit: BoxFit.cover),
+                    trailing: Material(
+                      // Added Material for inkwell effect and elevation
+                      color:
+                          Colors.transparent, // Make the background transparent
+                      child: InkWell(
+                        onTap: () async {
+                          await SpotifySdk.queue(spotifyUri: track.uri);
+                          await Future.delayed(Duration(milliseconds: 300));
+                          ref.read(queueProvider.notifier).refreshQueue();
+                        },
+                        borderRadius: BorderRadius.circular(
+                            24.0), // Optional: Rounded corners for the InkWell
+                        child: Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                          child: Icon(
+                            Icons.queue_music,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                            size: 36.0,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                title: Text(track.name),
-                subtitle: Text(track.prettyDuration())),
+                    title: Text(track.name),
+                    subtitle: Text(track.prettyDuration())),
+                Divider(height: 20)
+              ],
+            ),
           ),
         ),
       );
