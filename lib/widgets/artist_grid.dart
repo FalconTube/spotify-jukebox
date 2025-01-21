@@ -117,6 +117,7 @@ class InnerArtistGrid extends ConsumerWidget {
               padding: const EdgeInsets.all(5),
               child: Card(
                 elevation: 5,
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -136,31 +137,36 @@ class InnerArtistGrid extends ConsumerWidget {
                       }),
                     );
                   },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (imageData is ArtistCard)
-                        ArtistImage(imageData: imageData),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (imageData is ArtistCard)
+                          ArtistImage(imageData: imageData),
 
-                      if (imageData is AlbumCard)
-                        AlbumImage(imageData: imageData),
+                        if (imageData is AlbumCard)
+                          AlbumImage(imageData: imageData),
 
-                      if (imageData is SimpleTrack)
-                        PlayableNetworkImage(imageUrl: imageData.getImage()),
+                        if (imageData is SimpleTrack)
+                          PlayableNetworkImage(imageUrl: imageData.getImage()),
 
-                      // AlbumImage(imageData: imageData),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          imageData.name,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.ellipsis, // Handle long text
-                          maxLines: 1,
+                        // AlbumImage(imageData: imageData),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            imageData.name,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurface,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.ellipsis, // Handle long text
+                            maxLines: 1,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -218,7 +224,7 @@ class PlayableNetworkImage extends ConsumerWidget {
             right: 8.0, // Adjust as needed
             child: Material(
               // Added Material for inkwell effect and elevation
-              color: Colors.transparent, // Make the background transparent
+              color: Colors.transparent,
               child: InkWell(
                 onTap: () {},
                 borderRadius: BorderRadius.circular(
@@ -226,13 +232,12 @@ class PlayableNetworkImage extends ConsumerWidget {
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                    color: Colors.black
-                        .withValues(alpha: 0.9), // Semi-transparent background
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.queue_music,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                     size: 36.0,
                   ),
                 ),

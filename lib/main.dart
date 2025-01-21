@@ -40,19 +40,27 @@ void main() async {
   runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
+  @override
+  ConsumerState<MyApp> createState() => MyAppState();
+}
+
+class MyAppState extends ConsumerState<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(settingsProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeAnimationDuration: Durations.extralong4,
+      themeAnimationDuration: Durations.medium1,
       title: 'Jukebox',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.redAccent, brightness: Brightness.dark),
+            seedColor: settings.seedColor,
+            brightness: settings.brightness,
+          ),
           useMaterial3: true),
       home: MyHomePage(title: 'Spotify Jukebox'),
     );
@@ -127,6 +135,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 ? Row(
                     children: [
                       IconButton(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
@@ -135,6 +145,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           },
                           icon: Icon(Icons.playlist_add_sharp)),
                       IconButton(
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           onPressed: () async {
                             await SpotifySdk.disconnect();
                             setState(() {

@@ -23,7 +23,9 @@ class MySearchbar extends ConsumerWidget {
         padding: const EdgeInsets.all(10),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.grey[900], // Background color
+            color: Theme.of(context)
+                .colorScheme
+                .secondaryContainer, // Background color
             borderRadius: BorderRadius.circular(30.0), // Rounded corners
           ),
           child: Row(
@@ -36,11 +38,16 @@ class MySearchbar extends ConsumerWidget {
                         width: iconSize,
                         child: Padding(
                           padding: const EdgeInsets.all(0.0),
-                          child:
-                              SpinKitPulse(size: iconSize, color: Colors.grey),
+                          child: SpinKitPulse(
+                              size: iconSize,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer),
                         ))
                     : Icon(Icons.search,
-                        color: Colors.grey, size: iconSize), // Search icon
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                        size: iconSize), // Search icon
               ),
               Expanded(
                 child: TextField(
@@ -48,13 +55,15 @@ class MySearchbar extends ConsumerWidget {
                   decoration: InputDecoration(
                     hintText: "Search...",
                     border: InputBorder.none, // Remove default border
-                    hintStyle: const TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant),
                   ),
                 ),
               ),
               Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   child: IconButton(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                       onPressed: () {
                         textcontroller.text = "";
                       },
