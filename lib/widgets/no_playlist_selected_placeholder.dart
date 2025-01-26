@@ -66,14 +66,14 @@ class SelectCard extends StatelessWidget {
               Icon(
                 icon,
                 size: 64, // Make the icon larger
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               Text(
                 text,
                 textAlign: TextAlign.center, // Center the text
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ],

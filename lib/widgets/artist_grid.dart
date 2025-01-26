@@ -3,17 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
+import 'package:jukebox_spotify_flutter/classes/playlist.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 
-import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
+import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
-import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
+import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
 import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
@@ -99,15 +100,7 @@ class InnerArtistGrid extends ConsumerWidget {
       child: GridView.builder(
         controller: _scrollController,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 300
-            // crossAxisSpacing: 8,
-            // mainAxisSpacing: 0,
-            ),
-        // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //   crossAxisCount: 3,
-        //   crossAxisSpacing: 8,
-        //   mainAxisSpacing: 0,
-        // ),
+            maxCrossAxisExtent: 300),
         itemCount: dataState.data.length + (dataState.isLoading ? 1 : 0),
         // itemCount: imageList.length,
         itemBuilder: (context, index) {
@@ -133,7 +126,7 @@ class InnerArtistGrid extends ConsumerWidget {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return ArtistDetailView(info: imageData);
+                        return DetailView(info: imageData);
                       }),
                     );
                   },
@@ -146,7 +139,10 @@ class InnerArtistGrid extends ConsumerWidget {
                           ArtistImage(imageData: imageData),
 
                         if (imageData is AlbumCard)
-                          AlbumImage(imageData: imageData),
+                          AlbumOrPlaylistImage(imageData: imageData),
+
+                        if (imageData is Playlist)
+                          AlbumOrPlaylistImage(imageData: imageData),
 
                         if (imageData is SimpleTrack)
                           PlayableNetworkImage(imageUrl: imageData.getImage()),
@@ -237,7 +233,7 @@ class PlayableNetworkImage extends ConsumerWidget {
                   ),
                   child: Icon(
                     Icons.queue_music,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    color: Theme.of(context).colorScheme.onSurface,
                     size: 36.0,
                   ),
                 ),
@@ -273,8 +269,8 @@ class ArtistImage extends StatelessWidget {
   }
 }
 
-class AlbumImage extends StatelessWidget {
-  const AlbumImage({
+class AlbumOrPlaylistImage extends StatelessWidget {
+  const AlbumOrPlaylistImage({
     super.key,
     required this.imageData,
   });

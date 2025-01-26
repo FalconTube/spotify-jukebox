@@ -1,7 +1,8 @@
 enum RequestType {
   artist,
   album,
-  track;
+  track,
+  playlist;
 
   @override
   String toString() => name;

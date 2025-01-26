@@ -12,8 +12,9 @@ class Playlist extends Info {
     required super.id,
   });
 
-  factory Playlist.fromJson(Map<String, dynamic> json) =>
-      _$PlaylistFromJson(json);
+  factory Playlist.fromJson(Map<String, dynamic> json) {
+    return _$PlaylistFromJson(json);
+  }
 
   Map<String, dynamic> toJson() => _$PlaylistToJson(this);
 }

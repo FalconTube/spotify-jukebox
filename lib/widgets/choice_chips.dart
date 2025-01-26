@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
+import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
@@ -15,11 +15,12 @@ class ChipRow extends ConsumerWidget {
     final chipNotifier = ref.watch(chosenSearchFilter.notifier);
     final settings = ref.watch(settingsProvider);
 
-    const chipLabels = ['Artists', 'Albums', 'Songs'];
+    const chipLabels = ['Artists', 'Albums', 'Songs', 'Playlists'];
     const chipValues = {
       RequestType.artist: 'Artists',
       RequestType.album: 'Albums',
-      RequestType.track: 'Songs'
+      RequestType.track: 'Songs',
+      RequestType.playlist: 'Playlists'
     };
 
     return Row(

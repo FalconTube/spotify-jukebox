@@ -112,6 +112,231 @@
     }
   },
   {
+    "path": "https://api.spotify.com/v1/playlists/4G00RTgXb2dU4FieXsjBS4/tracks",
+    "method": "GET",
+    "statusCode": 200,
+    "data": {
+      "href": "https://api.spotify.com/v1/playlists/4G00RTgXb2dU4FieXsjBS4/tracks?offset=0&limit=2&market=US&locale=en-US,en;q%3D0.5",
+      "items": [
+        {
+          "added_at": "2018-03-01T14:46:48Z",
+          "added_by": {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/user/ctbp2c9ufz6qzyi045x7r2ria"
+            },
+            "href": "https://api.spotify.com/v1/users/ctbp2c9ufz6qzyi045x7r2ria",
+            "id": "ctbp2c9ufz6qzyi045x7r2ria",
+            "type": "user",
+            "uri": "spotify:user:ctbp2c9ufz6qzyi045x7r2ria"
+          },
+          "is_local": false,
+          "primary_color": null,
+          "track": {
+            "preview_url": null,
+            "is_playable": true,
+            "explicit": false,
+            "type": "track",
+            "episode": false,
+            "track": true,
+            "album": {
+              "is_playable": true,
+              "type": "album",
+              "album_type": "album",
+              "href": "https://api.spotify.com/v1/albums/2pKw6GERJVAD61449B1EEM",
+              "id": "2pKw6GERJVAD61449B1EEM",
+              "images": [
+                {
+                  "height": 640,
+                  "url": "https://i.scdn.co/image/ab67616d0000b2736741ca6e9ba6fdc166037321",
+                  "width": 640
+                },
+                {
+                  "height": 300,
+                  "url": "https://i.scdn.co/image/ab67616d00001e026741ca6e9ba6fdc166037321",
+                  "width": 300
+                },
+                {
+                  "height": 64,
+                  "url": "https://i.scdn.co/image/ab67616d000048516741ca6e9ba6fdc166037321",
+                  "width": 64
+                }
+              ],
+              "name": "Hybrid Theory",
+              "release_date": "2000",
+              "release_date_precision": "year",
+              "uri": "spotify:album:2pKw6GERJVAD61449B1EEM",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/6XyY86QOPPrYVGvF9ch6wz"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/6XyY86QOPPrYVGvF9ch6wz",
+                  "id": "6XyY86QOPPrYVGvF9ch6wz",
+                  "name": "Linkin Park",
+                  "type": "artist",
+                  "uri": "spotify:artist:6XyY86QOPPrYVGvF9ch6wz"
+                }
+              ],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/2pKw6GERJVAD61449B1EEM"
+              },
+              "total_tracks": 12
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/6XyY86QOPPrYVGvF9ch6wz"
+                },
+                "href": "https://api.spotify.com/v1/artists/6XyY86QOPPrYVGvF9ch6wz",
+                "id": "6XyY86QOPPrYVGvF9ch6wz",
+                "name": "Linkin Park",
+                "type": "artist",
+                "uri": "spotify:artist:6XyY86QOPPrYVGvF9ch6wz"
+              }
+            ],
+            "disc_number": 1,
+            "track_number": 8,
+            "duration_ms": 216800,
+            "external_ids": {
+              "isrc": "USWB10002407"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/3tSmXSxaAnU1EPGKa6NytH"
+            },
+            "href": "https://api.spotify.com/v1/tracks/3tSmXSxaAnU1EPGKa6NytH",
+            "id": "60a0Rd6pjrkxjPbaKzXjfq",
+            "name": "In the End",
+            "popularity": 63,
+            "uri": "spotify:track:60a0Rd6pjrkxjPbaKzXjfq",
+            "is_local": false,
+            "linked_from": {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/3tSmXSxaAnU1EPGKa6NytH"
+              },
+              "href": "https://api.spotify.com/v1/tracks/3tSmXSxaAnU1EPGKa6NytH",
+              "id": "3tSmXSxaAnU1EPGKa6NytH",
+              "type": "track",
+              "uri": "spotify:track:3tSmXSxaAnU1EPGKa6NytH"
+            }
+          },
+          "video_thumbnail": {
+            "url": null
+          }
+        },
+        {
+          "added_at": "2018-03-01T14:46:52Z",
+          "added_by": {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/user/ctbp2c9ufz6qzyi045x7r2ria"
+            },
+            "href": "https://api.spotify.com/v1/users/ctbp2c9ufz6qzyi045x7r2ria",
+            "id": "ctbp2c9ufz6qzyi045x7r2ria",
+            "type": "user",
+            "uri": "spotify:user:ctbp2c9ufz6qzyi045x7r2ria"
+          },
+          "is_local": false,
+          "primary_color": null,
+          "track": {
+            "preview_url": null,
+            "is_playable": true,
+            "explicit": true,
+            "type": "track",
+            "episode": false,
+            "track": true,
+            "album": {
+              "is_playable": true,
+              "type": "album",
+              "album_type": "album",
+              "href": "https://api.spotify.com/v1/albums/3VdXq4YQIt3ugs05SjFmsD",
+              "id": "3VdXq4YQIt3ugs05SjFmsD",
+              "images": [
+                {
+                  "height": 640,
+                  "url": "https://i.scdn.co/image/ab67616d0000b273883c9f16e98d3aaba93fef97",
+                  "width": 640
+                },
+                {
+                  "height": 300,
+                  "url": "https://i.scdn.co/image/ab67616d00001e02883c9f16e98d3aaba93fef97",
+                  "width": 300
+                },
+                {
+                  "height": 64,
+                  "url": "https://i.scdn.co/image/ab67616d00004851883c9f16e98d3aaba93fef97",
+                  "width": 64
+                }
+              ],
+              "name": "Infest",
+              "release_date": "2000-04-25",
+              "release_date_precision": "day",
+              "uri": "spotify:album:3VdXq4YQIt3ugs05SjFmsD",
+              "artists": [
+                {
+                  "external_urls": {
+                    "spotify": "https://open.spotify.com/artist/4RddZ3iHvSpGV4dvATac9X"
+                  },
+                  "href": "https://api.spotify.com/v1/artists/4RddZ3iHvSpGV4dvATac9X",
+                  "id": "4RddZ3iHvSpGV4dvATac9X",
+                  "name": "Papa Roach",
+                  "type": "artist",
+                  "uri": "spotify:artist:4RddZ3iHvSpGV4dvATac9X"
+                }
+              ],
+              "external_urls": {
+                "spotify": "https://open.spotify.com/album/3VdXq4YQIt3ugs05SjFmsD"
+              },
+              "total_tracks": 11
+            },
+            "artists": [
+              {
+                "external_urls": {
+                  "spotify": "https://open.spotify.com/artist/4RddZ3iHvSpGV4dvATac9X"
+                },
+                "href": "https://api.spotify.com/v1/artists/4RddZ3iHvSpGV4dvATac9X",
+                "id": "4RddZ3iHvSpGV4dvATac9X",
+                "name": "Papa Roach",
+                "type": "artist",
+                "uri": "spotify:artist:4RddZ3iHvSpGV4dvATac9X"
+              }
+            ],
+            "disc_number": 1,
+            "track_number": 2,
+            "duration_ms": 199893,
+            "external_ids": {
+              "isrc": "USDW10021712"
+            },
+            "external_urls": {
+              "spotify": "https://open.spotify.com/track/5eek2X5459T1HoYJk2CKXv"
+            },
+            "href": "https://api.spotify.com/v1/tracks/5eek2X5459T1HoYJk2CKXv",
+            "id": "5W8YXBz9MTIDyrpYaCg2Ky",
+            "name": "Last Resort",
+            "popularity": 24,
+            "uri": "spotify:track:5W8YXBz9MTIDyrpYaCg2Ky",
+            "is_local": false,
+            "linked_from": {
+              "external_urls": {
+                "spotify": "https://open.spotify.com/track/5eek2X5459T1HoYJk2CKXv"
+              },
+              "href": "https://api.spotify.com/v1/tracks/5eek2X5459T1HoYJk2CKXv",
+              "id": "5eek2X5459T1HoYJk2CKXv",
+              "type": "track",
+              "uri": "spotify:track:5eek2X5459T1HoYJk2CKXv"
+            }
+          },
+          "video_thumbnail": {
+            "url": null
+          }
+        }
+      ],
+      "limit": 2,
+      "next": "https://api.spotify.com/v1/playlists/4G00RTgXb2dU4FieXsjBS4/tracks?offset=2&limit=2&market=US&locale=en-US,en;q%3D0.5",
+      "offset": 0,
+      "previous": null,
+      "total": 144
+    }
+  },
+  {
     "path": "https://api.spotify.com/v1/me/player/queue",
     "method": "GET",
     "statusCode": 200,
@@ -1698,6 +1923,63 @@
                 "uri": "spotify:artist:3ZztVuWxHzNpl0THurTFCv"
               }
             ]
+          }
+        ]
+      },
+      "playlists": {
+        "href": "https://api.spotify.com/v1/search?offset=0&limit=2&query=rock%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=playlist&market=US&locale=en-US,en;q%3D0.5",
+        "limit": 2,
+        "next": "https://api.spotify.com/v1/search?offset=2&limit=2&query=rock%2520track%3ADoxy%2520artist%3AMiles%2520Davis&type=playlist&market=US&locale=en-US,en;q%3D0.5",
+        "offset": 0,
+        "previous": null,
+        "total": 800,
+        "items": [
+          null,
+          {
+            "collaborative": false,
+            "description": "",
+            "external_urls": {
+              "spotify": "https://open.spotify.com/playlist/4G00RTgXb2dU4FieXsjBS4"
+            },
+            "href": "https://api.spotify.com/v1/playlists/4G00RTgXb2dU4FieXsjBS4",
+            "id": "4G00RTgXb2dU4FieXsjBS4",
+            "images": [
+              {
+                "height": 640,
+                "url": "https://mosaic.scdn.co/640/ab67616d00001e027a3d77a6bd0814a5998f7749ab67616d00001e02985bf5ede2fe4a048ee85f28ab67616d00001e02e2f039481babe23658fc719aab67616d00001e02eaa10fffa60de320846c28be",
+                "width": 640
+              },
+              {
+                "height": 300,
+                "url": "https://mosaic.scdn.co/300/ab67616d00001e027a3d77a6bd0814a5998f7749ab67616d00001e02985bf5ede2fe4a048ee85f28ab67616d00001e02e2f039481babe23658fc719aab67616d00001e02eaa10fffa60de320846c28be",
+                "width": 300
+              },
+              {
+                "height": 60,
+                "url": "https://mosaic.scdn.co/60/ab67616d00001e027a3d77a6bd0814a5998f7749ab67616d00001e02985bf5ede2fe4a048ee85f28ab67616d00001e02e2f039481babe23658fc719aab67616d00001e02eaa10fffa60de320846c28be",
+                "width": 60
+              }
+            ],
+            "name": "Rock - 90er,2000er",
+            "owner": {
+              "display_name": "chillr1711",
+              "external_urls": {
+                "spotify": "https://open.spotify.com/user/ctbp2c9ufz6qzyi045x7r2ria"
+              },
+              "href": "https://api.spotify.com/v1/users/ctbp2c9ufz6qzyi045x7r2ria",
+              "id": "ctbp2c9ufz6qzyi045x7r2ria",
+              "type": "user",
+              "uri": "spotify:user:ctbp2c9ufz6qzyi045x7r2ria"
+            },
+            "primary_color": null,
+            "public": true,
+            "snapshot_id": "AAAAmMDrpjLA01HRi3ks1YymkhGv5e1b",
+            "tracks": {
+              "href": "https://api.spotify.com/v1/playlists/4G00RTgXb2dU4FieXsjBS4/tracks",
+              "total": 144
+            },
+            "type": "playlist",
+            "uri": "spotify:playlist:4G00RTgXb2dU4FieXsjBS4"
           }
         ]
       }

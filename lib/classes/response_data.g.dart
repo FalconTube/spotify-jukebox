@@ -16,6 +16,9 @@ ResponseData _$ResponseDataFromJson(Map<String, dynamic> json) => ResponseData(
       tracks: json['tracks'] == null
           ? null
           : ListSimpleTracks.fromJson(json['tracks'] as Map<String, dynamic>),
+      playlists: json['playlists'] == null
+          ? null
+          : ListPlaylists.fromJson(json['playlists'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ResponseDataToJson(ResponseData instance) =>
@@ -23,6 +26,7 @@ Map<String, dynamic> _$ResponseDataToJson(ResponseData instance) =>
       'artists': instance.artists?.toJson(),
       'albums': instance.albums?.toJson(),
       'tracks': instance.tracks?.toJson(),
+      'playlists': instance.playlists?.toJson(),
     };
 
 ListArtistCards _$ListArtistCardsFromJson(Map<String, dynamic> json) =>
@@ -57,6 +61,18 @@ ListSimpleTracks _$ListSimpleTracksFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ListSimpleTracksToJson(ListSimpleTracks instance) =>
+    <String, dynamic>{
+      'items': instance.items.map((e) => e.toJson()).toList(),
+    };
+
+ListPlaylists _$ListPlaylistsFromJson(Map<String, dynamic> json) =>
+    ListPlaylists(
+      items: (json['items'] as List<dynamic>)
+          .map((e) => Playlist.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$ListPlaylistsToJson(ListPlaylists instance) =>
     <String, dynamic>{
       'items': instance.items.map((e) => e.toJson()).toList(),
     };

@@ -1,46 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
+import 'package:jukebox_spotify_flutter/classes/playlist.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
+import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
-class ArtistDetailView extends ConsumerWidget {
-  const ArtistDetailView({super.key, required this.info});
+class DetailView extends ConsumerWidget {
+  const DetailView({super.key, required this.info});
 
   final Info info;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Log.log(info.runtimeType);
     switch (info.runtimeType) {
-      case ArtistCard:
+      case const (ArtistCard):
         ArtistCard artist = info as ArtistCard;
         AsyncValue<List<SimpleTrack>> topTracks =
             ref.watch(topTracksProvider(artist));
-        return ArtistOrAlbum(info: artist, tracks: topTracks);
-      case AlbumCard:
+        return DetailList(info: artist, tracks: topTracks);
+      case const (AlbumCard):
         AlbumCard album = info as AlbumCard;
         AsyncValue<List<SimpleTrack>> albumTracks =
             ref.watch(albumTracksProvider(album));
-        return ArtistOrAlbum(info: album, tracks: albumTracks);
+        return DetailList(info: album, tracks: albumTracks);
+      case const (Playlist):
+        Playlist playlist = info as Playlist;
+        AsyncValue<List<SimpleTrack>> playlistTracks =
+            ref.watch(playlistTracksProvider(playlist));
+        return DetailList(info: playlist, tracks: playlistTracks);
       default:
         return CircularProgressIndicator();
     }
   }
 }
 
-class ArtistOrAlbum extends ConsumerWidget {
+class DetailList extends ConsumerWidget {
   final Info info;
   final AsyncValue<List<SimpleTrack>> tracks;
 
-  const ArtistOrAlbum({
+  const DetailList({
     super.key,
     required this.info,
     required this.tracks,
@@ -48,8 +54,20 @@ class ArtistOrAlbum extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Material(
-      child: Row(
+    final isPlaylist = info is Playlist;
+    return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: isPlaylist
+          ? FloatingActionButton.extended(
+              onPressed: () async {
+                final api = await SpotifyApiService.api;
+                await api.playOrSelectPlaylist(info.id, selectOnly: true);
+
+                ref.read(isPlaylistSelected.notifier).update((state) => true);
+              },
+              label: Text('Select Playlist'))
+          : null,
+      body: Row(
         children: [
           Expanded(
             child: Container(
@@ -57,7 +75,6 @@ class ArtistOrAlbum extends ConsumerWidget {
                   gradient: RadialGradient(
                       center: Alignment(-0.4, -0.2),
                       radius: 2.2,
-                      // end: Alignment.bottomRight,
                       colors: [
                     Theme.of(context).colorScheme.surfaceContainerLowest,
                     Theme.of(context).colorScheme.surfaceContainer,
@@ -68,7 +85,6 @@ class ArtistOrAlbum extends ConsumerWidget {
                   tracks.when(
                     data: (tracks) {
                       return MainList(tracks: tracks);
-                      // return const Text("Error");
                     },
                     error: (error, stackTrace) {
                       return SliverToBoxAdapter(
@@ -125,7 +141,6 @@ class TopBar extends StatelessWidget {
               child: Center(
                 child: Icon(
                   Icons.arrow_back_ios_new_rounded, // Use a modern back arrow
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                   size: 20, // Adjust icon size
                 ),
               ),
@@ -133,18 +148,10 @@ class TopBar extends StatelessWidget {
           ),
         ),
         flexibleSpace: FlexibleSpaceBar(
-            title: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Theme.of(context).colorScheme.primaryContainer,
-              ),
-              padding: EdgeInsets.all(3),
-              child: Text(info.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  )),
-            ),
+            title: Text(info.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                )),
             background: info.getImage() != ""
                 ? Hero(
                     tag: info.getImage(),
@@ -160,8 +167,8 @@ class TopBar extends StatelessWidget {
 }
 
 class MainList extends ConsumerWidget {
-  List<SimpleTrack> tracks;
-  MainList({super.key, required this.tracks});
+  final List<SimpleTrack> tracks;
+  const MainList({super.key, required this.tracks});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -25,7 +25,7 @@ class PlaylistGridPageState extends ConsumerState<PlaylistGridPage> {
     return Scaffold(
         appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-            title: Text("Playlist Selection")),
+            title: Text("Personal Playlists")),
         body: switch (playlistItems) {
           AsyncData(:final value) => Material(
               child: GridView.builder(
