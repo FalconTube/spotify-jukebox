@@ -14,6 +14,7 @@ import 'package:jukebox_spotify_flutter/states/sdk_connected_provider.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/states/sidebar_visible_provider.dart';
+import 'package:jukebox_spotify_flutter/states/speech_listening_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
@@ -101,7 +102,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       // API with debounce
       final debounceDelay = ref.watch(settingsProvider).debounceDelay.toInt();
       debounce = Timer(Duration(milliseconds: debounceDelay), () {
-        // debounce = Timer(const Duration(milliseconds: 200), () {
+        ref.read(isSpeechListening.notifier).state = false;
         ref.read(searchQueryProvider.notifier).updateQuery(_controller.text);
         final genre = ref.read(chosenGenreFilterProvider);
         final requestType = ref.read(chosenSearchFilter);
