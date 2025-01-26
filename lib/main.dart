@@ -56,10 +56,13 @@ class MyAppState extends ConsumerState<MyApp> {
     final settings = ref.watch(settingsProvider);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      themeAnimationDuration: Durations.medium1,
+      themeAnimationDuration: Durations.short3,
       title: 'Jukebox',
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
+            dynamicSchemeVariant: settings.vibrantColors
+                ? DynamicSchemeVariant.vibrant
+                : DynamicSchemeVariant.rainbow,
             seedColor: settings.seedColor,
             brightness: settings.brightness,
           ),

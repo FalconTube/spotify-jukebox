@@ -24,6 +24,7 @@ class AppSettings {
   int searchResultAmount;
   Brightness brightness;
   Color seedColor;
+  bool vibrantColors;
 
   AppSettings(
       {required this.showVirtualKeyboard,
@@ -31,7 +32,8 @@ class AppSettings {
       required this.debounceDelay,
       required this.searchResultAmount,
       required this.brightness,
-      required this.seedColor});
+      required this.seedColor,
+      required this.vibrantColors});
 
   // Factory constructor to create from JSON (for persistence)
   factory AppSettings.fromJson(Map<String, dynamic> json) {
@@ -57,7 +59,8 @@ class AppSettings {
         debounceDelay: json['debounceDelay'] ?? 1500,
         searchResultAmount: json['searchResultAmount'] ?? 8,
         brightness: brightness,
-        seedColor: seedColor ?? Color(0xFFFA00F8));
+        seedColor: seedColor ?? Color(0xFFFA00F8),
+        vibrantColors: json['vibrantColors'] ?? false);
   }
 
   // Convert to JSON for storage
@@ -68,6 +71,7 @@ class AppSettings {
         'searchResultAmount': searchResultAmount,
         'brightness': brightness.name,
         'seedColor': seedColor.toHex(),
+        'vibrantColors': vibrantColors,
         // 'seedColor': seedColor.toString(),
       };
 
@@ -79,6 +83,7 @@ class AppSettings {
     int? searchResultAmount,
     Brightness? brightness,
     Color? seedColor,
+    bool? vibrantColors,
   }) {
     return AppSettings(
       showVirtualKeyboard: showVirtualKeyboard ?? this.showVirtualKeyboard,
@@ -87,6 +92,7 @@ class AppSettings {
       searchResultAmount: searchResultAmount ?? this.searchResultAmount,
       brightness: brightness ?? this.brightness,
       seedColor: seedColor ?? this.seedColor,
+      vibrantColors: vibrantColors ?? this.vibrantColors,
     );
   }
 }

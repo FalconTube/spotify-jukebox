@@ -15,7 +15,6 @@ class CustomDrawer extends ConsumerStatefulWidget {
 class CustomDrawerState extends ConsumerState<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
-    // final settings = ref.watch(settingsProvider);
     final settings = ref.read(settingsProvider);
     Color currentColor = settings.seedColor;
     void changeColor(Color color) => setState(() {
@@ -112,19 +111,41 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
                         return AlertDialog(
                           // backgroundColor: Colors.transparent,
                           titlePadding: const EdgeInsets.all(0),
-                          contentPadding: const EdgeInsets.all(0),
+                          contentPadding: const EdgeInsets.all(8),
                           shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(25))),
-                          content: SingleChildScrollView(
-                            child: ColorPicker(
-                              enableAlpha: false,
-                              labelTypes: [],
-                              displayThumbColor: true,
-                              pickerColor: currentColor,
-                              onColorChanged: (value) {
-                                changeColor(value);
-                              },
+                          content: SizedBox(
+                            height: 500,
+                            width: 300,
+                            child: ListView(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: ColorPicker(
+                                    enableAlpha: false,
+                                    labelTypes: [],
+                                    displayThumbColor: true,
+                                    pickerColor: currentColor,
+                                    onColorChanged: (value) {
+                                      changeColor(value);
+                                    },
+                                  ),
+                                ),
+                                ListTile(
+                                  title: const Text('Vibrant Colors'),
+                                  trailing: Switch(
+                                    value: ref
+                                        .read(settingsProvider)
+                                        .vibrantColors,
+                                    onChanged: (bool value) {
+                                      ref
+                                          .read(settingsProvider.notifier)
+                                          .updateVibrantColor(value);
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );

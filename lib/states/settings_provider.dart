@@ -31,7 +31,8 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
         debounceDelay: 1500,
         searchResultAmount: 8,
         brightness: Brightness.dark,
-        seedColor: Color(0xFFFA00F8));
+        seedColor: Color(0xFFFA00F8),
+        vibrantColors: false);
   }
 
   Future<void> updateShowVirtualKeyboard(bool value) async {
@@ -67,6 +68,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
 
   void updateSeedColor(Color color) async {
     state = state.copyWith(seedColor: color);
+    await _saveSettings();
+  }
+
+  void updateVibrantColor(bool value) async {
+    state = state.copyWith(vibrantColors: value);
     await _saveSettings();
   }
 
