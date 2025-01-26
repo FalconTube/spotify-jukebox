@@ -135,19 +135,24 @@ class InnerArtistGrid extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        if (imageData is ArtistCard)
-                          ArtistImage(imageData: imageData),
+                        Expanded(
+                            child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (imageData is ArtistCard)
+                              ArtistImage(imageData: imageData),
+                            if (imageData is AlbumCard)
+                              AlbumOrPlaylistImage(imageData: imageData),
+                            if (imageData is Playlist)
+                              AlbumOrPlaylistImage(imageData: imageData),
+                            if (imageData is SimpleTrack)
+                              PlayableNetworkImage(imageData: imageData),
 
-                        if (imageData is AlbumCard)
-                          AlbumOrPlaylistImage(imageData: imageData),
-
-                        if (imageData is Playlist)
-                          AlbumOrPlaylistImage(imageData: imageData),
-
-                        if (imageData is SimpleTrack)
-                          PlayableNetworkImage(imageUrl: imageData.getImage()),
-
-                        // AlbumImage(imageData: imageData),
+                            // Chip with type
+                            InsetChip(info: imageData),
+                          ],
+                        )),
+                        // Chip(label: Text("Foo")),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
@@ -176,72 +181,75 @@ class InnerArtistGrid extends ConsumerWidget {
   }
 }
 
+class InsetChip extends StatelessWidget {
+  final Info info;
+  const InsetChip({
+    super.key,
+    required this.info,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String label;
+    IconData icon;
+    switch (info.runtimeType) {
+      case const (ArtistCard):
+        label = "Artist";
+        icon = Icons.person;
+      case const (AlbumCard):
+        label = "Album";
+        icon = Icons.album;
+      case const (Playlist):
+        label = "Playlist";
+        icon = Icons.playlist_play;
+      case const (SimpleTrack):
+        label = "Song";
+        icon = Icons.queue_music;
+      default:
+        label = "null";
+        icon = Icons.error;
+    }
+    return Positioned(
+        bottom: 8.0, // Adjust as needed
+        right: 8.0, // Adjust as needed
+        child: Chip(avatar: Icon(icon), label: Text(label)));
+  }
+}
+
 class PlayableNetworkImage extends ConsumerWidget {
-  final String imageUrl;
+  final SimpleTrack imageData;
   final double imageWidth;
   final double imageHeight;
 
   const PlayableNetworkImage({
     super.key,
-    required this.imageUrl,
+    required this.imageData,
     this.imageWidth = double.infinity,
     this.imageHeight = 200.0,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Expanded(
-      child: Stack(
-        fit: StackFit.expand, // Important: Makes the image fill the SizedBox
-        children: [
-          Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              );
-            },
-            errorBuilder: (context, object, stackTrace) {
-              return const Center(
-                child: Icon(Icons.error, color: Colors.red),
-              );
-            },
+    return Image.network(
+      imageData.getImage(),
+      fit: BoxFit.cover,
+      loadingBuilder: (BuildContext context, Widget child,
+          ImageChunkEvent? loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                : null,
           ),
-          Positioned(
-            bottom: 8.0, // Adjust as needed
-            right: 8.0, // Adjust as needed
-            child: Material(
-              // Added Material for inkwell effect and elevation
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(
-                    24.0), // Optional: Rounded corners for the InkWell
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Icon(
-                    Icons.queue_music,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    size: 36.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
+      errorBuilder: (context, object, stackTrace) {
+        return const Center(
+          child: Icon(Icons.error, color: Colors.red),
+        );
+      },
     );
   }
 }
@@ -256,16 +264,14 @@ class ArtistImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: imageData.getImage() != ""
-          ? Hero(
-              tag: imageData.getImage(),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(imageData.getImage()),
-              ),
-            )
-          : CircleAvatar(backgroundImage: AssetImage("assets/placeholder.png")),
-    );
+    return imageData.getImage() != ""
+        ? Hero(
+            tag: imageData.getImage(),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(imageData.getImage()),
+            ),
+          )
+        : CircleAvatar(backgroundImage: AssetImage("assets/placeholder.png"));
   }
 }
 
@@ -279,18 +285,16 @@ class AlbumOrPlaylistImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: imageData.getImage() != ""
-          ? Hero(
-              tag: imageData.getImage(),
-              child: FadeInImage.memoryNetwork(
-                fadeInDuration: const Duration(milliseconds: 300),
-                image: imageData.getImage(),
-                fit: BoxFit.cover,
-                placeholder: pl,
-              ),
-            )
-          : Image.asset("assets/placeholder.png", fit: BoxFit.cover),
-    );
+    return imageData.getImage() != ""
+        ? Hero(
+            tag: imageData.getImage(),
+            child: FadeInImage.memoryNetwork(
+              fadeInDuration: const Duration(milliseconds: 300),
+              image: imageData.getImage(),
+              fit: BoxFit.cover,
+              placeholder: pl,
+            ),
+          )
+        : Image.asset("assets/placeholder.png", fit: BoxFit.cover);
   }
 }
