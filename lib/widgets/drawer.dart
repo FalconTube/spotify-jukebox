@@ -34,7 +34,7 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
             child: Text(
               'Settings',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 24,
               ),
             ),
@@ -140,7 +140,7 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
               padding: const EdgeInsets.all(20.0),
               child: OutlinedButton.icon(
                   label: const Text('Disconnect'),
-                  // color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  // color: Theme.of(context).colorScheme.onSurface,
                   onPressed: () async {
                     await SpotifySdk.disconnect();
                     ref.read(isSdkConnected.notifier).update((state) => false);

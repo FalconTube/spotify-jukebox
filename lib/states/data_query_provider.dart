@@ -51,8 +51,7 @@ class DataNotifier extends StateNotifier<DataState> {
       required List<RequestType> requestType,
       required int searchResultAmount}) {
     state = DataState(); // Reset state to initial values.
-    fetchData(searchQuery, genre, requestType,
-        searchResultAmount); // Fetch with the new URL
+    fetchData(searchQuery, genre, requestType, searchResultAmount);
   }
 
   Future<void> fetchData(String searchQuery, String genre,
@@ -67,14 +66,10 @@ class DataNotifier extends StateNotifier<DataState> {
     int currentAmountItems = state.data.length;
     final infos = await _requestInfo(searchQuery, searchResultAmount, genre,
         currentAmountItems, requestType);
-    // sortByFollowersDescending(infos);
-    // sortByPopularityDescending(infos);
-    // removeNotStartingWithLetter(infos, "f");
-    removeWithoutGenre(infos);
-    removeHoerspiel(infos);
+    _removeHoerspiel(infos);
     // Remove possible duplicates
     if (currentAmountItems > 1) {
-      final distinctInfos = removeAlreadyExisting(state.data, infos);
+      final distinctInfos = _removeAlreadyExisting(state.data, infos);
       state = state.copyWith(
         data: [...state.data, ...distinctInfos], // Append new data
         isLoading: false,
@@ -96,11 +91,11 @@ class DataNotifier extends StateNotifier<DataState> {
   // }
 
   // Sorts all artists by their amount of popularity in descending order
-  void sortByPopularityDescending(List<ArtistCard> artists) {
+  void _sortByPopularityDescending(List<ArtistCard> artists) {
     artists.sort((a, b) => b.popularity.compareTo(a.popularity));
   }
 
-  void removeNotStartingWithLetter(List<Info> artists, String letter) {
+  void _removeNotStartingWithLetter(List<Info> artists, String letter) {
     artists.removeWhere((artist) =>
         artist.name.toLowerCase().startsWith(letter.toLowerCase()) == false);
     // artists.sort((a, b) => b.followers.compareTo(a.followers));
@@ -108,7 +103,7 @@ class DataNotifier extends StateNotifier<DataState> {
 
   // Some things do not have a genre.
   // I guess they are not music then, so remove them.
-  void removeWithoutGenre(List<Info> infos) {
+  void _removeWithoutGenre(List<Info> infos) {
     infos.removeWhere((info) {
       if (info is ArtistCard) return info.genres!.isEmpty;
       return false;
@@ -116,14 +111,14 @@ class DataNotifier extends StateNotifier<DataState> {
   }
 
   // We do not want "Hoerspiel"
-  void removeHoerspiel(List<Info> infos) {
+  void _removeHoerspiel(List<Info> infos) {
     infos.removeWhere((info) {
       if (info is ArtistCard) return info.genres!.contains("hoerspiel");
       return false;
     });
   }
 
-  List<Info> removeAlreadyExisting(List<Info> curArt, List<Info> newArt) {
+  List<Info> _removeAlreadyExisting(List<Info> curArt, List<Info> newArt) {
     // Create list of names of artists
     List<String> curArtNames = [];
     for (final artist in curArt) {
@@ -141,7 +136,7 @@ class DataNotifier extends StateNotifier<DataState> {
     return distinctArtists;
   }
 
-  List<Info> removeDuplicates(List<Info> artists) {
+  List<Info> _removeDuplicates(List<Info> artists) {
     final distinctInfos = LinkedHashSet<Info>.from(artists).toList();
     return distinctInfos;
   }
@@ -152,7 +147,6 @@ class DataNotifier extends StateNotifier<DataState> {
     String typeFilter;
     // If no value give, search for all
     if (type.isEmpty) {
-      // typeFilter = "&type=${RequestType.artist.name}";
       typeFilter =
           "&type=${RequestType.artist.name},${RequestType.album.name},${RequestType.track.name}";
     } else {
@@ -177,6 +171,7 @@ class DataNotifier extends StateNotifier<DataState> {
       ...?response.artists?.items,
       ...?response.albums?.items,
       ...?response.tracks?.items,
+      ...?response.playlists?.items,
     ];
 
     return allOutputs;

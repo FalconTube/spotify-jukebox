@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
-import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
+import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
@@ -131,15 +131,19 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          title: Text(widget.title),
+          title: Text(widget.title,
+              style: TextStyle(
+                // fontWeight: FontWeight.w400,
+                color: Theme.of(context).colorScheme.onSurface,
+              )),
+          leading: DrawerButton(),
           actions: [
             // Disconnect
             (_sdkConnected || doMock)
                 ? Row(
                     children: [
                       IconButton(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: Theme.of(context).colorScheme.onSurface,
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
@@ -148,8 +152,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           },
                           icon: Icon(Icons.playlist_add_sharp)),
                       IconButton(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: Theme.of(context).colorScheme.onSurface,
                           onPressed: () {
                             // Invert visibilty
                             final sidebarState = ref.read(isSidebarVisible);
@@ -225,38 +228,54 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   }
 }
 
-class MainWidget extends StatelessWidget {
-  const MainWidget({
+class DrawerButton extends StatelessWidget {
+  const DrawerButton({
     super.key,
-    required TextEditingController controller,
-    required FocusNode searchFocusNode,
-  })  : _controller = controller,
-        _searchFocusNode = searchFocusNode;
+  });
 
-  final TextEditingController _controller;
-  final FocusNode _searchFocusNode;
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        onPressed: () => Scaffold.of(context).openDrawer(),
+        icon: Icon(Icons.settings));
+  }
+}
+
+class MainWidget extends StatelessWidget {
+  final TextEditingController controller;
+  final FocusNode searchFocusNode;
+  MainWidget({
+    super.key,
+    required this.controller,
+    required this.searchFocusNode,
+  });
+
+  final artistGrid = ArtistGrid(placeholder: pl);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        MainCenter(controller: _controller, searchFocusNode: _searchFocusNode),
+        SearchAndGrid(
+            controller: controller,
+            searchFocusNode: searchFocusNode,
+            gridWidget: artistGrid),
         SidebarPlayer(),
       ],
     );
   }
 }
 
-class MainCenter extends StatelessWidget {
-  const MainCenter({
-    super.key,
-    required TextEditingController controller,
-    required FocusNode searchFocusNode,
-  })  : _controller = controller,
-        _searchFocusNode = searchFocusNode;
+class SearchAndGrid extends StatelessWidget {
+  final Widget gridWidget;
+  final TextEditingController controller;
+  final FocusNode searchFocusNode;
 
-  final TextEditingController _controller;
-  final FocusNode _searchFocusNode;
+  const SearchAndGrid(
+      {super.key,
+      required this.controller,
+      required this.searchFocusNode,
+      required this.gridWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -265,14 +284,14 @@ class MainCenter extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-            if (constraints.maxWidth > 700) {
+            if (constraints.maxWidth > 800) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ChipRow(),
                   MySearchbar(
-                    textcontroller: _controller,
-                    focusNode: _searchFocusNode,
+                    textcontroller: controller,
+                    focusNode: searchFocusNode,
                   ),
                 ],
               );
@@ -283,18 +302,16 @@ class MainCenter extends StatelessWidget {
                   Padding(padding: EdgeInsets.all(6)),
                   ChipRow(),
                   MySearchbar(
-                    textcontroller: _controller,
-                    focusNode: _searchFocusNode,
+                    textcontroller: controller,
+                    focusNode: searchFocusNode,
                   ),
                 ],
               );
             }
           }),
-          Expanded(
-            child: ArtistGrid(placeholder: pl),
-          ),
+          Expanded(child: gridWidget),
           // GenreFilter(),
-          MyKeyboard(textcontroller: _controller, focusNode: _searchFocusNode),
+          MyKeyboard(textcontroller: controller, focusNode: searchFocusNode),
         ]),
       ),
     );

@@ -49,9 +49,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
     // }
 
     final doMock = dotenv.getBool("MOCK_API", fallback: false);
-    Log.log("Do Mock: $doMock");
     if (doMock) {
-      Log.log("mock enabled");
       final mockTrack = Track(
           Album("albumname", "uri"),
           Artist("artistname", "uri"),
@@ -94,7 +92,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
           if (playerState == null || track == null) {
             return Container(
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).colorScheme.primaryContainer,
               ),
               height: 100,
             );
@@ -175,7 +173,7 @@ class LowerPlayer extends StatelessWidget {
                   ' ${track.name} - ${getAllArtistNames(track.artists)}', // Replace with dynamic title
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -188,7 +186,7 @@ class LowerPlayer extends StatelessWidget {
 
           // Play/Pause Button
           IconButton(
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              color: Theme.of(context).colorScheme.onSurface,
               icon: Icon(playerState.isPaused ? Icons.play_arrow : Icons.pause),
               // icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
               onPressed: () async {
@@ -197,7 +195,7 @@ class LowerPlayer extends StatelessWidget {
                     : await SpotifySdk.pause();
               }),
           IconButton(
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
+            color: Theme.of(context).colorScheme.onSurface,
             icon: Icon(Icons.skip_next),
             onPressed: () async {
               await SpotifySdk.skipNext();

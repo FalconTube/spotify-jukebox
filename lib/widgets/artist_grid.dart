@@ -3,17 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
+import 'package:jukebox_spotify_flutter/classes/playlist.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 
-import 'package:jukebox_spotify_flutter/states/artist_images_provider.dart';
+import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
-import 'package:jukebox_spotify_flutter/widgets/artist_detail_view.dart';
+import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
 import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
@@ -99,15 +100,7 @@ class InnerArtistGrid extends ConsumerWidget {
       child: GridView.builder(
         controller: _scrollController,
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 300
-            // crossAxisSpacing: 8,
-            // mainAxisSpacing: 0,
-            ),
-        // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //   crossAxisCount: 3,
-        //   crossAxisSpacing: 8,
-        //   mainAxisSpacing: 0,
-        // ),
+            maxCrossAxisExtent: 300),
         itemCount: dataState.data.length + (dataState.isLoading ? 1 : 0),
         // itemCount: imageList.length,
         itemBuilder: (context, index) {
@@ -133,7 +126,7 @@ class InnerArtistGrid extends ConsumerWidget {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return ArtistDetailView(info: imageData);
+                        return DetailView(info: imageData);
                       }),
                     );
                   },
@@ -142,16 +135,24 @@ class InnerArtistGrid extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        if (imageData is ArtistCard)
-                          ArtistImage(imageData: imageData),
+                        Expanded(
+                            child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (imageData is ArtistCard)
+                              ArtistImage(imageData: imageData),
+                            if (imageData is AlbumCard)
+                              AlbumOrPlaylistImage(imageData: imageData),
+                            if (imageData is Playlist)
+                              AlbumOrPlaylistImage(imageData: imageData),
+                            if (imageData is SimpleTrack)
+                              PlayableNetworkImage(imageData: imageData),
 
-                        if (imageData is AlbumCard)
-                          AlbumImage(imageData: imageData),
-
-                        if (imageData is SimpleTrack)
-                          PlayableNetworkImage(imageUrl: imageData.getImage()),
-
-                        // AlbumImage(imageData: imageData),
+                            // Chip with type
+                            InsetChip(info: imageData),
+                          ],
+                        )),
+                        // Chip(label: Text("Foo")),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: Text(
@@ -180,72 +181,75 @@ class InnerArtistGrid extends ConsumerWidget {
   }
 }
 
+class InsetChip extends StatelessWidget {
+  final Info info;
+  const InsetChip({
+    super.key,
+    required this.info,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    String label;
+    IconData icon;
+    switch (info.runtimeType) {
+      case const (ArtistCard):
+        label = "Artist";
+        icon = Icons.person;
+      case const (AlbumCard):
+        label = "Album";
+        icon = Icons.album;
+      case const (Playlist):
+        label = "Playlist";
+        icon = Icons.playlist_play;
+      case const (SimpleTrack):
+        label = "Song";
+        icon = Icons.queue_music;
+      default:
+        label = "null";
+        icon = Icons.error;
+    }
+    return Positioned(
+        bottom: 8.0, // Adjust as needed
+        right: 8.0, // Adjust as needed
+        child: Chip(avatar: Icon(icon), label: Text(label)));
+  }
+}
+
 class PlayableNetworkImage extends ConsumerWidget {
-  final String imageUrl;
+  final SimpleTrack imageData;
   final double imageWidth;
   final double imageHeight;
 
   const PlayableNetworkImage({
     super.key,
-    required this.imageUrl,
+    required this.imageData,
     this.imageWidth = double.infinity,
     this.imageHeight = 200.0,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Expanded(
-      child: Stack(
-        fit: StackFit.expand, // Important: Makes the image fill the SizedBox
-        children: [
-          Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-            loadingBuilder: (BuildContext context, Widget child,
-                ImageChunkEvent? loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              );
-            },
-            errorBuilder: (context, object, stackTrace) {
-              return const Center(
-                child: Icon(Icons.error, color: Colors.red),
-              );
-            },
+    return Image.network(
+      imageData.getImage(),
+      fit: BoxFit.cover,
+      loadingBuilder: (BuildContext context, Widget child,
+          ImageChunkEvent? loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                : null,
           ),
-          Positioned(
-            bottom: 8.0, // Adjust as needed
-            right: 8.0, // Adjust as needed
-            child: Material(
-              // Added Material for inkwell effect and elevation
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {},
-                borderRadius: BorderRadius.circular(
-                    24.0), // Optional: Rounded corners for the InkWell
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Icon(
-                    Icons.queue_music,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    size: 36.0,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
+      errorBuilder: (context, object, stackTrace) {
+        return const Center(
+          child: Icon(Icons.error, color: Colors.red),
+        );
+      },
     );
   }
 }
@@ -260,21 +264,19 @@ class ArtistImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: imageData.getImage() != ""
-          ? Hero(
-              tag: imageData.getImage(),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(imageData.getImage()),
-              ),
-            )
-          : CircleAvatar(backgroundImage: AssetImage("assets/placeholder.png")),
-    );
+    return imageData.getImage() != ""
+        ? Hero(
+            tag: imageData.getImage(),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(imageData.getImage()),
+            ),
+          )
+        : CircleAvatar(backgroundImage: AssetImage("assets/placeholder.png"));
   }
 }
 
-class AlbumImage extends StatelessWidget {
-  const AlbumImage({
+class AlbumOrPlaylistImage extends StatelessWidget {
+  const AlbumOrPlaylistImage({
     super.key,
     required this.imageData,
   });
@@ -283,18 +285,16 @@ class AlbumImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: imageData.getImage() != ""
-          ? Hero(
-              tag: imageData.getImage(),
-              child: FadeInImage.memoryNetwork(
-                fadeInDuration: const Duration(milliseconds: 300),
-                image: imageData.getImage(),
-                fit: BoxFit.cover,
-                placeholder: pl,
-              ),
-            )
-          : Image.asset("assets/placeholder.png", fit: BoxFit.cover),
-    );
+    return imageData.getImage() != ""
+        ? Hero(
+            tag: imageData.getImage(),
+            child: FadeInImage.memoryNetwork(
+              fadeInDuration: const Duration(milliseconds: 300),
+              image: imageData.getImage(),
+              fit: BoxFit.cover,
+              placeholder: pl,
+            ),
+          )
+        : Image.asset("assets/placeholder.png", fit: BoxFit.cover);
   }
 }
