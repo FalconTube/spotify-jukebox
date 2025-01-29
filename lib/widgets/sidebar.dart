@@ -24,12 +24,10 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
     // If screen is large, use default size
     // If screen is size, use full width
     final screenWidth = MediaQuery.of(context).size.width;
-    final isLargeScreen = screenWidth > 600;
-    final double sidebarWidth = isLargeScreen ? 200 : screenWidth;
-
-    return sidebarVisible
-        ? _Sidebar(queue: queue, sidebarWidth: sidebarWidth)
-        : Container();
+    final isLargeScreen = screenWidth > 700;
+    final double sidebarWidth = isLargeScreen ? 300 : 80;
+    return _Sidebar(
+        queue: queue, sidebarWidth: sidebarWidth, isLargeScreen: isLargeScreen);
   }
 }
 
@@ -37,10 +35,12 @@ class _Sidebar extends StatelessWidget {
   const _Sidebar({
     required this.queue,
     required this.sidebarWidth,
+    required this.isLargeScreen,
   });
 
   final List<SimpleTrack> queue;
   final double sidebarWidth;
+  final bool isLargeScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -49,58 +49,67 @@ class _Sidebar extends StatelessWidget {
       color: Theme.of(context).colorScheme.surfaceContainerLowest,
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Upcoming Songs",
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18))
-              ],
-            ),
-          ),
           Expanded(
             child: queue.isEmpty
                 ? Container()
                 : ListView.builder(
-                    // BUG: Spotify API or SDK don't have option to alter queue
-                    //
-                    // onReorder: (int oldIndex, int newIndex) {
-                    //   // TODO: reorder list via API endpoint: https://developer.spotify.com/documentation/web-api/reference/reorder-or-replace-playlists-tracks
-                    //
-                    //   setState(() {
-                    //     if (oldIndex < newIndex) {
-                    //       newIndex -= 1;
-                    //     }
-                    //     final SimpleTrack item = queue.removeAt(oldIndex);
-                    //     queue.insert(newIndex, item);
-                    //   });
-                    // },
                     itemCount: queue.length,
                     itemBuilder: (context, index) {
                       final track = queue[index];
-                      return ListTile(
-                          key: ValueKey(track.uri),
-                          title: Text(track.name),
-                          subtitle: Text(track.album.name),
-                          // leading: Icon(Icons.music_note),
-                          leading: track.getImage() != ""
-                              ? FadeInImage.memoryNetwork(
-                                  fadeInDuration:
-                                      const Duration(milliseconds: 300),
-                                  image: track.getImage(),
-                                  fit: BoxFit.cover,
-                                  placeholder: pl)
-                              : Image.asset("assets/placeholder.png",
-                                  fit: BoxFit.cover));
+                      return isLargeScreen
+                          ? ExpandedQueueItem(track: track)
+                          : CollapsedQueueItem(track: track);
                     },
                   ),
           ),
         ],
       ),
     );
+  }
+}
+
+class CollapsedQueueItem extends StatelessWidget {
+  const CollapsedQueueItem({
+    super.key,
+    required this.track,
+  });
+
+  final SimpleTrack track;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        key: ValueKey(track.uri),
+        leading: track.getImage() != ""
+            ? FadeInImage.memoryNetwork(
+                fadeInDuration: const Duration(milliseconds: 300),
+                image: track.getImage(),
+                fit: BoxFit.cover,
+                placeholder: pl)
+            : Image.asset("assets/placeholder.png", fit: BoxFit.cover));
+  }
+}
+
+class ExpandedQueueItem extends StatelessWidget {
+  const ExpandedQueueItem({
+    super.key,
+    required this.track,
+  });
+
+  final SimpleTrack track;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        key: ValueKey(track.uri),
+        title: Text(track.name),
+        subtitle: Text(track.album.name),
+        leading: track.getImage() != ""
+            ? FadeInImage.memoryNetwork(
+                fadeInDuration: const Duration(milliseconds: 300),
+                image: track.getImage(),
+                fit: BoxFit.cover,
+                placeholder: pl)
+            : Image.asset("assets/placeholder.png", fit: BoxFit.cover));
   }
 }
