@@ -288,30 +288,22 @@ class SearchAndGrid extends StatelessWidget {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
-            if (constraints.maxWidth > 800) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ChipRow(),
-                  MySearchbar(
-                    textcontroller: controller,
-                    focusNode: searchFocusNode,
-                  ),
-                ],
-              );
-            } else {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(padding: EdgeInsets.all(6)),
-                  ChipRow(),
-                  MySearchbar(
-                    textcontroller: controller,
-                    focusNode: searchFocusNode,
-                  ),
-                ],
-              );
-            }
+            // if (constraints.maxWidth > 800) {
+            return Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: ChipRow(),
+                ),
+                MySearchbar(
+                  textcontroller: controller,
+                  focusNode: searchFocusNode,
+                ),
+              ],
+            );
           }),
           Expanded(child: gridWidget),
           // GenreFilter(),

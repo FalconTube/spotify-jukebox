@@ -23,8 +23,7 @@ class ChipRow extends ConsumerWidget {
       RequestType.playlist: 'Playlists'
     };
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
       children: List<Widget>.generate(chipValues.keys.length, (int index) {
         final option = chipValues.keys.toList()[index];
         final isSelected = selectedChips.contains(option);
