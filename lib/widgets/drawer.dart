@@ -122,10 +122,10 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(20.0),
-                                  child: ColorPicker(
-                                    enableAlpha: false,
-                                    labelTypes: [],
-                                    displayThumbColor: true,
+                                  child: BlockPicker(
+                                    // enableAlpha: false,
+                                    // labelTypes: [],
+                                    // displayThumbColor: true,
                                     pickerColor: currentColor,
                                     onColorChanged: (value) {
                                       changeColor(value);
