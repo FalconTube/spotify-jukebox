@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/states/admin_enabled_provider.dart';
 import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
@@ -132,6 +133,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     final _sdkConnected = ref.watch(isSdkConnected);
     final doMock = dotenv.getBool("MOCK_API", fallback: false);
     final isPlaylistChosen = ref.watch(isPlaylistSelected);
+    final isAdminDisabled = ref.watch(isAdminDisabledProvider);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -140,7 +142,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 // fontWeight: FontWeight.w400,
                 color: Theme.of(context).colorScheme.onSurface,
               )),
-          leading: DrawerButton(),
+          // leading: DrawerButton(),
           actions: [
             // Disconnect
             (_sdkConnected || doMock)
@@ -159,19 +161,19 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           color: Theme.of(context).colorScheme.onSurface,
                           onPressed: () {
                             // Invert visibilty
-                            final sidebarState = ref.read(isSidebarVisible);
-                            ref
-                                .read(isSidebarVisible.notifier)
-                                .update((state) => !sidebarState);
+                            ref.read(isAdminDisabledProvider.notifier).state =
+                                !isAdminDisabled;
                           },
-                          icon: Icon(Icons.queue_play_next_sharp)),
+                          icon: isAdminDisabled
+                              ? Icon(Icons.lock_open)
+                              : Icon(Icons.lock)),
                     ],
                   )
                 : Container(),
             // Connect
           ],
         ),
-        drawer: CustomDrawer(),
+        drawer: isAdminDisabled ? null : CustomDrawer(),
         bottomNavigationBar:
             (_sdkConnected) ? WebPlayerBottomBar() : WebPlayerBottomBar(),
         body: switch (spotifySdkEnabled) {
