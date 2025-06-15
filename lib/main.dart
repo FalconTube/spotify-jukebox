@@ -214,7 +214,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                       redirectUrl: redirectUrl,
                       playerName: "Jukebox",
                       scope:
-                          'streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private, playlist-read-private, playlist-read-collaborative',
+                          'app-remote-control, streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private, playlist-read-private, playlist-read-collaborative',
                     );
                     await SpotifySdk.getPlayerState();
                   } catch (e) {
