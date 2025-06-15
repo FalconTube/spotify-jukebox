@@ -15,9 +15,9 @@ import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
-import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:quickalert/quickalert.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
   final Uint8List placeholder;
@@ -117,6 +117,24 @@ class InnerArtistGrid extends ConsumerWidget {
                 child: InkWell(
                   onTap: () async {
                     if (imageData is SimpleTrack) {
+                      if (context.mounted) {
+                        QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.success,
+                            title: "Success",
+                            text: "Song added to queue!",
+                            autoCloseDuration: Duration(seconds: 5),
+                            showConfirmBtn: true,
+                            confirmBtnColor:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.surfaceContainer,
+                            titleColor: Theme.of(context).colorScheme.onSurface,
+                            textColor: Theme.of(context).colorScheme.onSurface,
+                            confirmBtnTextStyle: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.onSurface));
+                      }
                       await SpotifySdk.queue(spotifyUri: imageData.uri);
                       await Future.delayed(Duration(milliseconds: 300));
                       ref.read(queueProvider.notifier).refreshQueue();

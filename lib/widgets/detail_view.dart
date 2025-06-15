@@ -11,6 +11,7 @@ import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 class DetailView extends ConsumerWidget {
@@ -202,6 +203,29 @@ class MainList extends ConsumerWidget {
                           Colors.transparent, // Make the background transparent
                       child: InkWell(
                         onTap: () async {
+                          if (context.mounted) {
+                            QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.success,
+                                title: "Success",
+                                text: "Song added to queue!",
+                                autoCloseDuration: Duration(seconds: 5),
+                                showConfirmBtn: true,
+                                confirmBtnColor: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .surfaceContainer,
+                                titleColor:
+                                    Theme.of(context).colorScheme.onSurface,
+                                textColor:
+                                    Theme.of(context).colorScheme.onSurface,
+                                confirmBtnTextStyle: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface));
+                          }
                           await SpotifySdk.queue(spotifyUri: track.uri);
                           await Future.delayed(Duration(milliseconds: 300));
                           ref.read(queueProvider.notifier).refreshQueue();
