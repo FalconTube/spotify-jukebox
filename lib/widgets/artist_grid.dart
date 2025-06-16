@@ -17,7 +17,7 @@ import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
 import 'package:jukebox_spotify_flutter/widgets/search_placeholder.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:quickalert/quickalert.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class ArtistGrid extends ConsumerStatefulWidget {
   final Uint8List placeholder;
@@ -117,24 +117,27 @@ class InnerArtistGrid extends ConsumerWidget {
                 child: InkWell(
                   onTap: () async {
                     if (imageData is SimpleTrack) {
+                      bool doAddSong = true;
                       if (context.mounted) {
-                        QuickAlert.show(
-                            context: context,
-                            type: QuickAlertType.success,
-                            title: "Success",
-                            text: "Song added to queue!",
-                            autoCloseDuration: Duration(seconds: 5),
-                            showConfirmBtn: true,
-                            confirmBtnColor:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.surfaceContainer,
-                            titleColor: Theme.of(context).colorScheme.onSurface,
-                            textColor: Theme.of(context).colorScheme.onSurface,
-                            confirmBtnTextStyle: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onSurface));
+                        await AwesomeDialog(
+                          context: context,
+                          headerAnimationLoop: false,
+                          width: 500,
+                          autoHide: Duration(seconds: 8),
+                          dialogType: DialogType.success,
+                          animType: AnimType.scale,
+                          btnCancelColor: Colors.redAccent,
+                          btnOkColor: Theme.of(context).colorScheme.primary,
+                          title: 'Success',
+                          desc: 'Song added to queue!',
+                          btnCancelText: "Undo",
+                          btnCancelOnPress: () {
+                            doAddSong = false;
+                          },
+                          btnOkOnPress: () {},
+                        ).show();
                       }
+                      if (doAddSong == false) return;
                       await SpotifySdk.queue(spotifyUri: imageData.uri);
                       await Future.delayed(Duration(milliseconds: 300));
                       ref.read(queueProvider.notifier).refreshQueue();
