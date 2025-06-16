@@ -11,8 +11,8 @@ import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class DetailView extends ConsumerWidget {
   const DetailView({super.key, required this.info});
@@ -184,73 +184,79 @@ class MainList extends ConsumerWidget {
             constraints: BoxConstraints(maxWidth: 600),
             child: Column(
               children: [
-                ListTile(
-                    // isThreeLine: true,
-                    // tileColor: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    visualDensity: VisualDensity(vertical: 4),
-                    leading: track.getImage() != ""
-                        ? FadeInImage.memoryNetwork(
-                            fadeInDuration: const Duration(milliseconds: 300),
-                            image: track.getImage(),
-                            fit: BoxFit.fitHeight,
-                            placeholder: pl,
-                          )
-                        : Image.asset("assets/placeholder.png",
-                            fit: BoxFit.cover),
-                    trailing: Material(
-                      // Added Material for inkwell effect and elevation
-                      color:
-                          Colors.transparent, // Make the background transparent
-                      child: InkWell(
-                        onTap: () async {
-                          if (context.mounted) {
-                            QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.success,
-                                title: "Success",
-                                text: "Song added to queue!",
-                                autoCloseDuration: Duration(seconds: 5),
-                                showConfirmBtn: true,
-                                confirmBtnColor: Theme.of(context)
+                Material(
+                  color: Colors.transparent, // Make the background transparent
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(24.0),
+                    onTap: () async {
+                      bool doAddSong = true;
+                      if (context.mounted) {
+                        await AwesomeDialog(
+                          context: context,
+                          headerAnimationLoop: false,
+                          width: 500,
+                          autoHide: Duration(seconds: 8),
+                          dialogType: DialogType.success,
+                          animType: AnimType.scale,
+                          btnCancelColor:
+                              Theme.of(context).colorScheme.errorContainer,
+                          btnOkColor:
+                              Theme.of(context).colorScheme.primaryContainer,
+                          title: 'Success',
+                          desc: 'Song added to queue!',
+                          btnCancelText: "Undo",
+                          btnCancelOnPress: () {
+                            doAddSong = false;
+                          },
+                          btnOkOnPress: () {},
+                        ).show();
+                      }
+                      if (doAddSong == false) return;
+                      await SpotifySdk.queue(spotifyUri: track.uri);
+                      await Future.delayed(Duration(milliseconds: 300));
+                      ref.read(queueProvider.notifier).refreshQueue();
+                    },
+                    child: ListTile(
+                        visualDensity: VisualDensity(vertical: 4),
+                        leading: track.getImage() != ""
+                            ? FadeInImage.memoryNetwork(
+                                fadeInDuration:
+                                    const Duration(milliseconds: 300),
+                                image: track.getImage(),
+                                fit: BoxFit.fitHeight,
+                                placeholder: pl,
+                              )
+                            : Image.asset("assets/placeholder.png",
+                                fit: BoxFit.cover),
+                        trailing: Material(
+                          // Added Material for inkwell effect and elevation
+                          color: Colors
+                              .transparent, // Make the background transparent
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(
+                                24.0), // Optional: Rounded corners for the InkWell
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
                                     .colorScheme
                                     .primaryContainer,
-                                backgroundColor: Theme.of(context)
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              child: Icon(
+                                Icons.queue_music,
+                                color: Theme.of(context)
                                     .colorScheme
-                                    .surfaceContainer,
-                                titleColor:
-                                    Theme.of(context).colorScheme.onSurface,
-                                textColor:
-                                    Theme.of(context).colorScheme.onSurface,
-                                confirmBtnTextStyle: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurface));
-                          }
-                          await SpotifySdk.queue(spotifyUri: track.uri);
-                          await Future.delayed(Duration(milliseconds: 300));
-                          ref.read(queueProvider.notifier).refreshQueue();
-                        },
-                        borderRadius: BorderRadius.circular(
-                            24.0), // Optional: Rounded corners for the InkWell
-                        child: Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Icon(
-                            Icons.queue_music,
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            size: 36.0,
+                                    .onPrimaryContainer,
+                                size: 36.0,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    title: Text(track.name),
-                    subtitle: Text(track.prettyDuration())),
+                        title: Text(track.name),
+                        subtitle: Text(track.prettyDuration())),
+                  ),
+                ),
                 Divider(height: 20)
               ],
             ),
