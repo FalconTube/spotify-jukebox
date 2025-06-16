@@ -27,6 +27,8 @@ import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
+import 'package:pinput/pinput.dart';
+
 late ByteData placeholderRaw;
 late Uint8List pl;
 late bool spotifySdkEnabled;
@@ -85,6 +87,7 @@ class MyHomePage extends ConsumerStatefulWidget {
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   final TextEditingController _controller = TextEditingController(text: "");
+  final TextEditingController _pinController = TextEditingController();
   final FocusNode _searchFocusNode = FocusNode();
   String compareValue = "";
   Timer? debounce;
@@ -134,6 +137,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     final doMock = dotenv.getBool("MOCK_API", fallback: false);
     final isPlaylistChosen = ref.watch(isPlaylistSelected);
     final isAdminDisabled = ref.watch(isAdminDisabledProvider);
+    final adminPin = ref.watch(settingsProvider).adminPin;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
@@ -150,16 +154,23 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     children: [
                       IconButton(
                           color: Theme.of(context).colorScheme.onSurface,
-                          onPressed: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return PlaylistGridPage();
-                            }));
-                          },
+                          onPressed: isAdminDisabled
+                              ? null
+                              : () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return PlaylistGridPage();
+                                  }));
+                                },
                           icon: Icon(Icons.playlist_add_sharp)),
                       IconButton(
                           color: Theme.of(context).colorScheme.onSurface,
                           onPressed: () {
+                            Log.log("Admin pin is: $adminPin");
+                            if (isAdminDisabled == true) {
+                              _showPinInputDialog(context, adminPin);
+                              return;
+                            }
                             // Invert visibilty
                             ref.read(isAdminDisabledProvider.notifier).state =
                                 !isAdminDisabled;
@@ -170,7 +181,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     ],
                   )
                 : Container(),
-            // Connect
           ],
         ),
         drawer: isAdminDisabled ? null : CustomDrawer(),
@@ -230,6 +240,46 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showPinInputDialog(BuildContext context, String adminPin) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('Enter admin code'),
+          content: Pinput(
+            controller: _pinController,
+            length: 4,
+            autofocus: true,
+            pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+            keyboardType: TextInputType.number,
+            onCompleted: (pin) {
+              if (pin == adminPin) {
+                _pinController.clear();
+                ref.read(isAdminDisabledProvider.notifier).state = false;
+                Navigator.of(dialogContext).pop();
+              } else {
+                setState(() {
+                  _pinController.clear();
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Incorrect code!')),
+                );
+              }
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
