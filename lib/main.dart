@@ -139,6 +139,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     final isAdminDisabled = ref.watch(isAdminDisabledProvider);
     final adminPin = ref.watch(settingsProvider).adminPin;
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           title: Text(widget.title,
