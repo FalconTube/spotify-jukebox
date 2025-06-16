@@ -25,6 +25,7 @@ class AppSettings {
   Brightness brightness;
   Color seedColor;
   bool vibrantColors;
+  String adminPin;
 
   AppSettings(
       {required this.showVirtualKeyboard,
@@ -33,7 +34,8 @@ class AppSettings {
       required this.searchResultAmount,
       required this.brightness,
       required this.seedColor,
-      required this.vibrantColors});
+      required this.vibrantColors,
+      required this.adminPin});
 
   // Factory constructor to create from JSON (for persistence)
   factory AppSettings.fromJson(Map<String, dynamic> json) {
@@ -60,7 +62,8 @@ class AppSettings {
         searchResultAmount: json['searchResultAmount'] ?? 8,
         brightness: brightness,
         seedColor: seedColor ?? Color(0xFFFA00F8),
-        vibrantColors: json['vibrantColors'] ?? false);
+        vibrantColors: json['vibrantColors'] ?? false,
+        adminPin: json['adminPin'] ?? "0000");
   }
 
   // Convert to JSON for storage
@@ -72,6 +75,7 @@ class AppSettings {
         'brightness': brightness.name,
         'seedColor': seedColor.toHex(),
         'vibrantColors': vibrantColors,
+        'adminPin': adminPin,
         // 'seedColor': seedColor.toString(),
       };
 
@@ -84,6 +88,7 @@ class AppSettings {
     Brightness? brightness,
     Color? seedColor,
     bool? vibrantColors,
+    String? adminPin,
   }) {
     return AppSettings(
       showVirtualKeyboard: showVirtualKeyboard ?? this.showVirtualKeyboard,
@@ -93,6 +98,7 @@ class AppSettings {
       brightness: brightness ?? this.brightness,
       seedColor: seedColor ?? this.seedColor,
       vibrantColors: vibrantColors ?? this.vibrantColors,
+      adminPin: adminPin ?? this.adminPin,
     );
   }
 }

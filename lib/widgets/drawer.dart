@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/sdk_connected_provider.dart';
 import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
+import 'package:pinput/pinput.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
 class CustomDrawer extends ConsumerStatefulWidget {
@@ -13,6 +15,27 @@ class CustomDrawer extends ConsumerStatefulWidget {
 }
 
 class CustomDrawerState extends ConsumerState<CustomDrawer> {
+  final TextEditingController _controller = TextEditingController(text: "");
+  @override
+  void initState() {
+    super.initState();
+
+    final adminPin = ref.read(settingsProvider).adminPin;
+    _controller.text = adminPin;
+    // Listen to changes in the text field and update the provider.
+    _controller.addListener(() {
+      if (_controller.text.length < 4) return;
+      ref.read(settingsProvider.notifier).updateAdminPin(_controller.text);
+    });
+  }
+
+  @override
+  void dispose() async {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final settings = ref.read(settingsProvider);
@@ -67,6 +90,26 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
                     .read(settingsProvider.notifier)
                     .updateShowTypeFilters(value);
               },
+            ),
+          ),
+          ListTile(
+            // title: const Text("Admin Pin"),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Admin Pin"),
+                SizedBox(
+                  width: 100,
+                  child: TextField(
+                    controller: _controller,
+                    maxLength: 4,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    // onSubmitted: (String pin) {
+                    //   ref.read(settingsProvider.notifier).updateAdminPin(pin);
+                    // },
+                  ),
+                ),
+              ],
             ),
           ),
           ListTile(

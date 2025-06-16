@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
+import 'package:jukebox_spotify_flutter/states/admin_enabled_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:spotify_sdk/models/album.dart';
 import 'package:spotify_sdk/models/artist.dart';
@@ -109,7 +110,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
   }
 }
 
-class LowerPlayer extends StatelessWidget {
+class LowerPlayer extends ConsumerWidget {
   const LowerPlayer({
     super.key,
     required this.currentTrackImageUri,
@@ -131,7 +132,8 @@ class LowerPlayer extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isAdminDisabled = ref.watch(isAdminDisabledProvider);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
@@ -197,10 +199,11 @@ class LowerPlayer extends StatelessWidget {
           IconButton(
             color: Theme.of(context).colorScheme.onSurface,
             icon: Icon(Icons.skip_next),
-            onPressed: () async {
-              await SpotifySdk.skipNext();
-              // Handle next action
-            },
+            onPressed: isAdminDisabled
+                ? null
+                : () async {
+                    await SpotifySdk.skipNext();
+                  },
           ),
         ],
       ),

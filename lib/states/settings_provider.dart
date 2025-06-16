@@ -32,7 +32,8 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
         searchResultAmount: 8,
         brightness: Brightness.dark,
         seedColor: Color(0xFFFA00F8),
-        vibrantColors: false);
+        vibrantColors: false,
+        adminPin: "0000");
   }
 
   Future<void> updateShowVirtualKeyboard(bool value) async {
@@ -73,6 +74,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
 
   void updateVibrantColor(bool value) async {
     state = state.copyWith(vibrantColors: value);
+    await _saveSettings();
+  }
+
+  void updateAdminPin(String value) async {
+    state = state.copyWith(adminPin: value);
     await _saveSettings();
   }
 
