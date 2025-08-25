@@ -13,3 +13,15 @@ tasks:
   watchjson:
     cmds:
       - dart run build_runner watch --delete-conflicting-outputs
+
+  release:
+    cmds:
+      - flutter build web --release
+
+  serve:
+    dir: build/web
+    cmds:
+      - task: release
+      - python -m http.server 44344
+
+       
