@@ -103,7 +103,7 @@ class ExpandedQueueItem extends StatelessWidget {
     return ListTile(
         key: ValueKey(track.uri),
         title: Text(track.name),
-        subtitle: Text(track.album.name),
+        subtitle: Text(track.mainArtist()),
         leading: track.getImage() != ""
             ? FadeInImage.memoryNetwork(
                 fadeInDuration: const Duration(milliseconds: 300),
