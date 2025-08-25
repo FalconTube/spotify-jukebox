@@ -100,16 +100,19 @@ class ExpandedQueueItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        key: ValueKey(track.uri),
-        title: Text(track.name),
-        subtitle: Text(track.mainArtist()),
-        leading: track.getImage() != ""
-            ? FadeInImage.memoryNetwork(
-                fadeInDuration: const Duration(milliseconds: 300),
-                image: track.getImage(),
-                fit: BoxFit.cover,
-                placeholder: pl)
-            : Image.asset("assets/placeholder.png", fit: BoxFit.cover));
+    return AnimatedSwitcher(
+      duration: Duration(milliseconds: 300),
+      child: ListTile(
+          key: ValueKey(track.uri),
+          title: Text(track.name),
+          subtitle: Text(track.mainArtist()),
+          leading: track.getImage() != ""
+              ? FadeInImage.memoryNetwork(
+                  fadeInDuration: const Duration(milliseconds: 300),
+                  image: track.getImage(),
+                  fit: BoxFit.cover,
+                  placeholder: pl)
+              : Image.asset("assets/placeholder.png", fit: BoxFit.cover)),
+    );
   }
 }
