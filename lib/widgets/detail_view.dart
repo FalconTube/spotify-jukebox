@@ -11,6 +11,7 @@ import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
+import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
@@ -68,6 +69,7 @@ class DetailList extends ConsumerWidget {
               },
               label: Text('Select Playlist'))
           : null,
+      bottomNavigationBar: WebPlayerBottomBar(),
       body: Row(
         children: [
           Expanded(

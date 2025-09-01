@@ -250,26 +250,29 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text('Enter admin code'),
-          content: Pinput(
-            controller: _pinController,
-            length: 4,
-            autofocus: true,
-            pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-            keyboardType: TextInputType.number,
-            onCompleted: (pin) {
-              if (pin == adminPin) {
-                _pinController.clear();
-                ref.read(isAdminDisabledProvider.notifier).state = false;
-                Navigator.of(dialogContext).pop();
-              } else {
-                setState(() {
+          content: SizedBox(
+            height: 200,
+            child: Pinput(
+              controller: _pinController,
+              length: 4,
+              autofocus: true,
+              pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+              keyboardType: TextInputType.number,
+              onCompleted: (pin) {
+                if (pin == adminPin) {
                   _pinController.clear();
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Incorrect code!')),
-                );
-              }
-            },
+                  ref.read(isAdminDisabledProvider.notifier).state = false;
+                  Navigator.of(dialogContext).pop();
+                } else {
+                  setState(() {
+                    _pinController.clear();
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Incorrect code!')),
+                  );
+                }
+              },
+            ),
           ),
           actions: <Widget>[
             TextButton(
