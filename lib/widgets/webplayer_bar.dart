@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/admin_enabled_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
+import 'package:jukebox_spotify_flutter/states/track_duration_provider.dart';
 import 'package:spotify_sdk/models/album.dart';
 import 'package:spotify_sdk/models/artist.dart';
 import 'package:spotify_sdk/models/image_uri.dart';
@@ -13,7 +13,6 @@ import 'package:spotify_sdk/models/player_restrictions.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/models/track.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:spotify_sdk/enums/repeat_mode_enum.dart' as prefix;
 
 // class SidebarPlayer extends ConsumerStatefulWidget {
 //   const SidebarPlayer({super.key});
@@ -38,17 +37,6 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
   }
 
   Widget buildPlayerStateWidget() {
-    // double calcNormalizedProgress(Track? track, PlayerState? playerState) {
-    //   if (track != null && playerState != null) {
-    //     Log.log("Duration: ${track.duration}");
-    //     Log.log("Position: ${playerState.playbackPosition}");
-    //     final val = (1 / track.duration) * playerState.playbackPosition;
-    //     Log.log("Progress: $val");
-    //     return val;
-    //   }
-    //   return 0;
-    // }
-
     final doMock = dotenv.getBool("MOCK_API", fallback: false);
     if (doMock) {
       final mockTrack = Track(
@@ -101,6 +89,7 @@ class WebPlayerBottomBarState extends ConsumerState<WebPlayerBottomBar> {
 
           // Update queue
           ref.read(queueProvider.notifier).refreshQueue();
+          ref.read(trackDurationProvider.notifier).getTrackDuration(track.uri);
 
           return LowerPlayer(
               currentTrackImageUri: currentTrackImageUri,
@@ -134,6 +123,7 @@ class LowerPlayer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isAdminDisabled = ref.watch(isAdminDisabledProvider);
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
@@ -179,9 +169,10 @@ class LowerPlayer extends ConsumerWidget {
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-                LinearProgressIndicator(
-                    // value: calcNormalizedProgress(track, playerState),
-                    value: 0.5),
+                AnimatedProgress(
+                  track: track,
+                  currentPosition: playerState.playbackPosition,
+                )
               ],
             ),
           ),
@@ -209,4 +200,112 @@ class LowerPlayer extends ConsumerWidget {
       ),
     );
   }
+}
+
+class AnimatedProgress extends ConsumerStatefulWidget {
+  const AnimatedProgress({
+    super.key,
+    required this.track,
+    required this.currentPosition,
+  });
+
+  final Track track;
+  final int currentPosition;
+
+  @override
+  ConsumerState<AnimatedProgress> createState() => _AnimatedProgressState();
+}
+
+class _AnimatedProgressState extends ConsumerState<AnimatedProgress>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Tween<double> _tween;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+  }
+
+  @override
+  void didUpdateWidget(covariant AnimatedProgress oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentPosition != widget.currentPosition) {
+      final trackDuration = ref.read(trackDurationProvider);
+      final currentProgress =
+          calcNormalizedProgress(trackDuration, widget.currentPosition);
+
+      int remainingDuration = trackDuration - widget.currentPosition;
+      if (remainingDuration < 0) {
+        remainingDuration = 60000;
+      }
+
+      _tween = Tween<double>(begin: currentProgress, end: 1.0);
+      _controller
+        ..duration = Duration(milliseconds: remainingDuration)
+        ..forward(from: 0.0); // Restart the animation
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final value = _tween.evaluate(_controller);
+        return LinearProgressIndicator(value: value);
+      },
+    );
+  }
+}
+
+// class AnimatedProgress extends ConsumerStatefulWidget {
+//   const AnimatedProgress({
+//     super.key,
+//     required this.track,
+//     required this.currentPosition,
+//   });
+
+//   final Track track;
+//   final int currentPosition;
+
+//   @override
+//   ConsumerState<AnimatedProgress> createState() => _AnimatedProgressState();
+// }
+
+// class _AnimatedProgressState extends ConsumerState<AnimatedProgress> {
+//   @override
+//   Widget build(BuildContext context) {
+//     final trackDuration = ref.watch(trackDurationProvider);
+
+//     int remainingDuration = trackDuration - widget.currentPosition;
+//     if (remainingDuration < 0) {
+//       remainingDuration = 180000;
+//     }
+//     final currentProgress =
+//         calcNormalizedProgress(trackDuration, widget.currentPosition);
+//     return TweenAnimationBuilder<double>(
+//       key: ValueKey(remainingDuration),
+//       duration: Duration(milliseconds: remainingDuration),
+//       tween: Tween<double>(begin: currentProgress, end: 1.0),
+//       curve: Curves.linear,
+//       builder: (BuildContext context, double value, _) {
+//         return LinearProgressIndicator(value: value);
+//       },
+//     );
+//   }
+// }
+
+double calcNormalizedProgress(int trackDuration, int progress) {
+  if (trackDuration != 0 && progress != 0) {
+    final val = (1 / trackDuration) * progress;
+    return val;
+  }
+  return 0;
 }

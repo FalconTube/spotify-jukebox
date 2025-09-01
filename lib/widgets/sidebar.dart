@@ -97,7 +97,7 @@ class ExpandedQueueItem extends StatelessWidget {
 
   final SimpleTrack track;
   final int index;
-  static const Map<int, double> indexToSize = {0: 50.0, 1: 25.0, 2: 15.0};
+  static const Map<int, double> indexToSize = {0: 30.0, 1: 22.0, 2: 15.0};
 
   @override
   Widget build(BuildContext context) {
