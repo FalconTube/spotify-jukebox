@@ -197,7 +197,7 @@ class MainList extends ConsumerWidget {
                           context: context,
                           headerAnimationLoop: false,
                           width: 500,
-                          autoHide: Duration(seconds: 8),
+                          autoHide: Duration(seconds: 5),
                           dialogType: DialogType.success,
                           animType: AnimType.scale,
                           btnCancelColor:

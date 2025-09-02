@@ -351,7 +351,7 @@ class SearchAndGrid extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(30.0),
                   child: ChipRow(),
                 ),
                 MySearchbar(
