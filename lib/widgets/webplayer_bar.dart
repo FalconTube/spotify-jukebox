@@ -14,15 +14,6 @@ import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/models/track.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
-// class SidebarPlayer extends ConsumerStatefulWidget {
-//   const SidebarPlayer({super.key});
-//
-//   @override
-//   ConsumerState<SidebarPlayer> createState() => SidebarPlayerState();
-// }
-//
-// class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
-
 class WebPlayerBottomBar extends ConsumerStatefulWidget {
   const WebPlayerBottomBar({super.key});
 
@@ -170,9 +161,9 @@ class LowerPlayer extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 AnimatedProgress(
-                  track: track,
-                  currentPosition: playerState.playbackPosition,
-                )
+                    track: track,
+                    currentPosition: playerState.playbackPosition,
+                    isPaused: playerState.isPaused)
               ],
             ),
           ),
@@ -203,104 +194,44 @@ class LowerPlayer extends ConsumerWidget {
 }
 
 class AnimatedProgress extends ConsumerStatefulWidget {
-  const AnimatedProgress({
-    super.key,
-    required this.track,
-    required this.currentPosition,
-  });
+  const AnimatedProgress(
+      {super.key,
+      required this.track,
+      required this.currentPosition,
+      required this.isPaused});
 
   final Track track;
   final int currentPosition;
+  final bool isPaused;
 
   @override
   ConsumerState<AnimatedProgress> createState() => _AnimatedProgressState();
 }
 
-class _AnimatedProgressState extends ConsumerState<AnimatedProgress>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Tween<double> _tween;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-  }
-
-  @override
-  void didUpdateWidget(covariant AnimatedProgress oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.currentPosition != widget.currentPosition) {
-      final trackDuration = ref.read(trackDurationProvider);
-      final currentProgress =
-          calcNormalizedProgress(trackDuration, widget.currentPosition);
-
-      int remainingDuration = trackDuration - widget.currentPosition;
-      if (remainingDuration < 0) {
-        remainingDuration = 60000;
-      }
-
-      _tween = Tween<double>(begin: currentProgress, end: 1.0);
-      _controller
-        ..duration = Duration(milliseconds: remainingDuration)
-        ..forward(from: 0.0); // Restart the animation
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _AnimatedProgressState extends ConsumerState<AnimatedProgress> {
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        final value = _tween.evaluate(_controller);
-        return LinearProgressIndicator(value: value);
-      },
-    );
+    final trackDuration = ref.watch(trackDurationProvider);
+
+    int remainingDuration = trackDuration - widget.currentPosition;
+    if (remainingDuration < 0) {
+      remainingDuration = 180000;
+    }
+    final currentProgress =
+        calcNormalizedProgress(trackDuration, widget.currentPosition);
+    return widget.isPaused
+        ? LinearProgressIndicator(value: currentProgress, minHeight: 5)
+        : TweenAnimationBuilder<double>(
+            key: ValueKey(remainingDuration),
+            duration: Duration(milliseconds: remainingDuration),
+            tween: Tween<double>(begin: currentProgress, end: 1.0),
+            curve: Curves.linear,
+            builder: (BuildContext context, double value, _) {
+              return LinearProgressIndicator(value: value, minHeight: 5);
+            },
+          );
   }
 }
-
-// class AnimatedProgress extends ConsumerStatefulWidget {
-//   const AnimatedProgress({
-//     super.key,
-//     required this.track,
-//     required this.currentPosition,
-//   });
-
-//   final Track track;
-//   final int currentPosition;
-
-//   @override
-//   ConsumerState<AnimatedProgress> createState() => _AnimatedProgressState();
-// }
-
-// class _AnimatedProgressState extends ConsumerState<AnimatedProgress> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final trackDuration = ref.watch(trackDurationProvider);
-
-//     int remainingDuration = trackDuration - widget.currentPosition;
-//     if (remainingDuration < 0) {
-//       remainingDuration = 180000;
-//     }
-//     final currentProgress =
-//         calcNormalizedProgress(trackDuration, widget.currentPosition);
-//     return TweenAnimationBuilder<double>(
-//       key: ValueKey(remainingDuration),
-//       duration: Duration(milliseconds: remainingDuration),
-//       tween: Tween<double>(begin: currentProgress, end: 1.0),
-//       curve: Curves.linear,
-//       builder: (BuildContext context, double value, _) {
-//         return LinearProgressIndicator(value: value);
-//       },
-//     );
-//   }
-// }
 
 double calcNormalizedProgress(int trackDuration, int progress) {
   if (trackDuration != 0 && progress != 0) {
