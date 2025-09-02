@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
@@ -57,7 +58,7 @@ class _Sidebar extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final track = queue[index];
                       return isLargeScreen
-                          ? ExpandedQueueItem(track: track)
+                          ? ExpandedQueueItem(track: track, index: index)
                           : CollapsedQueueItem(track: track);
                     },
                   ),
@@ -91,21 +92,32 @@ class CollapsedQueueItem extends StatelessWidget {
 }
 
 class ExpandedQueueItem extends StatelessWidget {
-  const ExpandedQueueItem({
-    super.key,
-    required this.track,
-  });
+  const ExpandedQueueItem(
+      {super.key, required this.track, required this.index});
 
   final SimpleTrack track;
+  final int index;
+  static const Map<int, double> indexToSize = {0: 30.0, 1: 22.0, 2: 15.0};
 
   @override
   Widget build(BuildContext context) {
+    final bool isSoon = index < 3;
     return AnimatedSwitcher(
       duration: Duration(milliseconds: 300),
       child: ListTile(
           key: ValueKey(track.uri),
           title: Text(track.name),
           subtitle: Text(track.mainArtist()),
+          trailing: isSoon
+              ? SizedBox(
+                  width: 20,
+                  child: SpinKitSpinningLines(
+                      size: indexToSize[index]!,
+                      duration: Duration(seconds: 6),
+                      color:
+                          Theme.of(context).colorScheme.onSecondaryContainer),
+                )
+              : null,
           leading: track.getImage() != ""
               ? FadeInImage.memoryNetwork(
                   fadeInDuration: const Duration(milliseconds: 300),
