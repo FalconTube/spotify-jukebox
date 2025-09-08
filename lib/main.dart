@@ -185,8 +185,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           ],
         ),
         drawer: isAdminDisabled ? null : CustomDrawer(),
-        bottomNavigationBar:
-            (_sdkConnected) ? WebPlayerBottomBar() : WebPlayerBottomBar(),
+        bottomNavigationBar: WebPlayerBottomBar(),
         body: switch (spotifySdkEnabled) {
           false => isPlaylistChosen
               ? MainWidget(
@@ -227,7 +226,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                       redirectUrl: redirectUrl,
                       playerName: "Jukebox",
                       scope:
-                          'app-remote-control, streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private, playlist-read-private, playlist-read-collaborative',
+                          'app-remote-control, streaming, user-read-playback-state, user-modify-playback-state, user-read-currently-playing, user-read-email, user-read-private, playlist-read-private, playlist-read-collaborative, user-top-read',
                     );
                     await SpotifySdk.getPlayerState();
                   } catch (e) {

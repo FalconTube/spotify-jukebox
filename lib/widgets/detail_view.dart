@@ -69,7 +69,6 @@ class DetailList extends ConsumerWidget {
               },
               label: Text('Select Playlist'))
           : null,
-      bottomNavigationBar: WebPlayerBottomBar(),
       body: Row(
         children: [
           Expanded(

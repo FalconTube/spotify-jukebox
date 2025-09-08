@@ -3,6 +3,8 @@ import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/playlist_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 
 class NoPlaylistSelectedPlaceholder extends ConsumerWidget {
   const NoPlaylistSelectedPlaceholder({super.key});
@@ -24,8 +26,14 @@ class NoPlaylistSelectedPlaceholder extends ConsumerWidget {
           SelectCard(
               icon: Icons.skip_previous_outlined,
               text: "Continue without playlist",
-              function: () {
-                Log.log("clicked");
+              function: () async {
+                final api = await SpotifyApiService.api;
+                final topTrackUser = await api.getTopTrack();
+                await SpotifySdk.queue(spotifyUri: topTrackUser);
+                Future.delayed(Duration(milliseconds: 200));
+                await SpotifySdk.resume();
+                Future.delayed(Duration(milliseconds: 200));
+                await SpotifySdk.pause();
                 ref.read(isPlaylistSelected.notifier).state = true;
               }),
         ],

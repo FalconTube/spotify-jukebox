@@ -156,6 +156,7 @@ class LowerPlayer extends ConsumerWidget {
                   ' ${track.name} - ${getAllArtistNames(track.artists)}', // Replace with dynamic title
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontSize: 18,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
                   overflow: TextOverflow.ellipsis,
