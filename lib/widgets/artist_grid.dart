@@ -8,6 +8,7 @@ import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
+import 'package:jukebox_spotify_flutter/states/current_selection_provider.dart';
 
 import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
@@ -143,11 +144,14 @@ class InnerArtistGrid extends ConsumerWidget {
                       ref.read(queueProvider.notifier).refreshQueue();
                       return;
                     }
+                    ref
+                        .read(currentSelectionProvider.notifier)
+                        .updateSelection(imageData);
 
                     await Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return DetailView(info: imageData);
+                        return DetailView();
                       }),
                     );
                   },

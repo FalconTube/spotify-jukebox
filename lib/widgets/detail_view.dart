@@ -7,6 +7,7 @@ import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/classes/playlist.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
+import 'package:jukebox_spotify_flutter/states/current_selection_provider.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
@@ -16,12 +17,11 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class DetailView extends ConsumerWidget {
-  const DetailView({super.key, required this.info});
-
-  final Info info;
+  const DetailView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final info = ref.watch(currentSelectionProvider);
     switch (info.runtimeType) {
       case const (ArtistCard):
         ArtistCard artist = info as ArtistCard;
