@@ -151,10 +151,12 @@ class TopBar extends StatelessWidget {
           ),
         ),
         flexibleSpace: FlexibleSpaceBar(
-            title: Text(info.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                )),
+            title: Chip(
+              label: Text(info.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
             background: info.getImage() != ""
                 ? Hero(
                     tag: info.getImage(),
@@ -236,17 +238,20 @@ class MainList extends ConsumerWidget {
                               .transparent, // Make the background transparent
                           child: InkWell(
                             borderRadius: BorderRadius.circular(
-                                24.0), // Optional: Rounded corners for the InkWell
+                                8), // Optional: Rounded corners for the InkWell
                             child: Container(
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  width: 3,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(
-                                Icons.queue_music,
+                                Icons.add,
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onPrimaryContainer,
