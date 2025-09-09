@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
@@ -129,7 +130,7 @@ class TopBar extends StatelessWidget {
         leading: InkWell(
           borderRadius: BorderRadius.circular(20), // Circular shape
           onTap: () {
-            Navigator.of(context).maybePop();
+            GoRouter.of(context).go("/main");
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

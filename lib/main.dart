@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/admin_enabled_provider.dart';
@@ -18,6 +19,7 @@ import 'package:jukebox_spotify_flutter/states/sidebar_visible_provider.dart';
 import 'package:jukebox_spotify_flutter/states/speech_listening_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/artist_grid.dart';
 import 'package:jukebox_spotify_flutter/widgets/choice_chips.dart';
+import 'package:jukebox_spotify_flutter/widgets/detail_view.dart';
 import 'package:jukebox_spotify_flutter/widgets/drawer.dart';
 import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder.dart';
 import 'package:jukebox_spotify_flutter/widgets/playlist_page.dart';
@@ -54,11 +56,29 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class MyAppState extends ConsumerState<MyApp> {
+  final GoRouter router = GoRouter(routes: [
+    ShellRoute(
+        // builder: (context, state, child) return ,
+        routes: [
+          GoRoute(
+            path: "/main",
+            builder: (context, state) => MyHomePage(title: "Spotify Jukebox"),
+          ),
+          GoRoute(
+            path: "/detail",
+            builder: (context, state) => DetailView(),
+          ),
+          GoRoute(
+            path: "/playlists",
+            builder: (context, state) => PlaylistGridPage(),
+          )
+        ])
+  ], initialLocation: "/main");
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       themeAnimationDuration: Durations.short3,
       title: 'Jukebox',
@@ -71,7 +91,7 @@ class MyAppState extends ConsumerState<MyApp> {
             brightness: settings.brightness,
           ),
           useMaterial3: true),
-      home: MyHomePage(title: 'Spotify Jukebox'),
+      routerConfig: router,
     );
   }
 }
@@ -158,10 +178,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           onPressed: isAdminDisabled
                               ? null
                               : () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return PlaylistGridPage();
-                                  }));
+                                  GoRouter.of(context).go("/playlists");
                                 },
                           icon: Icon(Icons.playlist_add_sharp)),
                       IconButton(

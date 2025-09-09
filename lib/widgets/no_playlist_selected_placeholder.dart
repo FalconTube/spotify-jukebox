@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/widgets/playlist_page.dart';
@@ -19,9 +20,7 @@ class NoPlaylistSelectedPlaceholder extends ConsumerWidget {
               icon: Icons.playlist_add_sharp,
               text: "Select fallback playlist",
               function: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return PlaylistGridPage();
-                }));
+                GoRouter.of(context).go("/playlists");
               }),
           SelectCard(
               icon: Icons.skip_previous_outlined,
