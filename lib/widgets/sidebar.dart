@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
-import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
-import 'package:jukebox_spotify_flutter/states/sidebar_visible_provider.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
 
 class SidebarPlayer extends ConsumerStatefulWidget {
   const SidebarPlayer({super.key});
@@ -20,13 +15,10 @@ class SidebarPlayerState extends ConsumerState<SidebarPlayer> {
   @override
   Widget build(BuildContext context) {
     final queue = ref.watch(queueProvider);
-    final sidebarVisible = ref.watch(isSidebarVisible);
-
-    // If screen is large, use default size
     // If screen is size, use full width
     final screenWidth = MediaQuery.of(context).size.width;
     final isLargeScreen = screenWidth > 700;
-    final double sidebarWidth = isLargeScreen ? 300 : 80;
+    final double sidebarWidth = isLargeScreen ? 400 : 80;
     return _Sidebar(
         queue: queue, sidebarWidth: sidebarWidth, isLargeScreen: isLargeScreen);
   }
@@ -101,30 +93,37 @@ class ExpandedQueueItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isSoon = index < 3;
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 300),
-      child: ListTile(
-          key: ValueKey(track.uri),
-          title: Text(track.name),
-          subtitle: Text(track.mainArtist()),
-          trailing: isSoon
-              ? SizedBox(
-                  width: 20,
-                  child: SpinKitSpinningLines(
-                      size: indexToSize[index]!,
-                      duration: Duration(seconds: 6),
-                      color:
-                          Theme.of(context).colorScheme.onSecondaryContainer),
-                )
-              : null,
-          leading: track.getImage() != ""
-              ? FadeInImage.memoryNetwork(
-                  fadeInDuration: const Duration(milliseconds: 300),
-                  image: track.getImage(),
-                  fit: BoxFit.cover,
-                  placeholder: pl)
-              : Image.asset("assets/placeholder.png", fit: BoxFit.cover)),
-    );
+        duration: Duration(milliseconds: 300),
+        child: Padding(
+            key: ValueKey(track.uri),
+            padding: const EdgeInsets.all(2),
+            child: InnerListTile(track: track, index: index)));
+  }
+}
+
+class InnerListTile extends StatelessWidget {
+  const InnerListTile({
+    super.key,
+    required this.track,
+    required this.index,
+  });
+
+  final SimpleTrack track;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+        title: Text(track.name),
+        subtitle: Text(track.mainArtist()),
+        trailing: Text("${index + 1}."),
+        leading: track.getImage() != ""
+            ? FadeInImage.memoryNetwork(
+                fadeInDuration: const Duration(milliseconds: 300),
+                image: track.getImage(),
+                fit: BoxFit.cover,
+                placeholder: pl)
+            : Image.asset("assets/placeholder.png", fit: BoxFit.cover));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
@@ -7,6 +8,7 @@ import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/classes/playlist.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
+import 'package:jukebox_spotify_flutter/states/current_selection_provider.dart';
 import 'package:jukebox_spotify_flutter/states/detail_provider.dart';
 import 'package:jukebox_spotify_flutter/states/playlist_provider.dart';
 import 'package:jukebox_spotify_flutter/states/queue_provider.dart';
@@ -16,12 +18,11 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class DetailView extends ConsumerWidget {
-  const DetailView({super.key, required this.info});
-
-  final Info info;
+  const DetailView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final info = ref.watch(currentSelectionProvider);
     switch (info.runtimeType) {
       case const (ArtistCard):
         ArtistCard artist = info as ArtistCard;
@@ -69,7 +70,6 @@ class DetailList extends ConsumerWidget {
               },
               label: Text('Select Playlist'))
           : null,
-      bottomNavigationBar: WebPlayerBottomBar(),
       body: Row(
         children: [
           Expanded(
@@ -130,7 +130,7 @@ class TopBar extends StatelessWidget {
         leading: InkWell(
           borderRadius: BorderRadius.circular(20), // Circular shape
           onTap: () {
-            Navigator.of(context).maybePop();
+            GoRouter.of(context).go("/main");
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -151,10 +151,12 @@ class TopBar extends StatelessWidget {
           ),
         ),
         flexibleSpace: FlexibleSpaceBar(
-            title: Text(info.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                )),
+            title: Chip(
+              label: Text(info.name,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
             background: info.getImage() != ""
                 ? Hero(
                     tag: info.getImage(),
@@ -197,7 +199,7 @@ class MainList extends ConsumerWidget {
                           context: context,
                           headerAnimationLoop: false,
                           width: 500,
-                          autoHide: Duration(seconds: 8),
+                          autoHide: Duration(seconds: 5),
                           dialogType: DialogType.success,
                           animType: AnimType.scale,
                           btnCancelColor:
@@ -236,17 +238,20 @@ class MainList extends ConsumerWidget {
                               .transparent, // Make the background transparent
                           child: InkWell(
                             borderRadius: BorderRadius.circular(
-                                24.0), // Optional: Rounded corners for the InkWell
+                                8), // Optional: Rounded corners for the InkWell
                             child: Container(
                               padding: const EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                borderRadius: BorderRadius.circular(24),
+                                border: Border.all(
+                                  width: 3,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: Icon(
-                                Icons.queue_music,
+                                Icons.add,
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onPrimaryContainer,

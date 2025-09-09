@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jukebox_spotify_flutter/states/admin_enabled_provider.dart';
 import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
 import 'package:jukebox_spotify_flutter/states/searchbar_state.dart';
@@ -14,14 +15,19 @@ class ChipRow extends ConsumerWidget {
     final selectedChips = ref.watch(chosenSearchFilter);
     final chipNotifier = ref.watch(chosenSearchFilter.notifier);
     final settings = ref.watch(settingsProvider);
+    final isAdminDisabled = ref.watch(isAdminDisabledProvider);
 
-    const chipLabels = ['Artists', 'Albums', 'Songs', 'Playlists'];
-    const chipValues = {
+    final chipLabels = ['Artists', 'Albums', 'Songs'];
+    final chipValues = {
       RequestType.artist: 'Artists',
       RequestType.album: 'Albums',
       RequestType.track: 'Songs',
-      RequestType.playlist: 'Playlists'
     };
+
+    if (!isAdminDisabled) {
+      chipLabels.add("Playlists");
+      chipValues[RequestType.playlist] = "Playlists";
+    }
 
     return Wrap(
       children: List<Widget>.generate(chipValues.keys.length, (int index) {

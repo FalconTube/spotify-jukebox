@@ -2,12 +2,14 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jukebox_spotify_flutter/classes/album.dart';
 import 'package:jukebox_spotify_flutter/classes/playlist.dart';
 import 'package:jukebox_spotify_flutter/classes/artist.dart';
 import 'package:jukebox_spotify_flutter/classes/info.dart';
 import 'package:jukebox_spotify_flutter/classes/track.dart';
 import 'package:jukebox_spotify_flutter/main.dart';
+import 'package:jukebox_spotify_flutter/states/current_selection_provider.dart';
 
 import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/chosen_filters.dart';
@@ -123,11 +125,13 @@ class InnerArtistGrid extends ConsumerWidget {
                           context: context,
                           headerAnimationLoop: false,
                           width: 500,
-                          autoHide: Duration(seconds: 8),
+                          autoHide: Duration(seconds: 5),
                           dialogType: DialogType.success,
                           animType: AnimType.scale,
-                          btnCancelColor: Colors.redAccent,
-                          btnOkColor: Theme.of(context).colorScheme.primary,
+                          btnCancelColor:
+                              Theme.of(context).colorScheme.errorContainer,
+                          btnOkColor:
+                              Theme.of(context).colorScheme.primaryContainer,
                           title: 'Success',
                           desc: 'Song added to queue!',
                           btnCancelText: "Undo",
@@ -143,13 +147,11 @@ class InnerArtistGrid extends ConsumerWidget {
                       ref.read(queueProvider.notifier).refreshQueue();
                       return;
                     }
+                    ref
+                        .read(currentSelectionProvider.notifier)
+                        .updateSelection(imageData);
 
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) {
-                        return DetailView(info: imageData);
-                      }),
-                    );
+                    GoRouter.of(context).go("/detail");
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),

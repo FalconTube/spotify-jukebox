@@ -252,4 +252,11 @@ class SpotifyApi {
       rethrow;
     }
   }
+
+  Future<String> getTopTrack() async {
+    String uri = "https://api.spotify.com/v1/me/top/tracks?limit=1";
+    final out = await get(uri, withoutCache: true);
+    final topTrack = out.data["items"][0]["uri"];
+    return topTrack;
+  }
 }

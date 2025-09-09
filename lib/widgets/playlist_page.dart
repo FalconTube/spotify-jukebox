@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
 import 'package:jukebox_spotify_flutter/classes/playlist.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
@@ -112,7 +113,7 @@ class PlaylistGridPageState extends ConsumerState<PlaylistGridPage> {
                   setState(() {
                     _isLoading = false;
                   });
-                  if (context.mounted) Navigator.pop(context);
+                  if (context.mounted) GoRouter.of(context).go("/main");
                 },
                 label: Text("Choose Playlist"))
             : null);
