@@ -18,10 +18,14 @@ tasks:
     cmds:
       - flutter build web --release
 
+  profile:
+    cmds:
+      - flutter build web --profile
+
   serve:
     dir: build/web
     cmds:
-      - task: release
+      - task: profile
       - python -m http.server 44344
 
        
