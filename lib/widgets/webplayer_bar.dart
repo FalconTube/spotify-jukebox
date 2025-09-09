@@ -107,7 +107,7 @@ class LowerPlayer extends ConsumerWidget {
     for (final artist in artists) {
       artistsNames.add(artist.name);
     }
-    var out = artistsNames.join(",");
+    var out = artistsNames.join(", ");
     return out;
   }
 

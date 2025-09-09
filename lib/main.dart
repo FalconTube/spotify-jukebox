@@ -262,17 +262,17 @@ class _MainWrapperState extends ConsumerState<MainWrapper> {
   final TextEditingController controller = TextEditingController(text: "");
   final FocusNode searchFocusNode = FocusNode();
 
-  String compareValue = "";
   Timer? debounce;
   @override
   void initState() {
+    final searchText = ref.read(searchQueryProvider);
+    controller.text = searchText;
     super.initState();
     // Listen to changes in the text field and update the provider.
     controller.addListener(() {
-      if (controller.text == compareValue) return;
+      if (controller.text == searchText) return;
       ref.read(isLoadingProvider.notifier).state = true;
 
-      compareValue = controller.text;
       // Update provider
       // Check if another call is in flight
       if (debounce?.isActive ?? false) debounce?.cancel();
