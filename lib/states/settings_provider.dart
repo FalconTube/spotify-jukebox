@@ -27,6 +27,7 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
       }
     }
     return AppSettings(
+        virtualKeyboardSize: 3.0,
         showVirtualKeyboard: false,
         showTypeFilters: true,
         debounceDelay: 1500,
@@ -35,6 +36,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
         seedColor: Color(0xFFFA00F8),
         vibrantColors: false,
         adminPin: "0000");
+  }
+
+  Future<void> updateVirtualKeyboardSize(double value) async {
+    state = state.copyWith(virtualKeyboardSize: value);
+    await _saveSettings();
   }
 
   Future<void> updateShowVirtualKeyboard(bool value) async {
