@@ -173,12 +173,13 @@ class LowerPlayer extends ConsumerWidget {
           IconButton(
               color: Theme.of(context).colorScheme.onSurface,
               icon: Icon(playerState.isPaused ? Icons.play_arrow : Icons.pause),
-              // icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-              onPressed: () async {
-                playerState.isPaused
-                    ? await SpotifySdk.resume()
-                    : await SpotifySdk.pause();
-              }),
+              onPressed: isAdminDisabled
+                  ? null
+                  : () async {
+                      playerState.isPaused
+                          ? await SpotifySdk.resume()
+                          : await SpotifySdk.pause();
+                    }),
           IconButton(
             color: Theme.of(context).colorScheme.onSurface,
             icon: Icon(Icons.skip_next),

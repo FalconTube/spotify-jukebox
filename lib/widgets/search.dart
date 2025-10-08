@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_onscreen_keyboard/flutter_onscreen_keyboard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:jukebox_spotify_flutter/states/data_query_provider.dart';
 import 'package:jukebox_spotify_flutter/states/loading_state.dart';
+import 'package:jukebox_spotify_flutter/states/settings_provider.dart';
 import 'package:jukebox_spotify_flutter/states/speech_listening_provider.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -61,8 +63,8 @@ class _MySearchbarState extends ConsumerState<MySearchbar> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(isLoadingProvider);
-    final dataState = ref.watch(dataProvider);
-    final noResults = dataState.data.isEmpty;
+    final isVirtualKeyboardEnabled =
+        ref.watch(settingsProvider).showVirtualKeyboard;
 
     // Listen to changes of speech listening
     ref.listen(isSpeechListening, (_, isListening) {
@@ -73,10 +75,10 @@ class _MySearchbarState extends ConsumerState<MySearchbar> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: ZoAnimatedGradientBorder(
-          glowOpacity: noResults ? 0.2 : 0.1,
+          glowOpacity: 0.2,
           borderRadius: 30,
-          borderThickness: noResults ? 4 : 1,
-          shouldAnimate: noResults ? true : false,
+          borderThickness: 4,
+          shouldAnimate: true,
           gradientColor: [
             Theme.of(context).colorScheme.primary, // Background color
             Colors.pinkAccent, // Background color
@@ -112,7 +114,8 @@ class _MySearchbarState extends ConsumerState<MySearchbar> {
                           size: widget.iconSize), // Search icon
                 ),
                 Expanded(
-                  child: TextField(
+                  child: OnscreenKeyboardTextField(
+                    enableOnscreenKeyboard: isVirtualKeyboardEnabled,
                     controller: widget.textcontroller,
                     decoration: InputDecoration(
                       hintText: "Search...",
