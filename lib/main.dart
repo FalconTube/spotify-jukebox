@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_onscreen_keyboard/flutter_onscreen_keyboard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jukebox_spotify_flutter/api/spotify_api.dart';
@@ -25,7 +26,6 @@ import 'package:jukebox_spotify_flutter/widgets/no_playlist_selected_placeholder
 import 'package:jukebox_spotify_flutter/widgets/playlist_page.dart';
 import 'package:jukebox_spotify_flutter/widgets/search.dart';
 import 'package:jukebox_spotify_flutter/widgets/sidebar.dart';
-import 'package:jukebox_spotify_flutter/widgets/virtual_keyboard.dart';
 import 'package:jukebox_spotify_flutter/widgets/webplayer_bar.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 
@@ -54,12 +54,39 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class MyAppState extends ConsumerState<MyApp> {
-  // final GlobalKey<NavigatorState> _rootNavigatorKey =
-  // GlobalKey<NavigatorState>();
   final GoRouter router = GoRouter(routes: [
     ShellRoute(
         builder: (context, state, child) {
-          return MyHomePage(body: child);
+          final primary = Theme.of(context).colorScheme.primaryContainer;
+          final surface = Theme.of(context).colorScheme.surface;
+          final theme = OnscreenKeyboardThemeData(
+            color: Color.lerp(primary, surface, 0.8),
+            controlBarColor: Color.lerp(primary, surface, 0.8),
+            padding:
+                const EdgeInsets.only(left: 4, right: 4, top: 4, bottom: 14),
+            boxShadow: [],
+            border: const Border.fromBorderSide(BorderSide.none),
+            borderRadius: BorderRadius.zero,
+            textKeyThemeData: TextKeyThemeData(
+              backgroundColor: surface,
+              margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            actionKeyThemeData: ActionKeyThemeData(
+              backgroundColor: Color.lerp(primary, surface, 0.5),
+              pressedBackgroundColor: primary,
+              margin: const EdgeInsets.symmetric(
+                horizontal: 2,
+                vertical: 4,
+              ),
+              borderRadius: BorderRadius.circular(6),
+            ),
+          );
+          return OnscreenKeyboard(
+              aspectRatio: 32.0 / 9.0,
+              layout: DesktopKeyboardLayout(),
+              theme: theme,
+              child: MyHomePage(body: child));
         },
         routes: [
           GoRoute(
@@ -99,7 +126,7 @@ class MyAppState extends ConsumerState<MyApp> {
 }
 
 class MyHomePage extends ConsumerStatefulWidget {
-  MyHomePage({super.key, required this.body});
+  const MyHomePage({super.key, required this.body});
   final Widget body;
 
   @override
@@ -262,12 +289,24 @@ class _MainWrapperState extends ConsumerState<MainWrapper> {
   final TextEditingController controller = TextEditingController(text: "");
   final FocusNode searchFocusNode = FocusNode();
 
+  late final keyboard = OnscreenKeyboard.of(context);
+
+  void _listener(OnscreenKeyboardKey key) {
+    switch (key) {
+      case TextKey(:final primary): // a text key: "a", "b", "4", etc.
+        print('key: "$primary"');
+      case ActionKey(:final name): // an action key: "shift", "backspace", etc.
+        print('action: $name');
+    }
+  }
+
   Timer? debounce;
   @override
   void initState() {
     final searchText = ref.read(searchQueryProvider);
     controller.text = searchText;
     super.initState();
+    keyboard.addRawKeyDownListener(_listener);
     // Listen to changes in the text field and update the provider.
     controller.addListener(() {
       if (controller.text == searchText) return;
@@ -299,6 +338,7 @@ class _MainWrapperState extends ConsumerState<MainWrapper> {
   void dispose() {
     controller.dispose();
     searchFocusNode.dispose();
+    keyboard.removeRawKeyDownListener(_listener);
     // await SpotifySdk.disconnect();
 
     super.dispose();
@@ -356,7 +396,7 @@ class SearchAndGrid extends StatelessWidget {
           }),
           Expanded(child: gridWidget),
           // GenreFilter(),
-          MyKeyboard(textcontroller: controller, focusNode: searchFocusNode),
+          // MyKeyboard(textcontroller: controller, focusNode: searchFocusNode),
         ]),
       ),
     );

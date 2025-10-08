@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_onscreen_keyboard/flutter_onscreen_keyboard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:jukebox_spotify_flutter/states/sdk_connected_provider.dart';
@@ -75,6 +76,9 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
             trailing: Switch(
               value: settings.showVirtualKeyboard,
               onChanged: (bool value) {
+                value
+                    ? OnscreenKeyboard.of(context).open()
+                    : OnscreenKeyboard.of(context).close();
                 ref
                     .read(settingsProvider.notifier)
                     .updateShowVirtualKeyboard(value);

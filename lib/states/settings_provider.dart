@@ -5,6 +5,7 @@ import 'package:jukebox_spotify_flutter/classes/settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jukebox_spotify_flutter/logging/pretty_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_onscreen_keyboard/flutter_onscreen_keyboard.dart';
 
 // This provides the actual settings
 class SettingsNotifier extends StateNotifier<AppSettings> {
