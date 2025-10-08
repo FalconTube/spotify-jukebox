@@ -117,6 +117,20 @@ class CustomDrawerState extends ConsumerState<CustomDrawer> {
             ),
           ),
           ListTile(
+            title: const Text('Keyboard Size'),
+            subtitle: Slider(
+                min: 3.0,
+                max: 6.0,
+                divisions: 10,
+                label: settings.virtualKeyboardSize.toString(),
+                value: settings.virtualKeyboardSize,
+                onChanged: (double value) {
+                  ref
+                      .read(settingsProvider.notifier)
+                      .updateVirtualKeyboardSize(value);
+                }),
+          ),
+          ListTile(
             title: const Text('Search Delay'),
             subtitle: Slider(
                 min: 0,

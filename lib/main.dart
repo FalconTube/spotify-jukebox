@@ -57,36 +57,42 @@ class MyAppState extends ConsumerState<MyApp> {
   final GoRouter router = GoRouter(routes: [
     ShellRoute(
         builder: (context, state, child) {
-          final primary = Theme.of(context).colorScheme.primaryContainer;
-          final surface = Theme.of(context).colorScheme.surface;
-          final theme = OnscreenKeyboardThemeData(
-            color: Color.lerp(primary, surface, 0.8),
-            controlBarColor: Color.lerp(primary, surface, 0.8),
-            padding:
-                const EdgeInsets.only(left: 4, right: 4, top: 4, bottom: 14),
-            boxShadow: [],
-            border: const Border.fromBorderSide(BorderSide.none),
-            borderRadius: BorderRadius.zero,
-            textKeyThemeData: TextKeyThemeData(
-              backgroundColor: surface,
-              margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            actionKeyThemeData: ActionKeyThemeData(
-              backgroundColor: Color.lerp(primary, surface, 0.5),
-              pressedBackgroundColor: primary,
-              margin: const EdgeInsets.symmetric(
-                horizontal: 2,
-                vertical: 4,
+          return Consumer(builder: (context, ref, _) {
+            final settings = ref.watch(settingsProvider);
+
+            final primary = Theme.of(context).colorScheme.primaryContainer;
+            final surface = Theme.of(context).colorScheme.surface;
+            final theme = OnscreenKeyboardThemeData(
+              color: Color.lerp(primary, surface, 0.8),
+              controlBarColor: Color.lerp(primary, surface, 0.8),
+              padding:
+                  const EdgeInsets.only(left: 4, right: 4, top: 4, bottom: 14),
+              boxShadow: [],
+              border: const Border.fromBorderSide(BorderSide.none),
+              borderRadius: BorderRadius.zero,
+              textKeyThemeData: TextKeyThemeData(
+                backgroundColor: surface,
+                margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                borderRadius: BorderRadius.circular(6),
               ),
-              borderRadius: BorderRadius.circular(6),
-            ),
-          );
-          return OnscreenKeyboard(
-              aspectRatio: 32.0 / 9.0,
-              layout: DesktopKeyboardLayout(),
-              theme: theme,
-              child: MyHomePage(body: child));
+              actionKeyThemeData: ActionKeyThemeData(
+                backgroundColor: Color.lerp(primary, surface, 0.5),
+                pressedBackgroundColor: primary,
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 2,
+                  vertical: 4,
+                ),
+                borderRadius: BorderRadius.circular(6),
+              ),
+            );
+
+            return OnscreenKeyboard(
+                aspectRatio: settings.virtualKeyboardSize,
+                layout: DesktopKeyboardLayout(),
+                showControlBar: false,
+                theme: theme,
+                child: MyHomePage(body: child));
+          });
         },
         routes: [
           GoRoute(

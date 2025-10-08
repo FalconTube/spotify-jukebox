@@ -18,6 +18,7 @@ extension ColorExtension on Color {
 }
 
 class AppSettings {
+  double virtualKeyboardSize;
   bool showVirtualKeyboard;
   bool showTypeFilters;
   double debounceDelay;
@@ -28,7 +29,8 @@ class AppSettings {
   String adminPin;
 
   AppSettings(
-      {required this.showVirtualKeyboard,
+      {required this.virtualKeyboardSize,
+      required this.showVirtualKeyboard,
       required this.showTypeFilters,
       required this.debounceDelay,
       required this.searchResultAmount,
@@ -56,6 +58,7 @@ class AppSettings {
     // Map Color hex code to actual Color
 
     return AppSettings(
+        virtualKeyboardSize: json['virtualKeyboardSize'] ?? 2.0,
         showVirtualKeyboard: json['showVirtualKeyboard'] ?? false,
         showTypeFilters: json['showTypeFilters'] ?? true,
         debounceDelay: json['debounceDelay'] ?? 1500,
@@ -68,6 +71,7 @@ class AppSettings {
 
   // Convert to JSON for storage
   Map<String, dynamic> toJson() => {
+        'virtualKeyboardSize': virtualKeyboardSize,
         'showVirtualKeyboard': showVirtualKeyboard,
         'showTypeFilters': showTypeFilters,
         'debounceDelay': debounceDelay,
@@ -81,6 +85,7 @@ class AppSettings {
 
   // Create a copy with changes
   AppSettings copyWith({
+    double? virtualKeyboardSize,
     bool? showVirtualKeyboard,
     bool? showTypeFilters,
     double? debounceDelay,
@@ -91,6 +96,7 @@ class AppSettings {
     String? adminPin,
   }) {
     return AppSettings(
+      virtualKeyboardSize: virtualKeyboardSize ?? this.virtualKeyboardSize,
       showVirtualKeyboard: showVirtualKeyboard ?? this.showVirtualKeyboard,
       showTypeFilters: showTypeFilters ?? this.showTypeFilters,
       debounceDelay: debounceDelay ?? this.debounceDelay,
